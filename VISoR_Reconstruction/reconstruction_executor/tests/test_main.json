@@ -1,0 +1,127 @@
+
+{
+  "1": {
+    "name": "1",
+    "type": "reconstruct_sample",
+    "parameters": {},
+    "input_targets": {
+      "rawdata": {
+        "name": "raw_1",
+        "type": "raw_data",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/20180712_SY_PBM_AAV-NT640_G07_1/488nm_10X/1_006/PBM_AAV-NT640_G07_1_006.flsm"
+      }
+    },
+    "output_targets": [
+      {
+        "name": "slice1c1",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/488.tar"
+      }
+    ]
+  },
+  "2": {
+    "name": "2",
+    "type": "reconstruct_sample",
+    "parameters": {"methods": {"align_channels": "channel_elastix_align"}},
+    "input_targets": {
+      "rawdata": {
+        "name": "raw_2",
+        "type": "raw_data",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/20180712_SY_PBM_AAV-NT640_G07_1/552nm_10X/1_006/PBM_AAV-NT640_G07_1_006.flsm"
+      },
+      "reference_slice": {
+        "name": "slice1c1",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/488.tar"
+      }
+    },
+    "output_targets": [
+      {
+        "name": "slice1c2",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/552.tar"
+      }
+    ]
+  },
+  "3": {
+    "name": "3",
+    "type": "reconstruct_sample",
+    "parameters": {"methods": {"align_channels": "channel_elastix_align"}},
+    "input_targets": {
+      "rawdata": {
+        "name": "raw_3",
+        "type": "raw_data",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/20180712_SY_PBM_AAV-NT640_G07_1/641nm_10X/1_006/PBM_AAV-NT640_G07_1_006.flsm"
+      },
+      "reference_slice": {
+        "name": "slice1c1",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/488.tar"
+      }
+    },
+    "output_targets": [
+      {
+        "name": "slice1c3",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/641.tar"
+      }
+    ]
+  },
+  "4": {
+    "name": "4",
+    "type": "reconstruct_image",
+    "parameters": {"pixel_size": 4.0, "source": "thumbnail"},
+    "input_targets": {
+      "sample_data": {
+        "name": "slice1c1",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/488.tar"
+      }
+    },
+    "output_targets": [
+      {
+        "name": "slice1c1image",
+        "type": "image",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/488.mha"
+      }
+    ]
+  },
+  "5": {
+    "name": "5",
+    "type": "reconstruct_image",
+    "parameters": {"pixel_size": 4.0, "source": "thumbnail"},
+    "input_targets": {
+      "sample_data": {
+        "name": "slice1c1",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/552.tar"
+      }
+    },
+    "output_targets": [
+      {
+        "name": "slice1c1image",
+        "type": "image",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/552.mha"
+      }
+    ]
+  },
+  "6": {
+    "name": "6",
+    "type": "reconstruct_image",
+    "parameters": {"pixel_size": 4.0, "source": "thumbnail"},
+    "input_targets": {
+      "sample_data": {
+        "name": "slice1c1",
+        "type": "reconstructed_slice",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/641.tar"
+      }
+    },
+    "output_targets": [
+      {
+        "name": "slice1c1image",
+        "type": "image",
+        "path": "F:/TEST_DATA/visor_brain_test_data/visor12_data/641.mha"
+      }
+    ]
+  }
+}

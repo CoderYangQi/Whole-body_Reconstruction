@@ -1,0 +1,9 @@
+name: visor1
+stage:
+    x_coefficient: -1000
+    y_coefficient: 1000
+channels:
+      - roi: [0, 0, 2048, 2048]
+        offset: [0, 0]
+        pixel_size: 0.555
+        angle: -45

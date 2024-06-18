@@ -1,0 +1,98 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'surface_registration_ui.ui'
+#
+# Created by: PyQt5 UI code generator 5.9.2
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(1222, 849)
+        self.verticalLayout = QtWidgets.QVBoxLayout(Form)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.avFix = AnnotationWidget(Form)
+        self.avFix.setMinimumSize(QtCore.QSize(100, 0))
+        self.avFix.setObjectName("avFix")
+        self.horizontalLayout.addWidget(self.avFix)
+        self.avMove = AnnotationWidget(Form)
+        self.avMove.setMinimumSize(QtCore.QSize(100, 0))
+        self.avMove.setObjectName("avMove")
+        self.horizontalLayout.addWidget(self.avMove)
+        self.tableWidget = QtWidgets.QTableWidget(Form)
+        self.tableWidget.setMinimumSize(QtCore.QSize(0, 0))
+        self.tableWidget.setMaximumSize(QtCore.QSize(430, 16777215))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.tableWidget.setFont(font)
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(2)
+        self.tableWidget.setRowCount(1)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setVerticalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setItem(0, 0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setItem(0, 1, item)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(200)
+        self.horizontalLayout.addWidget(self.tableWidget)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pb_open = QtWidgets.QPushButton(Form)
+        self.pb_open.setEnabled(True)
+        self.pb_open.setObjectName("pb_open")
+        self.horizontalLayout_2.addWidget(self.pb_open)
+        self.pb_save = QtWidgets.QPushButton(Form)
+        self.pb_save.setObjectName("pb_save")
+        self.horizontalLayout_2.addWidget(self.pb_save)
+        self.progressBar = QtWidgets.QProgressBar(Form)
+        self.progressBar.setEnabled(True)
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        self.horizontalLayout_2.addWidget(self.progressBar)
+        self.pbView = QtWidgets.QPushButton(Form)
+        self.pbView.setEnabled(False)
+        self.pbView.setObjectName("pbView")
+        self.horizontalLayout_2.addWidget(self.pbView)
+        self.pbEdit = QtWidgets.QPushButton(Form)
+        self.pbEdit.setEnabled(False)
+        self.pbEdit.setObjectName("pbEdit")
+        self.horizontalLayout_2.addWidget(self.pbEdit)
+        self.pbAddPoint = QtWidgets.QPushButton(Form)
+        self.pbAddPoint.setEnabled(False)
+        self.pbAddPoint.setObjectName("pbAddPoint")
+        self.horizontalLayout_2.addWidget(self.pbAddPoint)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        item = self.tableWidget.verticalHeaderItem(0)
+        item.setText(_translate("Form", "1"))
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("Form", "fix"))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("Form", "move"))
+        __sortingEnabled = self.tableWidget.isSortingEnabled()
+        self.tableWidget.setSortingEnabled(False)
+        self.tableWidget.setSortingEnabled(__sortingEnabled)
+        self.pb_open.setText(_translate("Form", "open"))
+        self.pb_save.setText(_translate("Form", "Save"))
+        self.pbView.setText(_translate("Form", "view"))
+        self.pbEdit.setText(_translate("Form", "edit"))
+        self.pbAddPoint.setText(_translate("Form", "add point"))
+
+from VISoR_Reconstruction.tools.common.annotation_widget.annotation_widget import AnnotationWidget

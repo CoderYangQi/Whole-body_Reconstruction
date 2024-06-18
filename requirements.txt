@@ -1,0 +1,9 @@
+opencv-python~=4.1.2.30
+numpy~=1.18.1
+tifffile~=2019.7.26.2
+Pillow~=5.3.0
+PyQt5~=5.14.1
+SimpleITK~=1.2.0rc2.dev1166+ga27d6
+torch~=1.4.0
+PyYAML~=3.13
+torchvision~=0.5.0

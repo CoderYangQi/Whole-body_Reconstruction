@@ -1,0 +1,15 @@
+{
+  "SliceTransformInfo": {
+    "Type": "SliceTransform",
+    "Software": "VISOR_Reconstruction",
+    "Parameter": "../Parameters.json",
+    "Version": "0.9.2",
+    "Time": "Fri Jan 22 13:03:26 2021"
+  },
+  "SliceTransform": {
+    "_026_488nm_10X.txt": {
+      "SliceID": 26,
+      "ChannelName": "488nm_10X"
+    }
+  }
+}

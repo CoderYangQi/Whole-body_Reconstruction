@@ -1,0 +1,22 @@
+{
+  "annotation_path": null,
+  "global_optimization_downsample": 32,
+  "ignore_channel": null,
+  "ignore_slice": null,
+  "internal_pixel_size": 4.0,
+  "nonrigid": true,
+  "output_path": null,
+  "output_pixel_size": 4.0,
+  "reference_channel": null,
+  "roi_height": 6000,
+  "roi_width": 6000,
+  "slice_source": "thumbnail",
+  "slice_template": "mouse_spinal_cord",
+  "slice_thickness": 300,
+  "surface_detect_downsample": [
+    2,
+    2,
+    1
+  ],
+  "use_annotation": true
+}

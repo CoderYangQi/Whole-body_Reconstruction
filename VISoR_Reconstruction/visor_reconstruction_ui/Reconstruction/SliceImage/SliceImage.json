@@ -1,0 +1,10 @@
+{
+  "SliceImageInfo": {
+    "Type": "SliceImage",
+    "Software": "VISOR_Reconstruction",
+    "Parameter": "../Parameters.json",
+    "Version": "0.3.7",
+    "Time": "Wed May 22 19:03:41 2019",
+    "Transform": "../SliceTransform/SliceTransform.json"
+  }
+}

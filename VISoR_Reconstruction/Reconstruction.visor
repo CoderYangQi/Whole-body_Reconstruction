@@ -1,0 +1,46 @@
+{
+  "Reconstruction": {
+    "ReconstructionInput": "Reconstruction\\ReconstructionInput.json",
+    "Parameters": "Reconstruction\\Parameters.json",
+    "Projection": "Reconstruction\\Projection\\Projection.json",
+    "SliceTransform": "Reconstruction\\SliceTransform\\SliceTransform.json",
+    "SliceImage": "Reconstruction\\SliceImage\\SliceImage.json",
+    "BrainTransform": "Reconstruction\\BrainTransform\\BrainTransform.json",
+    "BrainImage": "Reconstruction\\BrainImage\\BrainImage.json",
+    "BrainProjection": "Reconstruction\\BrainProjection\\BrainProjection.json",
+    "Temp": "Reconstruction\\Temp\\Temp.json"
+  },
+  "Acquisition Results": [
+    {
+      "FlsmList": [
+        "H:/20210107_GYH_MC4R-CRE_MEA_NULL_1/Data/488nm_10X\\1_026\\MC4R-CRE_MEA_NULL_1_026.flsm"
+      ],
+      "SliceID": "26"
+    }
+  ],
+  "Channels": [
+    {
+      "ChannelId": "1",
+      "ChannelName": "488nm_10X",
+      "EmissionFilter": "520/40",
+      "ExposureTime": "4",
+      "Folder": "",
+      "LaserPower": "40",
+      "LaserWavelength": "488",
+      "MaxVolts": "2.3",
+      "Objective": "10",
+      "SoftwareVersion": "2.6.6",
+      "Spacing": "2",
+      "Velocity": "1.75",
+      "VoltsOffset": "0.15"
+    }
+  ],
+  "Project Info": {
+    "Animal ID": "NULL",
+    "Date": "",
+    "Personnel": "",
+    "Project Name": "MC4R-CRE",
+    "Slide": "",
+    "Subproject Name": "MEA"
+  }
+}

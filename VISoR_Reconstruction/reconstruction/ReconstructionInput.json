@@ -1,0 +1,710 @@
+{
+  "tasks": {
+    "reconstruct_sample__026_488nm_10X": {
+      "name": "reconstruct_sample__026_488nm_10X",
+      "type": "reconstruct_sample",
+      "input_targets": {
+        "rawdata": {
+          "name": "raw_data__026_488nm_10X",
+          "type": "raw_data",
+          "path": "H:/20210107_GYH_MC4R-CRE_MEA_NULL_1/Data/488nm_10X\\1_026\\MC4R-CRE_MEA_NULL_1_026.flsm",
+          "category": [
+            "Temp",
+            "raw_data__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      },
+      "output_targets": [
+        {
+          "name": "slice__026_488nm_10X",
+          "type": "reconstructed_slice",
+          "path": "Reconstruction\\SliceTransform\\_026_488nm_10X.txt",
+          "category": [
+            "SliceTransform",
+            "SliceTransform"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X"
+          }
+        }
+      ],
+      "parameters": {
+        "methods": {
+          "stitch": "elastix_align2"
+        }
+      }
+    },
+    "reconstruct_image__026_488nm_10X": {
+      "name": "reconstruct_image__026_488nm_10X",
+      "type": "reconstruct_image",
+      "input_targets": {
+        "sample_data": {
+          "name": "slice__026_488nm_10X",
+          "type": "reconstructed_slice",
+          "path": "Reconstruction\\SliceTransform\\_026_488nm_10X.txt",
+          "category": [
+            "SliceTransform",
+            "SliceTransform"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X"
+          }
+        }
+      },
+      "output_targets": [
+        {
+          "name": "slice_image__026_488nm_10X",
+          "type": "ome_tiff",
+          "path": "Reconstruction\\SliceImage/4.0\\_026_488nm_10X.tif",
+          "category": [
+            "SliceImage",
+            "SliceImage"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        }
+      ],
+      "parameters": {
+        "pixel_size": 4.0,
+        "source": "thumbnail",
+        "method": "gpu_resample"
+      }
+    },
+    "generate_projection__026_488nm_10X": {
+      "name": "generate_projection__026_488nm_10X",
+      "type": "generate_projection",
+      "input_targets": {
+        "image": {
+          "name": "slice_image__026_488nm_10X",
+          "type": "ome_tiff",
+          "path": "Reconstruction\\SliceImage/4.0\\_026_488nm_10X.tif",
+          "category": [
+            "SliceImage",
+            "SliceImage"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        }
+      },
+      "output_targets": [
+        {
+          "name": "slice_projection__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Projection/4.0\\_026_488nm_10X.tif",
+          "category": [
+            "Projection",
+            "Projection"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        }
+      ],
+      "parameters": {}
+    },
+    "calc_surface_height_map__026_488nm_10X": {
+      "name": "calc_surface_height_map__026_488nm_10X",
+      "type": "calc_surface_height_map",
+      "input_targets": {
+        "img": {
+          "name": "downsampled_image__026_488nm_10X",
+          "type": "ome_tiff",
+          "path": "Reconstruction\\SliceImage/4.0\\_026_488nm_10X.tif",
+          "category": [
+            "SliceImage",
+            "SliceImage"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        }
+      },
+      "output_targets": [
+        {
+          "name": "uz__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_uz.mha",
+          "category": [
+            "Temp",
+            "uz__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        {
+          "name": "lz__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_lz.mha",
+          "category": [
+            "Temp",
+            "lz__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      ],
+      "parameters": {
+        "slice_thickness": 300,
+        "internal_pixel_size": 4.0,
+        "internal_downsample": [
+          2,
+          2,
+          1
+        ]
+      }
+    },
+    "extract_surface__026_488nm_10X": {
+      "name": "extract_surface__026_488nm_10X",
+      "type": "extract_surface",
+      "input_targets": {
+        "img": {
+          "name": "downsampled_image__026_488nm_10X",
+          "type": "ome_tiff",
+          "path": "Reconstruction\\SliceImage/4.0\\_026_488nm_10X.tif",
+          "category": [
+            "SliceImage",
+            "SliceImage"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        },
+        "umap": {
+          "name": "uz__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_uz.mha",
+          "category": [
+            "Temp",
+            "uz__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        "lmap": {
+          "name": "lz__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_lz.mha",
+          "category": [
+            "Temp",
+            "lz__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      },
+      "output_targets": [
+        {
+          "name": "us__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_us.mha",
+          "category": [
+            "Temp",
+            "us__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        {
+          "name": "ls__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_ls.mha",
+          "category": [
+            "Temp",
+            "ls__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      ],
+      "parameters": {}
+    },
+    "align_surfaces_u__026_488nm_10X": {
+      "name": "align_surfaces_u__026_488nm_10X",
+      "type": "align_surfaces",
+      "input_targets": {
+        "next_surface_0": {
+          "name": "us__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_us.mha",
+          "category": [
+            "Temp",
+            "us__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        "ref_img_0": {
+          "name": "reference_26_0",
+          "type": "image",
+          "path": "C:\\Software\\VISoR-data-analysis\\VISoR_Brain\\data/slice_template/26.tif",
+          "category": [
+            "Temp",
+            "reference_26_0"
+          ],
+          "metadata": {}
+        }
+      },
+      "output_targets": [
+        {
+          "name": "null",
+          "type": "null",
+          "path": null,
+          "category": [
+            "Temp",
+            "null"
+          ],
+          "metadata": {}
+        },
+        {
+          "name": "uxy__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_uxy.mha",
+          "category": [
+            "Temp",
+            "uxy__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      ],
+      "parameters": {
+        "nonrigid": true,
+        "outside_brightness": 5,
+        "use_rigidity_mask": false,
+        "method": "elastix",
+        "prev_surface_0": null,
+        "ref_size": [
+          3500,
+          2500
+        ],
+        "ref_scale": 1.0
+      }
+    },
+    "align_surfaces_l__026_488nm_10X": {
+      "name": "align_surfaces_l__026_488nm_10X",
+      "type": "align_surfaces",
+      "input_targets": {
+        "prev_surface": {
+          "name": "ls__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_ls.mha",
+          "category": [
+            "Temp",
+            "ls__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        "ref_img": {
+          "name": "reference_26_0",
+          "type": "image",
+          "path": "C:\\Software\\VISoR-data-analysis\\VISoR_Brain\\data/slice_template/26.tif",
+          "category": [
+            "Temp",
+            "reference_26_0"
+          ],
+          "metadata": {}
+        }
+      },
+      "output_targets": [
+        {
+          "name": "lxy__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_lxy.mha",
+          "category": [
+            "Temp",
+            "lxy__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        {
+          "name": "null",
+          "type": "null",
+          "path": null,
+          "category": [
+            "Temp",
+            "null"
+          ],
+          "metadata": {}
+        }
+      ],
+      "parameters": {
+        "nonrigid": true,
+        "outside_brightness": 5,
+        "use_rigidity_mask": false,
+        "method": "elastix",
+        "prev_surface_0": null,
+        "ref_size": [
+          3500,
+          2500
+        ],
+        "ref_scale": 1.0,
+        "next_surface": null
+      }
+    },
+    "process_transforms_": {
+      "name": "process_transforms_",
+      "type": "process_transforms",
+      "input_targets": {
+        "26,xy,u": {
+          "name": "uxy__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_uxy.mha",
+          "category": [
+            "Temp",
+            "uxy__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        "26,xy,l": {
+          "name": "lxy__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_lxy.mha",
+          "category": [
+            "Temp",
+            "lxy__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        "26,z,u": {
+          "name": "uz__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_uz.mha",
+          "category": [
+            "Temp",
+            "uz__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        "26,z,l": {
+          "name": "lz__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_lz.mha",
+          "category": [
+            "Temp",
+            "lz__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      },
+      "output_targets": [
+        {
+          "name": "udf__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_udf.mha",
+          "category": [
+            "Temp",
+            "udf__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        {
+          "name": "ldf__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_ldf.mha",
+          "category": [
+            "Temp",
+            "ldf__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      ],
+      "parameters": {
+        "internal_downsample": 32,
+        "nonrigid": true
+      }
+    },
+    "create_brain_": {
+      "name": "create_brain_",
+      "type": "create_brain",
+      "input_targets": {
+        "26,sl": {
+          "name": "slice__026_488nm_10X",
+          "type": "reconstructed_slice",
+          "path": "Reconstruction\\SliceTransform\\_026_488nm_10X.txt",
+          "category": [
+            "SliceTransform",
+            "SliceTransform"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X"
+          }
+        },
+        "26,u": {
+          "name": "udf__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_udf.mha",
+          "category": [
+            "Temp",
+            "udf__026_488nm_10X"
+          ],
+          "metadata": {}
+        },
+        "26,l": {
+          "name": "ldf__026_488nm_10X",
+          "type": "image",
+          "path": "Reconstruction\\Temp\\_026_488nm_10X_ldf.mha",
+          "category": [
+            "Temp",
+            "ldf__026_488nm_10X"
+          ],
+          "metadata": {}
+        }
+      },
+      "output_targets": [
+        {
+          "name": "brain_",
+          "type": "reconstructed_brain",
+          "path": "Reconstruction\\BrainTransform\\visor_brain.txt",
+          "category": [
+            "BrainTransform",
+            "BrainTransform"
+          ],
+          "metadata": {}
+        }
+      ],
+      "parameters": {
+        "internal_pixel_size": 4.0,
+        "slice_thickness": 300
+      }
+    },
+    "generate_brain_image__026_488nm_10X": {
+      "name": "generate_brain_image__026_488nm_10X",
+      "type": "generate_brain_image",
+      "input_targets": {
+        "brain": {
+          "name": "brain_",
+          "type": "reconstructed_brain",
+          "path": "Reconstruction\\BrainTransform\\visor_brain.txt",
+          "category": [
+            "BrainTransform",
+            "BrainTransform"
+          ],
+          "metadata": {}
+        },
+        "img": {
+          "name": "slice_image__026_488nm_10X",
+          "type": "ome_tiff",
+          "path": "Reconstruction\\SliceImage/4.0\\_026_488nm_10X.tif",
+          "category": [
+            "SliceImage",
+            "SliceImage"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        }
+      },
+      "output_targets": [
+        {
+          "name": "d__026_488nm_10X",
+          "type": "file",
+          "path": "Reconstruction\\BrainImage\\4.0\\_026_488nm_10X.txt",
+          "category": [
+            "BrainImage",
+            "BrainImage"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        }
+      ],
+      "parameters": {
+        "slice_index": 26,
+        "input_pixel_size": 4.0,
+        "name_format": "Reconstruction\\BrainImage\\4.0\\Z{:05d}_C1.tif",
+        "output_pixel_size": 4.0,
+        "n_start": 1875
+      }
+    },
+    "generate_freesia_input_488nm_10X": {
+      "name": "generate_freesia_input_488nm_10X",
+      "type": "generate_freesia_input",
+      "input_targets": {
+        "d__026_488nm_10X": {
+          "name": "d__026_488nm_10X",
+          "type": "file",
+          "path": "Reconstruction\\BrainImage\\4.0\\_026_488nm_10X.txt",
+          "category": [
+            "BrainImage",
+            "BrainImage"
+          ],
+          "metadata": {
+            "SliceID": 26,
+            "ChannelName": "488nm_10X",
+            "PixelSize": 4.0
+          }
+        }
+      },
+      "output_targets": [
+        {
+          "name": "freesia_input_4.0_C488nm_10X",
+          "type": "file",
+          "path": "Reconstruction\\BrainImage\\freesia_4.0_C1_488nm_10X.json",
+          "category": [
+            "BrainImage",
+            "FreesiaFile"
+          ],
+          "metadata": {}
+        }
+      ],
+      "parameters": {
+        "input_path": "Reconstruction\\BrainImage\\4.0",
+        "shape": [
+          3500,
+          2500
+        ],
+        "channel": "1",
+        "pixel_size": 4.0,
+        "group_size": 75
+      }
+    }
+  },
+  "name": "Reconstruction",
+  "path": "",
+  "parameters": {
+    "annotation_path": null,
+    "brain_projection_thickness": 30,
+    "channel_align_method": "channel_elastix_align",
+    "generate_brain_projection": false,
+    "generate_projection": true,
+    "global_optimization_downsample": 32,
+    "ignore_channel": null,
+    "ignore_slice": null,
+    "internal_pixel_size": 4.0,
+    "nonrigid": true,
+    "output_path": "",
+    "output_pixel_size": 4.0,
+    "outside_brightness": 112,
+    "reconstruct_brain": true,
+    "reference_channel": null,
+    "roi_height": 10000,
+    "roi_width": 14000,
+    "separate_brain_image": false,
+    "slice_source": "thumbnail",
+    "slice_template": "mouse_brain",
+    "slice_thickness": 300,
+    "slice_stitch_method": "elastix",
+    "slice_stitch_channels": "all",
+    "surface_detect_downsample": [
+      2,
+      2,
+      1
+    ],
+    "use_annotation": true,
+    "use_rigidity_mask": false
+  },
+  "metadata": {
+    "Projection": {
+      "ProjectionInfo": {
+        "PixelSize": 4.0,
+        "Type": "Projection",
+        "Software": "VISOR_Reconstruction",
+        "Parameter": "../Parameters.json",
+        "Version": "0.9.2",
+        "Time": "Fri Jan 22 13:03:26 2021",
+        "Transform": "../SliceTransform/SliceTransform.json"
+      }
+    },
+    "SliceTransform": {
+      "SliceTransformInfo": {
+        "Type": "SliceTransform",
+        "Software": "VISOR_Reconstruction",
+        "Parameter": "../Parameters.json",
+        "Version": "0.9.2",
+        "Time": "Fri Jan 22 13:03:26 2021"
+      },
+      "SliceTransform": {
+        "_026_488nm_10X.txt": {
+          "SliceID": 26,
+          "ChannelName": "488nm_10X"
+        }
+      }
+    },
+    "SliceImage": {
+      "SliceImageInfo": {
+        "Type": "SliceImage",
+        "Software": "VISOR_Reconstruction",
+        "Parameter": "../Parameters.json",
+        "Version": "0.9.2",
+        "Time": "Fri Jan 22 13:03:26 2021",
+        "Transform": "../SliceTransform/SliceTransform.json"
+      }
+    },
+    "BrainTransform": {
+      "BrainTransformInfo": {
+        "Type": "BrainTransform",
+        "Software": "VISOR_Reconstruction",
+        "Parameter": "../Parameters.json",
+        "Version": "0.9.2",
+        "Time": "Fri Jan 22 13:03:26 2021"
+      }
+    },
+    "BrainImage": {
+      "BrainImageInfo": {
+        "Type": "BrainImage",
+        "Software": "VISOR_Reconstruction",
+        "Parameter": "../Parameters.json",
+        "Version": "0.9.2",
+        "Time": "Fri Jan 22 13:03:26 2021",
+        "Transform": "../BrainTransform/BrainTransform.json"
+      }
+    },
+    "BrainProjection": {
+      "BrainProjectionInfo": {
+        "Type": "BrainProjection",
+        "Software": "VISOR_Reconstruction",
+        "Parameter": "../Parameters.json",
+        "Version": "0.9.2",
+        "Time": "Fri Jan 22 13:03:26 2021",
+        "BrainImage": "../BrainImage/BrainImage.json"
+      }
+    }
+  },
+  "raw_data_info": {
+    "Acquisition Results": [
+      {
+        "FlsmList": [
+          "H:/20210107_GYH_MC4R-CRE_MEA_NULL_1/Data/488nm_10X\\1_026\\MC4R-CRE_MEA_NULL_1_026.flsm"
+        ],
+        "SliceID": "26"
+      }
+    ],
+    "Channels": [
+      {
+        "ChannelId": "1",
+        "ChannelName": "488nm_10X",
+        "EmissionFilter": "520/40",
+        "ExposureTime": "4",
+        "Folder": "",
+        "LaserPower": "40",
+        "LaserWavelength": "488",
+        "MaxVolts": "2.3",
+        "Objective": "10",
+        "SoftwareVersion": "2.6.6",
+        "Spacing": "2",
+        "Velocity": "1.75",
+        "VoltsOffset": "0.15"
+      }
+    ],
+    "Project Info": {
+      "Animal ID": "NULL",
+      "Date": "",
+      "Personnel": "",
+      "Project Name": "MC4R-CRE",
+      "Slide": "",
+      "Subproject Name": "MEA"
+    }
+  }
+}

@@ -1,0 +1,1393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="982d538f-3708-40d5-b7fc-b39bc6aea5df" name="Default" comment="update ui">
+      <change afterPath="$PROJECT_DIR$/ReconstructionScripts/surface153_156/CalLoss.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ReconstructionScripts/surface153_156/CreateUxy0615.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ReconstructionScripts/surface153_156/Script0617.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ReconstructionScripts/surface153_156/ScriptTest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ReconstructionScripts/surface153_156/Step1_Translate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ReconstructionScripts/surface153_156/Step2_CreateMHA.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ReconstructionScripts/surface153_156/StepAlignSurface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/cell_counting/cell_counting.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/common/ilastik_cell_counter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/common/point_transform.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/common/test/test_ilastik_cell_counter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/image_reconstruction/region_reconstruction.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/texture_classifier/autoencoder.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/texture_classifier/data.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/texture_classifier/resnet3d.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/texture_classifier/texture_classifier.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Analysis/visor_analysis_ui/mainwindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/data/reference.tif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/format/raw_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/format/raw_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/format/tests/test_raw_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/format/tests/test_raw_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/format/visor_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/format/visor_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/lib/gpu_resample/resampler.cp37-win_amd64.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/lib/gpu_resample/resampler.cp37-win_amd64.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/misc.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/misc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_align_columns_2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_align_columns_2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_align_surface_bspline3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_align_surface_bspline3.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_align_surface_rigid.txt" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_align_surface_rigid.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_brain_registration_affine.txt" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_brain_registration_affine.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_brain_registration_bspline.txt" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/parameters/tp_brain_registration_bspline.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/positioning/tests/test_visor_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/positioning/tests/test_visor_sample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/positioning/visor_brain.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/positioning/visor_brain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/positioning/visor_sample.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/positioning/visor_sample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/utils/elastix_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/utils/elastix_files.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Brain/utils/ome_tiff.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Brain/utils/ome_tiff.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/misc.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/misc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/preset/mouse_fast.json" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/preset/mouse_fast.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/preset/mouse_fine.json" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/preset/mouse_fine.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_registration.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_registration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/align_channels/channel_elastix_align.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/align_channels/channel_elastix_align.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/image_reconstruct/gpu_resample.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/image_reconstruct/gpu_resample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/image_reconstruct/inverse_resample.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/image_reconstruct/inverse_resample.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/stitch/elastix_align.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/stitch/elastix_align.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/stitch/elastix_align2.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/stitch/elastix_align2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/tests/test_brain_reconstruct.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/tests/test_brain_reconstruct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/tests/test_channel_elastix_align.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/tests/test_channel_elastix_align.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/tests/test_sample_reconstruct.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/tests/test_sample_reconstruct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction_executor/executor.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction_executor/executor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction_executor/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction_executor/generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction_executor/tests/test_reconstruction_tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/reconstruction_executor/tests/test_reconstruction_tool.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/run_visor_reconstruction.bat" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/run_visor_reconstruction.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/tools/common/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/tools/common/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/tools/imagej_bridge/visor_reconstruct.ijm" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/tools/imagej_bridge/visor_reconstruct.ijm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/tools/raw_data_viewer/raw_data_viewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/tools/raw_data_viewer/raw_data_viewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/brain_reconstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/brain_reconstruction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/select_raw_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/select_raw_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/select_raw_data_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/select_raw_data_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/select_raw_data_ui.ui" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/select_raw_data_ui.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/settings_dialog_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/settings_dialog_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/surface_registration/surface_registration.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/surface_registration/surface_registration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/whole_brain_reconstruct.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/whole_brain_reconstruct.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/whole_brain_reconstruct_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/whole_brain_reconstruct_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/whole_brain_reconstruct_ui.ui" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/whole_brain_reconstruct_ui.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pipelines/reconstruction_pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pipelines/reconstruction_pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resample_affine/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resample_affine/resample_affine/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resample_affine/resample_affine/helper_cuda.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resample_affine/resample_affine/helper_string.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resample_affine/resample_affine/module.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resample_affine/resample_affine/resampler.cu" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/resample_affine/resample_affine/resampler.h" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="local" />
+      </map>
+    </option>
+    <option name="PUSH_TAGS">
+      <GitPushTagMode />
+    </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/brain_reconstruction.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/stitch/elastix_align2.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/sample_reconstruct_methods/image_reconstruct/gpu_resample.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="JupyterTrust" id="52a69400-b514-4744-8231-66d720923c8e" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="21Aa0JmyeFycFx9fa2cOyOh7vNH" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python tests.Nosetests for CalLoss.Calloss.test_ReadNpy.executor": "Run",
+    "Python tests.Nosetests for CalLoss.Calloss.test_loss.executor": "Run",
+    "Python tests.Nosetests for ScriptTest.Calloss.test_AlignImgs.executor": "Run",
+    "Python tests.Nosetests for ScriptTest.Calloss.test_apply_xy.executor": "Run",
+    "Python tests.Nosetests for ScriptTest.Calloss.test_print.executor": "Run",
+    "Python tests.Nosetests for ScriptTest.Calloss.test_std.executor": "Run",
+    "Python.Step1_ROI_0610.executor": "Run",
+    "Python.Step2_ROI_0610.executor": "Run",
+    "Python.StepAlignSurface0612.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/USERS/yq/code/GitHub/heightVISoR",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\USERS\yq\code\heightVISoR\YQReconstructionScripts\surface153_156" />
+      <recent name="D:\USERS\yq\code\heightVISoR\YQReconstructionScripts\SpineReg" />
+      <recent name="D:\USERS\yq\code\heightVISoR\YQReconstructionScripts\LegReg" />
+      <recent name="D:\USERS\yq\code\heightVISoR\VISoR_Reconstruction\reconstruction\parameters" />
+      <recent name="D:\USERS\yq\code\heightVISoR\common_script" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\USERS\yq\code\GitHub\heightVISoR\ReconstructionScripts\surface153_156" />
+      <recent name="D:\USERS\yq\code\GitHub\heightVISoR\common_script" />
+      <recent name="D:\USERS\yq\code\heightVISoR\common_script" />
+      <recent name="D:\users\yq\Project\cal_overlap\DownSample" />
+      <recent name="C:\Users\chaoyu\Documents\projects\VISoR-data-analysis\VISoR_Reconstruction" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Step2_ROI_0610" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="VISoR-data-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/YQReconstructionScripts/surface153_156/Step2_ROI_0610.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="StepAlignSurface0612" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="VISoR-data-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/YQReconstructionScripts/surface153_156/StepAlignSurface0612.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Nosetests for ReconstructionScripts.surface153_156.CalLoss.Calloss.test_loss" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <module name="VISoR-data-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ReconstructionScripts/surface153_156" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;ReconstructionScripts.surface153_156.CalLoss.Calloss.test_loss&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Nosetests for ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_apply_xy" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <module name="VISoR-data-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ReconstructionScripts/surface153_156" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_apply_xy&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Nosetests for ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_std" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <module name="VISoR-data-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ReconstructionScripts/surface153_156" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_std&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Nosetests in bin" type="tests" factoryName="Nosetests" nameIsGenerated="true">
+      <module name="VISoR-data-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="D:\USERS\yq\code\cal_overlap\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <module name="VISoR-data-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;.&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.StepAlignSurface0612" />
+      <item itemvalue="Python.Step2_ROI_0610" />
+      <item itemvalue="Python tests.Nosetests in bin" />
+      <item itemvalue="Python tests.Nosetests for ReconstructionScripts.surface153_156.CalLoss.Calloss.test_loss" />
+      <item itemvalue="Python tests.Nosetests for ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_apply_xy" />
+      <item itemvalue="Python tests.Nosetests for ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_std" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Nosetests for ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_apply_xy" />
+        <item itemvalue="Python tests.Nosetests for ReconstructionScripts.surface153_156.ScriptTest.Calloss.test_std" />
+        <item itemvalue="Python.StepAlignSurface0612" />
+        <item itemvalue="Python.Step2_ROI_0610" />
+        <item itemvalue="Python tests.Nosetests for ReconstructionScripts.surface153_156.CalLoss.Calloss.test_loss" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-09665e90c3a7-b11f5e8da5ad-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.15026.15" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\chaoyu\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="982d538f-3708-40d5-b7fc-b39bc6aea5df" name="Default" comment="" />
+      <created>1520072159188</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1520072159188</updated>
+      <workItem from="1695462089791" duration="25288000" />
+      <workItem from="1695801415658" duration="1223000" />
+      <workItem from="1696574260198" duration="10034000" />
+      <workItem from="1696755486329" duration="1795000" />
+      <workItem from="1696771586831" duration="25745000" />
+      <workItem from="1697182972174" duration="3588000" />
+      <workItem from="1697471636460" duration="7131000" />
+      <workItem from="1711687650983" duration="83560000" />
+      <workItem from="1713641328114" duration="1657000" />
+      <workItem from="1713682493327" duration="99797000" />
+      <workItem from="1715000942257" duration="151848000" />
+      <workItem from="1716046056828" duration="18393000" />
+      <workItem from="1716217309314" duration="6724000" />
+      <workItem from="1716279793923" duration="37900000" />
+      <workItem from="1716529603128" duration="7842000" />
+      <workItem from="1716626683267" duration="1434000" />
+      <workItem from="1716722781205" duration="36413000" />
+      <workItem from="1716929725153" duration="44568000" />
+      <workItem from="1717079854105" duration="123557000" />
+      <workItem from="1718089683797" duration="20544000" />
+      <workItem from="1718203580678" duration="7897000" />
+      <workItem from="1718707571420" duration="1521000" />
+    </task>
+    <task id="LOCAL-00040" summary="Add brain reconstruction GUI">
+      <created>1541328030434</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1541328030434</updated>
+    </task>
+    <task id="LOCAL-00041" summary="replace get_sample_image by reconstruct_image">
+      <created>1541509848879</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1541509848879</updated>
+    </task>
+    <task id="LOCAL-00042" summary="fix bugs">
+      <created>1542010080985</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1542010080985</updated>
+    </task>
+    <task id="LOCAL-00043" summary="minor optimization">
+      <created>1542600827007</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1542600827007</updated>
+    </task>
+    <task id="LOCAL-00044" summary="add new stitching method: elastix_align2">
+      <created>1542600864797</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1542600864797</updated>
+    </task>
+    <task id="LOCAL-00045" summary="add brain reconstruct script generator">
+      <created>1542891259407</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1542891259407</updated>
+    </task>
+    <task id="LOCAL-00046" summary="optimize brain reconstruction">
+      <created>1543725169590</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1543725169590</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Add surface annotation tool">
+      <created>1544250681718</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1544250681718</updated>
+    </task>
+    <task id="LOCAL-00048" summary="change folder structure">
+      <created>1544789978903</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1544789978903</updated>
+    </task>
+    <task id="LOCAL-00049" summary="print execution time">
+      <created>1544856840297</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1544856840297</updated>
+    </task>
+    <task id="LOCAL-00050" summary="optimize performance">
+      <created>1545372272316</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1545372272317</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Add mouse spinal cord reconstruction">
+      <created>1546438707349</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1546438707349</updated>
+    </task>
+    <task id="LOCAL-00052" summary="fix bugs">
+      <created>1546497486097</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1546497486097</updated>
+    </task>
+    <task id="LOCAL-00053" summary="fix bugs">
+      <created>1546499280187</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1546499280187</updated>
+    </task>
+    <task id="LOCAL-00054" summary="fix path problems">
+      <created>1546599914304</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1546599914304</updated>
+    </task>
+    <task id="LOCAL-00055" summary="update slice reconstruction output format">
+      <created>1546600174109</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1546600174109</updated>
+    </task>
+    <task id="LOCAL-00056" summary="update slice reconstruction output format">
+      <created>1546600284881</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1546600284881</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Add metadata output">
+      <created>1547813844424</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1547813844424</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Update metadata output">
+      <created>1548068041664</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1548068041664</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Fix bugs">
+      <created>1548484206472</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1548484206472</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Add save/load reconstruction settings">
+      <created>1549684198300</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1549684198300</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Add metadata output">
+      <created>1550222525998</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1550222525998</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Fix bugs">
+      <created>1550378861446</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1550378861446</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Add texture classifier">
+      <created>1550378887175</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1550378887176</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Add whole brain roi size adjust">
+      <created>1550469309628</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1550469309628</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Fix bug">
+      <created>1550554481731</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1550554481731</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Fix bug">
+      <created>1550556229655</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1550556229655</updated>
+    </task>
+    <task id="LOCAL-00067" summary="Fix bug">
+      <created>1550561148981</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1550561148981</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Fix bug">
+      <created>1550581093603</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1550581093603</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Fix bug">
+      <created>1550581134622</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1550581134622</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Add fake rawdata">
+      <created>1550840782450</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1550840782450</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Fix bug">
+      <created>1550841263868</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1550841263868</updated>
+    </task>
+    <task id="LOCAL-00072" summary="Fix bug">
+      <created>1551422585423</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1551422585423</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Add gpu resampler">
+      <created>1551683101572</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1551683101572</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Add gpu resampler">
+      <created>1551683205792</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1551683205792</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Add gpu resampler">
+      <created>1551683319573</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1551683319573</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Update gpu resampler">
+      <created>1551715361001</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1551715361001</updated>
+    </task>
+    <task id="LOCAL-00077" summary="Fix bugs">
+      <created>1551866982763</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1551866982764</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Fix bugs">
+      <created>1551944715916</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1551944715916</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Fix bugs">
+      <created>1552194750145</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1552194750145</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Fix raw data loading bugs">
+      <created>1552637463662</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1552637463662</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Automated parameter generation">
+      <created>1552637510227</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1552637510227</updated>
+    </task>
+    <task id="LOCAL-00082" summary="optimize memory usage">
+      <created>1552906168096</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1552906168096</updated>
+    </task>
+    <task id="LOCAL-00083" summary="fix bugs">
+      <created>1553425744141</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1553425744141</updated>
+    </task>
+    <task id="LOCAL-00084" summary="fix bugs">
+      <created>1553615966371</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1553615966371</updated>
+    </task>
+    <task id="LOCAL-00085" summary="fix bugs">
+      <created>1554635660443</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1554635660443</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Add region reconstruction">
+      <created>1555431890393</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1555431890393</updated>
+    </task>
+    <task id="LOCAL-00087" summary="optimize performance of slice alignment">
+      <created>1557129855660</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1557129855660</updated>
+    </task>
+    <task id="LOCAL-00088" summary="update ui">
+      <created>1558523814206</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1558523814206</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
+    <servers />
+  </component>
+  <component name="TodoView" selected-index="4">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="optimize brain reconstruction" />
+    <MESSAGE value="Add surface annotation tool" />
+    <MESSAGE value="change folder structure" />
+    <MESSAGE value="print execution time" />
+    <MESSAGE value="optimize performance" />
+    <MESSAGE value="Add mouse spinal cord reconstruction" />
+    <MESSAGE value="fix path problems" />
+    <MESSAGE value="update slice reconstruction output format" />
+    <MESSAGE value="Update metadata output" />
+    <MESSAGE value="Add save/load reconstruction settings" />
+    <MESSAGE value="Add metadata output" />
+    <MESSAGE value="Add texture classifier" />
+    <MESSAGE value="Add whole brain roi size adjust" />
+    <MESSAGE value="Add fake rawdata" />
+    <MESSAGE value="Fix bug" />
+    <MESSAGE value="Add gpu resampler" />
+    <MESSAGE value="Update gpu resampler" />
+    <MESSAGE value="Fix bugs" />
+    <MESSAGE value="Fix raw data loading bugs" />
+    <MESSAGE value="Automated parameter generation" />
+    <MESSAGE value="optimize memory usage" />
+    <MESSAGE value="fix bugs" />
+    <MESSAGE value="Add region reconstruction" />
+    <MESSAGE value="optimize performance of slice alignment" />
+    <MESSAGE value="update ui" />
+    <option name="LAST_COMMIT_MESSAGE" value="update ui" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Analysis/image_reconstruction/region_reconstruction.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="223" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/pages/select_raw_data/select_raw_data.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="230" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/elastix_multichannel.py</url>
+          <line>65</line>
+          <option name="timeStamp" value="232" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/elastix_multichannel.py</url>
+          <line>73</line>
+          <option name="timeStamp" value="239" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/elastix.py</url>
+          <line>65</line>
+          <option name="timeStamp" value="250" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/try_block_cal.py</url>
+          <line>701</line>
+          <option name="timeStamp" value="253" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Stage_Generator.py</url>
+          <line>292</line>
+          <option name="timeStamp" value="256" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Stage_Generator.py</url>
+          <line>289</line>
+          <option name="timeStamp" value="258" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Refine_SliceTransform.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="259" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/try_block_cal.py</url>
+          <line>2608</line>
+          <option name="timeStamp" value="264" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/InterSliceRefine.py</url>
+          <line>105</line>
+          <option name="timeStamp" value="265" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/InterSliceRefine.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="266" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/InterSliceRefine.py</url>
+          <line>63</line>
+          <option name="timeStamp" value="268" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/InterSliceRefine.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="269" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/InterSliceRefine.py</url>
+          <line>55</line>
+          <option name="timeStamp" value="270" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/createMHASurface.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="271" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/createMHASurface.py</url>
+          <line>188</line>
+          <option name="timeStamp" value="272" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/createMHASurface.py</url>
+          <line>156</line>
+          <option name="timeStamp" value="273" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/DownSample/Down_sample_Refine_from_4um_seq.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="274" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>222</line>
+          <option name="timeStamp" value="287" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>221</line>
+          <option name="timeStamp" value="288" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>286</line>
+          <option name="timeStamp" value="289" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="304" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>332</line>
+          <option name="timeStamp" value="306" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/elastix.py</url>
+          <line>30</line>
+          <option name="timeStamp" value="315" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>553</line>
+          <option name="timeStamp" value="321" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>344</line>
+          <option name="timeStamp" value="338" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>343</line>
+          <option name="timeStamp" value="339" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>336</line>
+          <option name="timeStamp" value="342" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>349</line>
+          <option name="timeStamp" value="345" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>348</line>
+          <option name="timeStamp" value="347" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>330</line>
+          <option name="timeStamp" value="348" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>366</line>
+          <option name="timeStamp" value="356" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>412</line>
+          <option name="timeStamp" value="357" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>382</line>
+          <option name="timeStamp" value="358" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>371</line>
+          <option name="timeStamp" value="359" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>490</line>
+          <option name="timeStamp" value="373" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>462</line>
+          <option name="timeStamp" value="375" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>439</line>
+          <option name="timeStamp" value="376" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>513</line>
+          <option name="timeStamp" value="377" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>247</line>
+          <option name="timeStamp" value="378" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>536</line>
+          <option name="timeStamp" value="380" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RefineTranslate.py</url>
+          <line>690</line>
+          <option name="timeStamp" value="381" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/elastix.py</url>
+          <line>90</line>
+          <option name="timeStamp" value="390" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>406</line>
+          <option name="timeStamp" value="391" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>459</line>
+          <option name="timeStamp" value="395" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>383</line>
+          <option name="timeStamp" value="398" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>458</line>
+          <option name="timeStamp" value="400" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>462</line>
+          <option name="timeStamp" value="401" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>423</line>
+          <option name="timeStamp" value="403" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/yqRefine_elasitx.py</url>
+          <line>121</line>
+          <option name="timeStamp" value="406" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/yqRefine_elasitx.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="407" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VISoR_Reconstruction/reconstruction/brain_reconstruct_methods/align_surfaces/yqRefine_elasitx.py</url>
+          <line>61</line>
+          <option name="timeStamp" value="408" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TranslateSliceImage.py</url>
+          <line>218</line>
+          <option name="timeStamp" value="423" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TranslateSliceImage.py</url>
+          <line>104</line>
+          <option name="timeStamp" value="432" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step1.py</url>
+          <line>187</line>
+          <option name="timeStamp" value="435" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0424.py</url>
+          <line>411</line>
+          <option name="timeStamp" value="436" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step1.py</url>
+          <line>172</line>
+          <option name="timeStamp" value="438" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step3_multiGenerator.py</url>
+          <line>74</line>
+          <option name="timeStamp" value="453" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step1.py</url>
+          <line>162</line>
+          <option name="timeStamp" value="454" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step1.py</url>
+          <line>350</line>
+          <option name="timeStamp" value="455" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>624</line>
+          <option name="timeStamp" value="456" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/CheckCalBlock0516.py</url>
+          <line>36</line>
+          <option name="timeStamp" value="457" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step2_SurfaceTransform.py</url>
+          <line>284</line>
+          <option name="timeStamp" value="469" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step2_SurfaceTransform.py</url>
+          <line>342</line>
+          <option name="timeStamp" value="470" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ContiuneProcessTransform.py</url>
+          <line>14</line>
+          <option name="timeStamp" value="476" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step3_multiGenerator.py</url>
+          <line>69</line>
+          <option name="timeStamp" value="477" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ChannelAlign0526.py</url>
+          <line>115</line>
+          <option name="timeStamp" value="480" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ChannelAlign0526.py</url>
+          <line>69</line>
+          <option name="timeStamp" value="481" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ChannelAlign0526.py</url>
+          <line>58</line>
+          <option name="timeStamp" value="482" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0516.py</url>
+          <line>511</line>
+          <option name="timeStamp" value="483" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0516.py</url>
+          <line>510</line>
+          <option name="timeStamp" value="484" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step1_0527.py</url>
+          <line>245</line>
+          <option name="timeStamp" value="486" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/Step2_ROI_0528.py</url>
+          <line>257</line>
+          <option name="timeStamp" value="488" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/RigidAlignSurface.py</url>
+          <line>131</line>
+          <option name="timeStamp" value="490" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0529.py</url>
+          <line>456</line>
+          <option name="timeStamp" value="494" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0529.py</url>
+          <line>499</line>
+          <option name="timeStamp" value="495" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0529.py</url>
+          <line>505</line>
+          <option name="timeStamp" value="496" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0529.py</url>
+          <line>510</line>
+          <option name="timeStamp" value="497" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>814</line>
+          <option name="timeStamp" value="505" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>831</line>
+          <option name="timeStamp" value="506" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/CalLoss.py</url>
+          <line>296</line>
+          <option name="timeStamp" value="507" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/CheckSurface0523.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="508" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/CalLoss.py</url>
+          <line>238</line>
+          <option name="timeStamp" value="511" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/CalLoss.py</url>
+          <line>294</line>
+          <option name="timeStamp" value="512" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/CalLoss.py</url>
+          <line>332</line>
+          <option name="timeStamp" value="513" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/StepAlignSurface.py</url>
+          <line>123</line>
+          <option name="timeStamp" value="517" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ContiuneProcessTransform.py</url>
+          <line>66</line>
+          <option name="timeStamp" value="524" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/GetNewSurface.py</url>
+          <line>984</line>
+          <option name="timeStamp" value="528" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ContiuneProcessTransform.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="534" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ContiuneProcessTransform.py</url>
+          <line>94</line>
+          <option name="timeStamp" value="536" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ContiuneProcessTransform.py</url>
+          <line>114</line>
+          <option name="timeStamp" value="537" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/surface153_156/CreateUxy.py</url>
+          <line>63</line>
+          <option name="timeStamp" value="538" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/surface153_156/CreateUxy.py</url>
+          <line>139</line>
+          <option name="timeStamp" value="540" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/LegReg/ContiuneProcessTransform.py</url>
+          <line>46</line>
+          <option name="timeStamp" value="544" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ContiuneProcessTransform.py</url>
+          <line>33</line>
+          <option name="timeStamp" value="547" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/ContiuneProcessTransform.py</url>
+          <line>87</line>
+          <option name="timeStamp" value="549" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/LegReg/TestScript.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="552" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/SpineReg/ContiuneProcessTransform0605.py</url>
+          <line>60</line>
+          <option name="timeStamp" value="553" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/common_script/common0604.py</url>
+          <line>549</line>
+          <option name="timeStamp" value="559" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/surface153_156/Step1_Translate.py</url>
+          <line>197</line>
+          <option name="timeStamp" value="562" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ReconstructionScripts/surface153_156/ScriptTest.py</url>
+          <line>88</line>
+          <option name="timeStamp" value="563" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="tests">
+        <watch expression="img" />
+      </configuration>
+      <configuration name="PythonConfigurationType">
+        <watch expression="t.type" />
+        <watch expression="results['reconstruct_sample_1_1_G14_1_001_488']" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1_0527.coverage" NAME="Step1_0527 Coverage Results" MODIFIED="1716801341033" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_process_transform.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_process_transform Coverage Results" MODIFIED="1713344645346" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_CreateSurface.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_CreateSurface Coverage Results" MODIFIED="1713683488431" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_CreateSurface34.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_CreateSurface34 Coverage Results" MODIFIED="1714229769584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$TH2_writeBlock.coverage" NAME="TH2_writeBlock Coverage Results" MODIFIED="1714721677259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_CombineSurface.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_CombineSurface Coverage Results" MODIFIED="1717318776934" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$StepAlignSurface.coverage" NAME="StepAlignSurface Coverage Results" MODIFIED="1717680537193" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/SpineReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_pick_piece.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_pick_piece Coverage Results" MODIFIED="1716901720127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_create_brain.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_create_brain Coverage Results" MODIFIED="1717183847470" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_CheckCalBlock.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_CheckCalBlock Coverage Results" MODIFIED="1717075465283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_readsize.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_readsize Coverage Results" MODIFIED="1713877112375" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$CheckSurface0522.coverage" NAME="CheckSurface0522 Coverage Results" MODIFIED="1716433899907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$StepAlignSurface0612.coverage" NAME="StepAlignSurface0612 Coverage Results" MODIFIED="1718252369253" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step2_0517.coverage" NAME="Step2_0517 Coverage Results" MODIFIED="1716792848236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_TestScript_TestAddFunction_test_readUxy.coverage" NAME="Nosetests for TestScript.TestAddFunction.test_readUxy Coverage Results" MODIFIED="1717576988097" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step2_ROI_0604.coverage" NAME="Step2_ROI_0604 Coverage Results" MODIFIED="1717563636216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$brainReconstruction2.coverage" NAME="brainReconstruction2 Coverage Results" MODIFIED="1716557008158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_in_CalLoss_py.coverage" NAME="Nosetests in CalLoss.py Coverage Results" MODIFIED="1716231748486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step2_ROI_0610.coverage" NAME="Step2_ROI_0610 Coverage Results" MODIFIED="1718251655078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$TranslateSliceImage.coverage" NAME="TranslateSliceImage Coverage Results" MODIFIED="1715370052686" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step3_multiGenerator.coverage" NAME="Step3_multiGenerator Coverage Results" MODIFIED="1716615544580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_ScriptTest_Calloss_test_apply_xy.coverage" NAME="Nosetests for ScriptTest.Calloss.test_apply_xy Coverage Results" MODIFIED="1718283367285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$ContiuneProcessTransform.coverage" NAME="ContiuneProcessTransform Coverage Results" MODIFIED="1717584386311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_3DTranslate.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_3DTranslate Coverage Results" MODIFIED="1714659478351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_simpleSurface.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_simpleSurface Coverage Results" MODIFIED="1717323686705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CheckCalBlock0516_TestAddFunction_test_Img111_112.coverage" NAME="Nosetests for CheckCalBlock0516.TestAddFunction.test_Img111_112 Coverage Results" MODIFIED="1715856453210" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_SpineTestScript_TestAddFunction_test_648nm_takeROI.coverage" NAME="Nosetests for SpineTestScript.TestAddFunction.test_648nm_takeROI Coverage Results" MODIFIED="1717734037262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/SpineReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_multiCreateSurface.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_multiCreateSurface Coverage Results" MODIFIED="1715000604401" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1_ROI_0604.coverage" NAME="Step1_ROI_0604 Coverage Results" MODIFIED="1717503781764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1_ROI_0610.coverage" NAME="Step1_ROI_0610 Coverage Results" MODIFIED="1718206741617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_CreateSurface34_i9_j6.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_CreateSurface34_i9_j6 Coverage Results" MODIFIED="1714661560212" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$CreateUxy.coverage" NAME="CreateUxy Coverage Results" MODIFIED="1717417819314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_TestScript_TestAddFunction_test_combine_surface.coverage" NAME="Nosetests for TestScript.TestAddFunction.test_combine_surface Coverage Results" MODIFIED="1717568793774" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_ROI_alignSurface.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_ROI_alignSurface Coverage Results" MODIFIED="1716999774892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CheckCalBlock0516_TestAddFunction_test_print.coverage" NAME="Nosetests for CheckCalBlock0516.TestAddFunction.test_print Coverage Results" MODIFIED="1715853868082" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_ReadNpy.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_ReadNpy Coverage Results" MODIFIED="1714659400539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$TH2_0420.coverage" NAME="TH2_0420 Coverage Results" MODIFIED="1713777795822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_select_useful_result.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_select_useful_result Coverage Results" MODIFIED="1714103044270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CalLoss_Calloss_test_ReadNpy.coverage" NAME="Nosetests for CalLoss.Calloss.test_ReadNpy Coverage Results" MODIFIED="1718185261703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CheckSurface0523_TestAddFunction_test_print.coverage" NAME="Nosetests for CheckSurface0523.TestAddFunction.test_print Coverage Results" MODIFIED="1716433925610" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_SpineTestScript_TestAddFunction_test_takeROI.coverage" NAME="Nosetests for SpineTestScript.TestAddFunction.test_takeROI Coverage Results" MODIFIED="1717657538197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/SpineReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step2_ROI_0605.coverage" NAME="Step2_ROI_0605 Coverage Results" MODIFIED="1717680453392" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/SpineReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_cal_xy_translate.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_cal_xy_translate Coverage Results" MODIFIED="1713517851005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_print.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_print Coverage Results" MODIFIED="1716433827657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step2_ROI_0602.coverage" NAME="Step2_ROI_0602 Coverage Results" MODIFIED="1717394700455" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_CalTranslate.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_CalTranslate Coverage Results" MODIFIED="1717086562783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_TestScript_TestAddFunction_test_print.coverage" NAME="Nosetests for TestScript.TestAddFunction.test_print Coverage Results" MODIFIED="1717485473676" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$TH2_0423_refine.coverage" NAME="TH2_0423_refine Coverage Results" MODIFIED="1714710735160" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_TestScript_TestAddFunction_test_takeROI.coverage" NAME="Nosetests for TestScript.TestAddFunction.test_takeROI Coverage Results" MODIFIED="1717486723941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_singleCheckSurface.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_singleCheckSurface Coverage Results" MODIFIED="1715162320854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$ChannelAlign0526.coverage" NAME="ChannelAlign0526 Coverage Results" MODIFIED="1716730397330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_ScriptTest_Calloss_test_std.coverage" NAME="Nosetests for ScriptTest.Calloss.test_std Coverage Results" MODIFIED="1718283069266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CalLoss_Calloss_test_readCSV.coverage" NAME="Nosetests for CalLoss.Calloss.test_readCSV Coverage Results" MODIFIED="1717157029705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_ReadFLSM.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_ReadFLSM Coverage Results" MODIFIED="1715362294069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$DownSample.coverage" NAME="DownSample Coverage Results" MODIFIED="1715010069172" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1_ROI_0602.coverage" NAME="Step1_ROI_0602 Coverage Results" MODIFIED="1717330223611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Down_Sample_BrainImage.coverage" NAME="Down_Sample_BrainImage Coverage Results" MODIFIED="1717312889189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$ContiuneProcessTransform0605.coverage" NAME="ContiuneProcessTransform0605 Coverage Results" MODIFIED="1717740363139" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/SpineReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_print.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_print Coverage Results" MODIFIED="1713842459503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1_2.coverage" NAME="Step1_2 Coverage Results" MODIFIED="1717508147847" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_ScriptTest_Calloss_test_AlignImgs.coverage" NAME="Nosetests for ScriptTest.Calloss.test_AlignImgs Coverage Results" MODIFIED="1718173851684" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CheckSurface0523_TestAddFunction_test_alignSurface.coverage" NAME="Nosetests for CheckSurface0523.TestAddFunction.test_alignSurface Coverage Results" MODIFIED="1716442247195" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_multiChannel.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_multiChannel Coverage Results" MODIFIED="1716279947735" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_process_transform_yq.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_process_transform_yq Coverage Results" MODIFIED="1713593441616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$step1_0516.coverage" NAME="step1_0516 Coverage Results" MODIFIED="1716744474283" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1_ROI_0605.coverage" NAME="Step1_ROI_0605 Coverage Results" MODIFIED="1717658936203" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/SpineReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_Tcreate_brain.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_Tcreate_brain Coverage Results" MODIFIED="1717184060798" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_CheckSurface.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_CheckSurface Coverage Results" MODIFIED="1716278120673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step2_SurfaceTransform.coverage" NAME="Step2_SurfaceTransform Coverage Results" MODIFIED="1716228054736" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_alignSurface.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_alignSurface Coverage Results" MODIFIED="1715231936549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1.coverage" NAME="Step1 Coverage Results" MODIFIED="1715760101408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$BrainRecon3.coverage" NAME="BrainRecon3 Coverage Results" MODIFIED="1716442162378" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui/Reconstruction" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_SpineTestScript_TestAddFunction_test_combine_surface.coverage" NAME="Nosetests for SpineTestScript.TestAddFunction.test_combine_surface Coverage Results" MODIFIED="1717655451437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/SpineReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CheckSurface0523_TestAddFunction_test_CheckSurface.coverage" NAME="Nosetests for CheckSurface0523.TestAddFunction.test_CheckSurface Coverage Results" MODIFIED="1717320010752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_apply_translate.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_apply_translate Coverage Results" MODIFIED="1715244746789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$ContiuneProcessTransform__1_.coverage" NAME="ContiuneProcessTransform (1) Coverage Results" MODIFIED="1717569694669" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_Elastix.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_Elastix Coverage Results" MODIFIED="1714998612489" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CopyGolgi_PickUpROI_MyTestCase_test_combine_xy_SliceImg.coverage" NAME="Nosetests for CopyGolgi_PickUpROI.MyTestCase.test_combine_xy_SliceImg Coverage Results" MODIFIED="1716911309689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step1_ROI_0528.coverage" NAME="Step1_ROI_0528 Coverage Results" MODIFIED="1717158079314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$brain_reconstruction.coverage" NAME="brain_reconstruction Coverage Results" MODIFIED="1717235255049" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/VISoR_Reconstruction/visor_reconstruction_ui" />
+    <SUITE FILE_PATH="coverage/heightVISoR$common.coverage" NAME="common Coverage Results" MODIFIED="1713774378631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$RigidAlignSurface.coverage" NAME="RigidAlignSurface Coverage Results" MODIFIED="1716917029017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_TestScript_TestAddFunction_test_648nm_takeROI.coverage" NAME="Nosetests for TestScript.TestAddFunction.test_648nm_takeROI Coverage Results" MODIFIED="1717581195971" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/LegReg" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_CalLoss_Calloss_test_loss.coverage" NAME="Nosetests for CalLoss.Calloss.test_loss Coverage Results" MODIFIED="1718249650159" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_no.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_no Coverage Results" MODIFIED="1717098023564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_RefineTranslate_TestAddFunction_test_CreateInitSurface.coverage" NAME="Nosetests for RefineTranslate.TestAddFunction.test_CreateInitSurface Coverage Results" MODIFIED="1715000654498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_check_surface_xy_transform.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_check_surface_xy_transform Coverage Results" MODIFIED="1713517419162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/heightVISoR$New.coverage" NAME="New Coverage Results" MODIFIED="1716623423908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_ScriptTest_Calloss_test_print.coverage" NAME="Nosetests for ScriptTest.Calloss.test_print Coverage Results" MODIFIED="1718161952411" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts/surface153_156" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Step2_ROI_0528.coverage" NAME="Step2_ROI_0528 Coverage Results" MODIFIED="1717181070642" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/YQReconstructionScripts" />
+    <SUITE FILE_PATH="coverage/heightVISoR$Nosetests_for_GetNewSurface_TestAddFunction_test_read.coverage" NAME="Nosetests for GetNewSurface.TestAddFunction.test_read Coverage Results" MODIFIED="1715762485387" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

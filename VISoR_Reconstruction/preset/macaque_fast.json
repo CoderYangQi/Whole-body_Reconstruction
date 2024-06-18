@@ -1,0 +1,22 @@
+{
+  "annotation_path": null,
+  "global_optimization_downsample": 32,
+  "ignore_channel": null,
+  "ignore_slice": null,
+  "internal_pixel_size": 10.0,
+  "nonrigid": true,
+  "output_path": null,
+  "output_pixel_size": 5.0,
+  "reference_channel": null,
+  "roi_height": 60000,
+  "roi_width": 70000,
+  "slice_source": "thumbnail",
+  "slice_template": "general",
+  "slice_thickness": 300,
+  "surface_detect_downsample": [
+    4,
+    4,
+    1
+  ],
+  "use_annotation": true
+}

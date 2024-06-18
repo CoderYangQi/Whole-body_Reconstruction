@@ -1,0 +1,23 @@
+{
+  "reference_channel": null,
+  "output_path": "",
+  "slice_thickness": 300,
+  "internal_pixel_size": 4.0,
+  "output_pixel_size": 4.0,
+  "slice_source": "thumbnail",
+  "slice_template": "mouse_brain",
+  "surface_detect_downsample": [
+    2,
+    2,
+    1
+  ],
+  "global_optimization_downsample": 2,
+  "annotation_path": null,
+  "use_annotation": true,
+  "ignore_slice": null,
+  "ignore_channel": null,
+  "nonrigid": true,
+  "roi_width": 14000,
+  "roi_height": 10000,
+  "outside_brightness": 112
+}

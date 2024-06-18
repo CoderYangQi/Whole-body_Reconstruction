@@ -1,0 +1,338 @@
+{
+  "Reconstruction": {
+    "ReconstructionInput": "Reconstruction\\ReconstructionInput.json",
+    "Parameters": "Reconstruction\\Parameters.json",
+    "Projection": "Reconstruction\\Projection\\Projection.json",
+    "SliceTransform": "Reconstruction\\SliceTransform\\SliceTransform.json",
+    "SliceImage": "Reconstruction\\SliceImage\\SliceImage.json",
+    "BrainTransform": "Reconstruction\\BrainTransform\\BrainTransform.json",
+    "BrainImage": "Reconstruction\\BrainImage\\BrainImage.json"
+  },
+  "Acquisition Results": [
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_001-1\\WH_THY-CRE-8_1_1_001.flsm"
+      ],
+      "SliceID": 1
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_002-1\\WH_THY-CRE-8_1_1_002.flsm"
+      ],
+      "SliceID": 2
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_003-1\\WH_THY-CRE-8_1_1_003.flsm"
+      ],
+      "SliceID": 3
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_004-1\\WH_THY-CRE-8_1_1_004.flsm"
+      ],
+      "SliceID": 4
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_005-1\\WH_THY-CRE-8_1_1_005.flsm"
+      ],
+      "SliceID": 5
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_006-1\\WH_THY-CRE-8_1_1_006.flsm"
+      ],
+      "SliceID": 6
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_007-1\\WH_THY-CRE-8_1_1_007.flsm"
+      ],
+      "SliceID": 7
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_008-1\\WH_THY-CRE-8_1_1_008.flsm"
+      ],
+      "SliceID": 8
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_009-1\\WH_THY-CRE-8_1_1_009.flsm"
+      ],
+      "SliceID": 9
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_010-1\\WH_THY-CRE-8_1_1_010.flsm"
+      ],
+      "SliceID": 10
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_011-1\\WH_THY-CRE-8_1_1_011.flsm"
+      ],
+      "SliceID": 11
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_012-1\\WH_THY-CRE-8_1_1_012.flsm"
+      ],
+      "SliceID": 12
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_013-1\\WH_THY-CRE-8_1_1_013.flsm"
+      ],
+      "SliceID": 13
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_014-1\\WH_THY-CRE-8_1_1_014.flsm"
+      ],
+      "SliceID": 14
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_015-1\\WH_THY-CRE-8_1_1_015.flsm"
+      ],
+      "SliceID": 15
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_016-1\\WH_THY-CRE-8_1_1_016.flsm"
+      ],
+      "SliceID": 16
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_017-1\\WH_THY-CRE-8_1_1_017.flsm"
+      ],
+      "SliceID": 17
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_018-1\\WH_THY-CRE-8_1_1_018.flsm"
+      ],
+      "SliceID": 18
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_019-1\\WH_THY-CRE-8_1_1_019.flsm"
+      ],
+      "SliceID": 19
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_020-1\\WH_THY-CRE-8_1_1_020.flsm"
+      ],
+      "SliceID": 20
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_021-1\\WH_THY-CRE-8_1_1_021.flsm"
+      ],
+      "SliceID": 21
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_022-1\\WH_THY-CRE-8_1_1_022.flsm"
+      ],
+      "SliceID": 22
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_023-1\\WH_THY-CRE-8_1_1_023.flsm"
+      ],
+      "SliceID": 23
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_024-1\\WH_THY-CRE-8_1_1_024.flsm"
+      ],
+      "SliceID": 24
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_025-1\\WH_THY-CRE-8_1_1_025.flsm"
+      ],
+      "SliceID": 25
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_026-1\\WH_THY-CRE-8_1_1_026.flsm"
+      ],
+      "SliceID": 26
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_027-1\\WH_THY-CRE-8_1_1_027.flsm"
+      ],
+      "SliceID": 27
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_028-1\\WH_THY-CRE-8_1_1_028.flsm"
+      ],
+      "SliceID": 28
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_029-1\\WH_THY-CRE-8_1_1_029.flsm"
+      ],
+      "SliceID": 29
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_030-1\\WH_THY-CRE-8_1_1_030.flsm"
+      ],
+      "SliceID": 30
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_031-1\\WH_THY-CRE-8_1_1_031.flsm"
+      ],
+      "SliceID": 31
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_032-1\\WH_THY-CRE-8_1_1_032.flsm"
+      ],
+      "SliceID": 32
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_033-1\\WH_THY-CRE-8_1_1_033.flsm"
+      ],
+      "SliceID": 33
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_034-1\\WH_THY-CRE-8_1_1_034.flsm"
+      ],
+      "SliceID": 34
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_035-1\\WH_THY-CRE-8_1_1_035.flsm"
+      ],
+      "SliceID": 35
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_036-1\\WH_THY-CRE-8_1_1_036.flsm"
+      ],
+      "SliceID": 36
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_037-1\\WH_THY-CRE-8_1_1_037.flsm"
+      ],
+      "SliceID": 37
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_038-1\\WH_THY-CRE-8_1_1_038.flsm"
+      ],
+      "SliceID": 38
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_039-1\\WH_THY-CRE-8_1_1_039.flsm"
+      ],
+      "SliceID": 39
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_040-1\\WH_THY-CRE-8_1_1_040.flsm"
+      ],
+      "SliceID": 40
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_041-1\\WH_THY-CRE-8_1_1_041.flsm"
+      ],
+      "SliceID": 41
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_042-1\\WH_THY-CRE-8_1_1_042.flsm"
+      ],
+      "SliceID": 42
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_043-1\\WH_THY-CRE-8_1_1_043.flsm"
+      ],
+      "SliceID": 43
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_044-1\\WH_THY-CRE-8_1_1_044.flsm"
+      ],
+      "SliceID": 44
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_045-1\\WH_THY-CRE-8_1_1_045.flsm"
+      ],
+      "SliceID": 45
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_046-1\\WH_THY-CRE-8_1_1_046.flsm"
+      ],
+      "SliceID": 46
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_047-1\\WH_THY-CRE-8_1_1_047.flsm"
+      ],
+      "SliceID": 47
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_048-1\\WH_THY-CRE-8_1_1_048.flsm"
+      ],
+      "SliceID": 48
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_049-1\\WH_THY-CRE-8_1_1_049.flsm"
+      ],
+      "SliceID": 49
+    },
+    {
+      "FlsmList": [
+        "D:\\VISoR12\\Mouse\\20180914_ZMN_WH_THY-CRE-8_1_1\\Data\\552nm_10X\\1_050-1\\WH_THY-CRE-8_1_1_050.flsm"
+      ],
+      "SliceID": 50
+    }
+  ],
+  "Channels": [
+    {
+      "ChannelId": "1",
+      "ChannelName": "552nm_10X",
+      "EmissionFilter": "600/50",
+      "ExposureTime": "4",
+      "Folder": "",
+      "LaserPower": "40",
+      "LaserWavelength": "552",
+      "MaxVolts": "2.1",
+      "Objective": "10",
+      "SoftwareVersion": "2.6.1",
+      "Spacing": "2",
+      "Velocity": "1.75",
+      "VoltsOffset": "0.5"
+    }
+  ],
+  "Project Info": {
+    "Animal ID": "1",
+    "Date": "",
+    "Personnel": "",
+    "Project Name": "WH",
+    "Slide": "",
+    "Subproject Name": "THY-CRE-8"
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "SliceTransformInfo": {
+    "Type": "SliceTransform",
+    "Software": "VISOR_Reconstruction",
+    "Parameter": "../Parameters.json",
+    "Version": "0.3.7",
+    "Time": "Wed May 22 19:03:41 2019"
+  },
+  "SliceTransform": {
+    "_006_552nm_10X.txt": {
+      "SliceID": 6,
+      "ChannelName": "552nm_10X"
+    },
+    "_050_552nm_10X.txt": {
+      "SliceID": 50,
+      "ChannelName": "552nm_10X"
+    },
+    "_008_552nm_10X.txt": {
+      "SliceID": 8,
+      "ChannelName": "552nm_10X"
+    },
+    "_007_552nm_10X.txt": {
+      "SliceID": 7,
+      "ChannelName": "552nm_10X"
+    },
+    "_004_552nm_10X.txt": {
+      "SliceID": 4,
+      "ChannelName": "552nm_10X"
+    },
+    "_015_552nm_10X.txt": {
+      "SliceID": 15,
+      "ChannelName": "552nm_10X"
+    },
+    "_013_552nm_10X.txt": {
+      "SliceID": 13,
+      "ChannelName": "552nm_10X"
+    },
+    "_046_552nm_10X.txt": {
+      "SliceID": 46,
+      "ChannelName": "552nm_10X"
+    },
+    "_035_552nm_10X.txt": {
+      "SliceID": 35,
+      "ChannelName": "552nm_10X"
+    },
+    "_030_552nm_10X.txt": {
+      "SliceID": 30,
+      "ChannelName": "552nm_10X"
+    },
+    "_034_552nm_10X.txt": {
+      "SliceID": 34,
+      "ChannelName": "552nm_10X"
+    },
+    "_022_552nm_10X.txt": {
+      "SliceID": 22,
+      "ChannelName": "552nm_10X"
+    },
+    "_010_552nm_10X.txt": {
+      "SliceID": 10,
+      "ChannelName": "552nm_10X"
+    },
+    "_021_552nm_10X.txt": {
+      "SliceID": 21,
+      "ChannelName": "552nm_10X"
+    },
+    "_040_552nm_10X.txt": {
+      "SliceID": 40,
+      "ChannelName": "552nm_10X"
+    },
+    "_028_552nm_10X.txt": {
+      "SliceID": 28,
+      "ChannelName": "552nm_10X"
+    },
+    "_002_552nm_10X.txt": {
+      "SliceID": 2,
+      "ChannelName": "552nm_10X"
+    },
+    "_025_552nm_10X.txt": {
+      "SliceID": 25,
+      "ChannelName": "552nm_10X"
+    },
+    "_005_552nm_10X.txt": {
+      "SliceID": 5,
+      "ChannelName": "552nm_10X"
+    },
+    "_049_552nm_10X.txt": {
+      "SliceID": 49,
+      "ChannelName": "552nm_10X"
+    },
+    "_023_552nm_10X.txt": {
+      "SliceID": 23,
+      "ChannelName": "552nm_10X"
+    },
+    "_012_552nm_10X.txt": {
+      "SliceID": 12,
+      "ChannelName": "552nm_10X"
+    },
+    "_016_552nm_10X.txt": {
+      "SliceID": 16,
+      "ChannelName": "552nm_10X"
+    },
+    "_020_552nm_10X.txt": {
+      "SliceID": 20,
+      "ChannelName": "552nm_10X"
+    },
+    "_048_552nm_10X.txt": {
+      "SliceID": 48,
+      "ChannelName": "552nm_10X"
+    },
+    "_017_552nm_10X.txt": {
+      "SliceID": 17,
+      "ChannelName": "552nm_10X"
+    },
+    "_009_552nm_10X.txt": {
+      "SliceID": 9,
+      "ChannelName": "552nm_10X"
+    },
+    "_027_552nm_10X.txt": {
+      "SliceID": 27,
+      "ChannelName": "552nm_10X"
+    },
+    "_038_552nm_10X.txt": {
+      "SliceID": 38,
+      "ChannelName": "552nm_10X"
+    },
+    "_039_552nm_10X.txt": {
+      "SliceID": 39,
+      "ChannelName": "552nm_10X"
+    },
+    "_045_552nm_10X.txt": {
+      "SliceID": 45,
+      "ChannelName": "552nm_10X"
+    },
+    "_031_552nm_10X.txt": {
+      "SliceID": 31,
+      "ChannelName": "552nm_10X"
+    },
+    "_001_552nm_10X.txt": {
+      "SliceID": 1,
+      "ChannelName": "552nm_10X"
+    },
+    "_032_552nm_10X.txt": {
+      "SliceID": 32,
+      "ChannelName": "552nm_10X"
+    },
+    "_041_552nm_10X.txt": {
+      "SliceID": 41,
+      "ChannelName": "552nm_10X"
+    },
+    "_011_552nm_10X.txt": {
+      "SliceID": 11,
+      "ChannelName": "552nm_10X"
+    },
+    "_026_552nm_10X.txt": {
+      "SliceID": 26,
+      "ChannelName": "552nm_10X"
+    },
+    "_024_552nm_10X.txt": {
+      "SliceID": 24,
+      "ChannelName": "552nm_10X"
+    },
+    "_042_552nm_10X.txt": {
+      "SliceID": 42,
+      "ChannelName": "552nm_10X"
+    },
+    "_003_552nm_10X.txt": {
+      "SliceID": 3,
+      "ChannelName": "552nm_10X"
+    },
+    "_033_552nm_10X.txt": {
+      "SliceID": 33,
+      "ChannelName": "552nm_10X"
+    },
+    "_044_552nm_10X.txt": {
+      "SliceID": 44,
+      "ChannelName": "552nm_10X"
+    },
+    "_043_552nm_10X.txt": {
+      "SliceID": 43,
+      "ChannelName": "552nm_10X"
+    },
+    "_014_552nm_10X.txt": {
+      "SliceID": 14,
+      "ChannelName": "552nm_10X"
+    },
+    "_018_552nm_10X.txt": {
+      "SliceID": 18,
+      "ChannelName": "552nm_10X"
+    },
+    "_047_552nm_10X.txt": {
+      "SliceID": 47,
+      "ChannelName": "552nm_10X"
+    },
+    "_019_552nm_10X.txt": {
+      "SliceID": 19,
+      "ChannelName": "552nm_10X"
+    }
+  }
+}
