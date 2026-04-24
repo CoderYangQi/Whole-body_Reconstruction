@@ -1,0 +1,26 @@
+﻿# Python 缓存与编译文件
+__pycache__/
+*.py[cod]
+*.so
+
+# 你指定的目录（统一使用正斜杠，末尾加 /）
+.idea/
+.vscode/
+temp/
+VISoR_Analysis/
+VISoR_Brain/
+YQReconstructionScripts/
+common_script/
+misc/
+VISoR_Reconstruction/doc/
+VISoR_Reconstruction/preset/
+VISoR_Reconstruction/reconstruction_executor/
+VISoR_Reconstruction/reconstruction/parameters/
+VISoR_Reconstruction/scripts/
+VISoR_Reconstruction/tools/
+
+# 你指定的文件
+VISoR_Data.py
+ome_tiff.py
+Torch_Losses.py
+yq_elastix_files.py

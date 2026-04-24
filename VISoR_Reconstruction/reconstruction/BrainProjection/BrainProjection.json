@@ -1,0 +1,10 @@
+{
+  "BrainProjectionInfo": {
+    "Type": "BrainProjection",
+    "Software": "VISOR_Reconstruction",
+    "Parameter": "../Parameters.json",
+    "Version": "0.9.2",
+    "Time": "Fri Jan 22 13:03:26 2021",
+    "BrainImage": "../BrainImage/BrainImage.json"
+  }
+}
