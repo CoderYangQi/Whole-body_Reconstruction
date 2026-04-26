@@ -1,4 +1,4 @@
 @echo off
-set PYTHONPATH=C:\softwares\VISoR-data-analysis\venv\Scripts
-C:\softwares\VISoR-data-analysis\venv\Scripts\python.exe .\visor_reconstruction_ui\brain_reconstruction.py
+set PYTHONPATH=%~dp0..;%PYTHONPATH%
+D:\Tools\Anaconda_envs\envs\napari-env\python.exe .\visor_reconstruction_ui\brain_reconstruction.py
 pause
