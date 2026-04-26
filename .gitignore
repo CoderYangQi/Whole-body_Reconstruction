@@ -8,17 +8,14 @@ __pycache__/
 .vscode/
 temp/
 VISoR_Analysis/
-VISoR_Brain/
 YQReconstructionScripts/
 common_script/
 misc/
 VISoR_Reconstruction/doc/
 VISoR_Reconstruction/preset/
-VISoR_Reconstruction/reconstruction_executor/
 VISoR_Reconstruction/reconstruction/parameters/
 VISoR_Reconstruction/scripts/
 VISoR_Reconstruction/tools/
-VISoR_Reconstruction/visor_reconstruction_ui/pages
 
 
 # 你指定的文件
@@ -26,3 +23,20 @@ VISoR_Data.py
 ome_tiff.py
 Torch_Losses.py
 yq_elastix_files.py
+
+# 本次 Refinement 集成与 UI 优化需要上传的文件
+!VISoR_Reconstruction/reconstruction_executor/
+VISoR_Reconstruction/reconstruction_executor/*
+!VISoR_Reconstruction/reconstruction_executor/b85_runner.py
+
+!VISoR_Reconstruction/visor_reconstruction_ui/pages/
+VISoR_Reconstruction/visor_reconstruction_ui/pages/*
+!VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/
+VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/*
+!VISoR_Reconstruction/visor_reconstruction_ui/pages/whole_brain_reconstruct/whole_brain_reconstruct.py
+
+!VISoR_Brain/
+VISoR_Brain/*
+!VISoR_Brain/positioning/
+VISoR_Brain/positioning/*
+!VISoR_Brain/positioning/visor_brain.py
