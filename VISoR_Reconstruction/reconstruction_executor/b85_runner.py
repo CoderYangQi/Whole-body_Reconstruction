@@ -358,9 +358,14 @@ def _calc_reference_geometry(config: B85Config):
 
 def _send(pipe, payload):
     if pipe is not None:
-        pipe.send(payload)
+        try:
+            pipe.send(payload)
+        except (BrokenPipeError, EOFError, OSError):
+            return False
+        return True
     elif "message" in payload:
         print(payload["message"])
+    return False
 
 
 def _send_message(pipe, message: str):
@@ -370,9 +375,12 @@ def _send_message(pipe, message: str):
 def _check_stop(pipe):
     if pipe is None:
         return False
-    if pipe.poll():
-        payload = pipe.recv()
-        return "stop" in payload
+    try:
+        if pipe.poll():
+            payload = pipe.recv()
+            return "stop" in payload
+    except (BrokenPipeError, EOFError, OSError):
+        return False
     return False
 
 

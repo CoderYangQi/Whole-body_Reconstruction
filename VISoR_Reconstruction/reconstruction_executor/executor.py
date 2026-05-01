@@ -183,6 +183,7 @@ class Executor:
 
         self._pool = None
         self.pipe = pipe
+        self.pipe_closed = False
 
     def set_tasks(self, input_info):
         self.input_info = input_info
@@ -203,10 +204,30 @@ class Executor:
                 self.unfinished_targets.add(r.name)
 
     def send_message(self, message):
-        if self.pipe is not None:
-            self.pipe.send({'message': message})
-        else:
+        if not self._send_pipe({'message': message}):
             print(message)
+
+    def _send_pipe(self, payload):
+        if self.pipe is None or self.pipe_closed:
+            return False
+        try:
+            self.pipe.send(payload)
+            return True
+        except (BrokenPipeError, EOFError, OSError):
+            self.pipe_closed = True
+            return False
+
+    def _recv_pipe_command(self, timeout=1):
+        if self.pipe is None or self.pipe_closed:
+            if timeout:
+                time.sleep(timeout)
+            return None
+        try:
+            if self.pipe.poll(timeout):
+                return self.pipe.recv()
+        except (BrokenPipeError, EOFError, OSError):
+            self.pipe_closed = True
+        return None
 
     def _update_metadata(self, task_name):
         t_ = self.tasks[task_name]
@@ -251,16 +272,14 @@ class Executor:
                 self.gpu_occupation[i] = None
         self._update_metadata(task_name)
         self.save_metadata(None, os.path.join(self.path, '{}.visor'.format(self.input_info['name'])))
-        if self.pipe is not None:
-            self.pipe.send({'progress': 1 - len(self.unfinished_targets) / len(self.targets)})
+        self._send_pipe({'progress': 1 - len(self.unfinished_targets) / len(self.targets)})
 
     def _task_skipped(self, task_name):
         self.send_message('Task {} finnished, skip'.format(task_name))
         t = self.tasks[task_name]
         self.unfinished_tasks.remove(task_name)
         self._update_metadata(task_name)
-        if self.pipe is not None:
-            self.pipe.send({'progress': 1 - len(self.unfinished_targets) / len(self.targets)})
+        self._send_pipe({'progress': 1 - len(self.unfinished_targets) / len(self.targets)})
 
     def _task_failed(self, task_name):
         self.send_message('[{}] Task {} failed'.format(time.asctime(), task_name))
@@ -285,8 +304,7 @@ class Executor:
         #self._pool = multiprocessing.Pool(processes=resource_amount[0], maxtasksperchild=1)
         #self._pool.apply_async() = NoDaemonProcess
         self._pool = []
-        if self.pipe is not None:
-            self.pipe.send({'status': 'Running'})
+        self._send_pipe({'status': 'Running'})
 
         self.start_time = time.time()
         for k in self.tasks:
@@ -307,8 +325,7 @@ class Executor:
                             #traceback.print_exception(exc_type, exc_value, exc_traceback)
                             self._task_failed(k)
                             self._execute_finished()
-                            if self.pipe is not None:
-                                self.pipe.send({'status': 'Failed'})
+                            self._send_pipe({'status': 'Failed'})
                             raise Exception()
                         pop_list.append(k)
                     for k in pop_list:
@@ -325,20 +342,15 @@ class Executor:
                         break
                     except AssertionError:
                         pass
-                    if self.pipe is not None:
-                        if self.pipe.poll(1):
-                            s = self.pipe.recv()
-                            if 'stop' in s:
-                                self.pipe.send({'status': 'Stopping'})
-                                self._execute_finished()
-                                self.pipe.send({'status': 'Stopped'})
-                                return
-                    else:
-                        time.sleep(1)
+                    s = self._recv_pipe_command(1)
+                    if s is not None and 'stop' in s:
+                        self._send_pipe({'status': 'Stopping'})
+                        self._execute_finished()
+                        self._send_pipe({'status': 'Stopped'})
+                        return
             self._start_task(t.name)
         self._execute_finished()
-        if self.pipe is not None:
-            self.pipe.send({'status': 'Finished'})
+        self._send_pipe({'status': 'Finished'})
 
     def save_metadata(self, input_path, save_path):
         name = self.input_info['name']
