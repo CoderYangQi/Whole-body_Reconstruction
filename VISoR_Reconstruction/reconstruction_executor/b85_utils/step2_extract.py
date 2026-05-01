@@ -1,8 +1,7 @@
-'''
-@ yangqi
-def test_ReadNpy(self): 应用translate prameters 查看计算结果�?moved 效果
+"""B85 refinement step 2 helpers.
 
-'''
+This module extracts upper/lower z and surface images from refine parameters.
+"""
 
 import json
 import os.path
@@ -15,29 +14,29 @@ from .common0424 import *
 def ReadOffsetTxt(txtPath = r"D:\USERS\yq\code\cal_overlap\Refine\th2_33\tf_33_pars.txt"):
     import re
 
-    # 初始化一个空字典来存储坐标和对应的偏移量
+    # 
     offsets = {}
 
-    # 假设文本文件的内容已经以字符串形式给出或已经保存在一个文件中
+    # 
 
     with open(txtPath, 'r') as file:
         data = file.readlines()
 
     file.close()
-    # 按行分割数据
+    # 
     # lines = data.split('\n')
 
-    # 处理每一�?
+    # ?
     for line in data:
-        # 使用正则表达式提取坐标和偏移�?
+        # ?
         match = re.match(r'\[(\d+), (\d+)\]: \(([^)]+)\)', line)
         if match:
-            # 提取坐标和偏移量
+            # 
             coord = (int(match.group(1)), int(match.group(2)))
             offsets_values = match.group(3).split(',')
             offsets[coord] = tuple(float(v) for v in offsets_values)
 
-    # 打印结果
+    # 
     tempName = 'th2_33'
     spacing = [4.0, 4.0, 4.0]
     for key, value in offsets.items():
@@ -88,12 +87,12 @@ def CreateTransform(x, y, z, img_size):
 def CreateTransform_Test(x, y, z, img_size):
     original = z
     block_size = 250
-    # block_size = 3  # 例如，你可以根据实际情况设置 block_size 的�?
+    # block_size = 3  #  block_size ?
 
-    # 使用 np.kron �?original 中的每个元素扩展�?block_size x block_size 的块
+    #  np.kron ?original ?block_size x block_size 
     deformation_field = np.kron(original, np.ones((block_size, block_size)))
 
-    print(deformation_field.shape)  # 输出应为 (43*block_size, 24*block_size)
+    print(deformation_field.shape)  #  (43*block_size, 24*block_size)
 
     return None, None, deformation_field
 
@@ -108,33 +107,33 @@ def Flip(img,affine_t):
     # write_ome_tiff(sitk_image,'temp.tif')
     return sitk_image
 
-# �?cal overlap
+# ?cal overlap
 def ReadNpy(txtPath,tempName):
     import re
 
-    # 初始化一个空字典来存储坐标和对应的偏移量
+    # 
     offsets = {}
 
-    # 假设文本文件的内容已经以字符串形式给出或已经保存在一个文件中
+    # 
     # txtPath = r"D:\USERS\yq\code\cal_overlap\Refine\th2_0511\tf_33_pars.txt"
     with open(txtPath, 'r') as file:
         data = file.readlines()
 
     file.close()
-    # 按行分割数据
+    # 
     # lines = data.split('\n')
 
-    # 处理每一�?
+    # ?
     for line in data:
-        # 使用正则表达式提取坐标和偏移�?
+        # ?
         match = re.match(r'\[(\d+), (\d+)\]: \(([^)]+)\)', line)
         if match:
-            # 提取坐标和偏移量
+            # 
             coord = (int(match.group(1)), int(match.group(2)))
             offsets_values = match.group(3).split(',')
             offsets[coord] = tuple(float(v) for v in offsets_values)
 
-    # 打印结果
+    # 
     # tempName = 'th2_0511/33_34'
     spacing = [4.0, 4.0, 4.0]
     # spacing = [1.0, 1.0, 1.0]
@@ -152,21 +151,21 @@ def ReadNpy(txtPath,tempName):
         moving.SetSpacing(spacing)
 
         # todo translate
-        # 平移向量
+        # 
         translate = value
 
-        # 创建平移变换
+        # 
         translation = sitk.TranslationTransform(3, translate)
-        # 重采样过滤器
+        # 
         resampler = sitk.ResampleImageFilter()
-        resampler.SetReferenceImage(moving)  # 设置参考图�?
-        resampler.SetInterpolator(sitk.sitkLinear)  # 设置插值方�?
-        resampler.SetTransform(translation)  # 设置应用的平移变�?
+        resampler.SetReferenceImage(moving)  # ?
+        resampler.SetInterpolator(sitk.sitkLinear)  # ?
+        resampler.SetTransform(translation)  # ?
 
-        # 用平移变换重采样图像
+        # 
         resampled_image = resampler.Execute(moving)
 
-        # 保存重采样后的图�?
+        # ?
         sitk.WriteImage(resampled_image, movedPath)
 import multiprocessing
 import time, gc
@@ -183,7 +182,7 @@ def step2_multiprocess(numsThread, taskParas):
     pool.join()
 
     # for res in result:
-    #     print('***:', res.get())  # get()函数得出每个返回结果的�?
+    #     print('***:', res.get())  # get()?
 
     print('All end--')
 
@@ -220,12 +219,12 @@ def MainTask(npy_path,imgPath,saveRoot,slice_index,left_point,
     img = sitk.ReadImage(imgPath)
 
     img.SetOrigin(imgOrigin)
-    # 此时 spacing �?.0 因为�?sliceimage 保持consistency
+    #  spacing ?.0 ?sliceimage consistency
     img.SetSpacing(spacing)
     img_size = img.GetSize()
     img = sitk.Resample(img, [refSize[0], refSize[1], img_size[2]],
                            sitk.Transform(), sitk.sitkLinear, left_point, spacing)
-    # 恢复 初始
+    #  
     img.SetOrigin([0,0,0])
     img.SetSpacing([1,1,1])
 
@@ -267,7 +266,7 @@ def MainTask(npy_path,imgPath,saveRoot,slice_index,left_point,
     _, _, y_trans = CreateTransform(x, y, z, refSize)
     # _, _, y_trans = CreateTransform_Test(x, y, z, refSize)
     y_trans = y_trans / rate
-    umap_y = sitk.GetImageFromArray(y_trans)  # tips  可能需要取�?
+    umap_y = sitk.GetImageFromArray(y_trans)  # tips  ?
     umap_y = sitk.Cast(umap_y, sitk.sitkFloat32)
 
     umap_x = sitk.Cast(umap_x, sitk.sitkFloat32)

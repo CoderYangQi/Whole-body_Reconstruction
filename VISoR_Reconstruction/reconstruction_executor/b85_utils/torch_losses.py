@@ -535,27 +535,27 @@ class GlobalNCC(torch.nn.Module):
 
     def forward(self, y_true, y_pred):
         """
-        计算全局图像之间�?NCC�?
-        参数:
-            y_true: torch.Tensor - 真实�?(shape: [batch_size, *vol_shape])
-            y_pred: torch.Tensor - 预测�?(shape: [batch_size, *vol_shape])
-        返回:
-            ncc_value: torch.Tensor - 全局 NCC 值�?
+        ?NCC?
+        :
+            y_true: torch.Tensor - ?(shape: [batch_size, *vol_shape])
+            y_pred: torch.Tensor - ?(shape: [batch_size, *vol_shape])
+        :
+            ncc_value: torch.Tensor -  NCC ?
         """
-        # 确保输入的形状一�?
+        # ?
         assert y_true.shape == y_pred.shape, "Input shapes must match."
 
-        # 计算均�?
+        # ?
         mean_y_true = torch.mean(y_true)
         mean_y_pred = torch.mean(y_pred)
 
-        # 计算分子和分�?
+        # ?
         numerator = torch.sum((y_true - mean_y_true) * (y_pred - mean_y_pred))
         denominator = torch.sqrt(
             torch.sum((y_true - mean_y_true) ** 2) * torch.sum((y_pred - mean_y_pred) ** 2)
         )
 
-        # 计算 NCC
+        #  NCC
         if denominator == 0:
             return torch.tensor(0.0, device=y_true.device)
         ncc_value = numerator / denominator

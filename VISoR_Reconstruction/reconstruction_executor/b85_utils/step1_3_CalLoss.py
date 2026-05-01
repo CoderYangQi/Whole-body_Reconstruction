@@ -1,8 +1,8 @@
-'''
-@ yangqi
-Translate_Npy 应用paras 去配�?
+"""B85 refinement step 1.3 helpers.
 
-'''
+This module evaluates block alignment quality and converts block loss files
+into refine parameter arrays.
+"""
 
 from .common0313 import *
 import unittest
@@ -19,29 +19,29 @@ import multiprocessing
 def ReadOffsetTxt(txtPath=r"Z:\users\yq\MorphDatasets\TestTemp\th2_33\tf_33_pars.txt"):
     import re
 
-    # 初始化一个空字典来存储坐标和对应的偏移量
+    # 
     offsets = {}
 
-    # 假设文本文件的内容已经以字符串形式给出或已经保存在一个文件中
+    # 
 
     with open(txtPath, 'r') as file:
         data = file.readlines()
 
     file.close()
-    # 按行分割数据
+    # 
     # lines = data.split('\n')
 
-    # 处理每一�?
+    # ?
     for line in data:
-        # 使用正则表达式提取坐标和偏移�?
+        # ?
         match = re.match(r'\[(\d+), (\d+)\]: \(([^)]+)\)', line)
         if match:
-            # 提取坐标和偏移量
+            # 
             coord = (int(match.group(1)), int(match.group(2)))
             offsets_values = match.group(3).split(',')
             offsets[coord] = tuple(float(v) for v in offsets_values)
 
-    # 打印结果
+    # 
     tempName = 'th2_33'
     spacing = [4.0, 4.0, 4.0]
     for key, value in offsets.items():
@@ -53,7 +53,7 @@ def ReadOffsetTxt(txtPath=r"Z:\users\yq\MorphDatasets\TestTemp\th2_33\tf_33_pars
 
 def Translate_Npy(offsets, movingFormat, movedFormat, spacing):
     import re
-    # 打印结果
+    # 
 
     # spacing = [1.0, 1.0, 1.0]
 
@@ -70,21 +70,21 @@ def Translate_Npy(offsets, movingFormat, movedFormat, spacing):
         moving.SetSpacing(spacing)
 
         # todo translate
-        # 平移向量
+        # 
         translate = value
 
-        # 创建平移变换
+        # 
         translation = sitk.TranslationTransform(3, translate)
-        # 重采样过滤器
+        # 
         resampler = sitk.ResampleImageFilter()
-        resampler.SetReferenceImage(moving)  # 设置参考图�?
-        resampler.SetInterpolator(sitk.sitkLinear)  # 设置插值方�?
-        resampler.SetTransform(translation)  # 设置应用的平移变�?
+        resampler.SetReferenceImage(moving)  # ?
+        resampler.SetInterpolator(sitk.sitkLinear)  # ?
+        resampler.SetTransform(translation)  # ?
 
-        # 用平移变换重采样图像
+        # 
         resampled_image = resampler.Execute(moving)
 
-        # 保存重采样后的图�?
+        # ?
         write_ome_tiff(resampled_image, movedPath)
 
 
@@ -96,59 +96,59 @@ def linerArray2D(array, zero_positions, non_zero_positions):
         list_.append(array[pos[0], pos[1]])
     mean = np.mean(list_)
 
-    # 对每�?值进行插值处�?
+    # ??
     for pos in zip(zero_positions[0], zero_positions[1]):
-        # 提取周围的元�?
+        # ?
         neighbors = []
-        # 检查上下左右四个方�?
+        # ?
         for d in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             n_row, n_col = pos[0] + d[0], pos[1] + d[1]
-            # 确保索引在数组范围内
+            # 
             if 0 <= n_row < array.shape[0] and 0 <= n_col < array.shape[1]:
                 neighbors.append(array[n_row, n_col])
 
-        # 计算非零邻居的平均值，只考虑非零�?
+        # ?
         if neighbors:
             non_zero_neighbors = [n for n in neighbors if n != 0]
             if non_zero_neighbors:
                 new_array[pos] = sum(non_zero_neighbors) / len(non_zero_neighbors)
             else:
-                # 如果周围没有非零值，可以选择一个默认值，例如周围数的平均或其他合理的�?
+                # ?
                 # new_array[pos] = np.mean(array)
                 new_array[pos] = mean
         # else:
         #     new_array[pos] = mean
-    # 打印结果
+    # 
     print(new_array)
     return new_array
 
 
 def linerArray(array):
-    # 找到所�?值的位置
+    # ?
     zero_positions = np.where(array == 0)
     # print(zero_positions)
 
-    # 对每�?值进行插值处�?
+    # ??
     for pos in zip(zero_positions[0], zero_positions[1]):
-        # 提取周围的元�?
+        # ?
         neighbors = []
-        # 检查上下左右四个方�?
+        # ?
         for d in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             n_row, n_col = pos[0] + d[0], pos[1] + d[1]
-            # 确保索引在数组范围内
+            # 
             if 0 <= n_row < array.shape[0] and 0 <= n_col < array.shape[1]:
                 neighbors.append(array[n_row, n_col])
 
-        # 计算非零邻居的平均值，只考虑非零�?
+        # ?
         if neighbors:
             non_zero_neighbors = [n for n in neighbors if n != 0]
             if non_zero_neighbors:
                 array[pos] = sum(non_zero_neighbors) / len(non_zero_neighbors)
             else:
-                # 如果周围没有非零值，可以选择一个默认值，例如周围数的平均或其他合理的�?
+                # ?
                 array[pos] = np.mean(array)
 
-    # 打印结果
+    # 
     print(array)
     return array
 
@@ -169,7 +169,7 @@ def run_multiprocess(numsThread, taskParas):
     pool.join()
 
     # for res in result:
-    #     print('***:', res.get())  # get()函数得出每个返回结果的�?
+    #     print('***:', res.get())  # get()?
 
     print('All end--')
 
@@ -178,8 +178,8 @@ def cal_single(key, value, rate, spacing
                , movingFormat, movedFormat, FixedPathFormat,
                MovedPathFormat, FixedsaveRefineFormat,
                MovingsaveRefineFormat, save_loss_format, saveFlag):
-    ncc_loss = GlobalNCC().cuda()  # 确保NCC模块在CUDA上运�?
-    ssim_loss = SSIMLoss(spatial_dims=3).cuda()  # 确保NCC模块在CUDA上运�?
+    ncc_loss = GlobalNCC().cuda()  # NCCCUDA?
+    ssim_loss = SSIMLoss(spatial_dims=3).cuda()  # NCCCUDA?
     i = key[0];
     j = key[1];
     moving = sitk.ReadImage(movingFormat.format(i, j))[:, :, :-10]
@@ -188,25 +188,25 @@ def cal_single(key, value, rate, spacing
     moving.SetSpacing(spacing)
 
     # todo translate
-    # 平移向量
+    # 
     translate = value
 
-    # 创建平移变换
+    # 
     translation = sitk.TranslationTransform(3, translate)
-    # 重采样过滤器
+    # 
     resampler = sitk.ResampleImageFilter()
-    resampler.SetReferenceImage(moving)  # 设置参考图�?
-    resampler.SetInterpolator(sitk.sitkLinear)  # 设置插值方�?
-    resampler.SetTransform(translation)  # 设置应用的平移变�?
+    resampler.SetReferenceImage(moving)  # ?
+    resampler.SetInterpolator(sitk.sitkLinear)  # ?
+    resampler.SetTransform(translation)  # ?
 
-    # 用平移变换重采样图像
+    # 
     resampled_image = resampler.Execute(moving)
 
-    # 保存重采样后的图�?
+    # ?
     # print(movedPath)
     write_ome_tiff(resampled_image, movedPath)
 
-    # test i = 7; j = 3; todo 选取出有效的已对齐的区域
+    # test i = 7; j = 3; todo 
     # i = 7; j = 3;
     i = key[0];
     j = key[1]
@@ -256,37 +256,37 @@ def cal_single(key, value, rate, spacing
     if start > end:
         warnings.warn(
             "The 'start' value should not exceed 'end'. Unexpected results may occur.",
-            category=UserWarning,  # 指定警告类别[1,4](@ref)
-            stacklevel=2  # 显示调用位置的堆栈层级[5,7](@ref)
+            category=UserWarning,  # [1,4](@ref)
+            stacklevel=2  # [5,7](@ref)
         )
 
-    # 判断数据类型并做相应操作
+    # 
     threshold = 120
     pixel_type = img1.GetPixelID()
     if pixel_type == sitk.sitkUInt8:
-        print("图像类型�?sitk.UInt8，不进行操作�?)
+        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
     elif pixel_type == sitk.sitkUInt16:
-        print("图像类型�?sitk.UInt16，进行操作�?)
+        print("Image pixel type is sitkUInt16; preprocessing is applied.")
         img1 = Preprocess(img1, threshold)
     if saveFlag:
         write_ome_tiff(img1, FixedsaveRefineFormat.format(i, j))
         write_ome_tiff(img2, MovingsaveRefineFormat.format(i, j))
     pixel_type = img2.GetPixelID()
     if pixel_type == sitk.sitkUInt8:
-        print("图像类型�?sitk.UInt8，不进行操作�?)
+        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
     elif pixel_type == sitk.sitkUInt16:
-        print("图像类型�?sitk.UInt16，进行操作�?)
+        print("Image pixel type is sitkUInt16; preprocessing is applied.")
         img2 = Preprocess(img2, threshold)
     img1 = sitk.GetArrayFromImage(img1)
     img2 = sitk.GetArrayFromImage(img2)
-    # todo 计算 loss
+    # todo  loss
 
     tensor_img1 = torch.tensor(img1, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
     tensor_img2 = torch.tensor(img2, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
 
     shape = img1.shape
     if shape[0] > 7:
-        # 计算两个图像之间的NCC误差
+        # NCC
 
         loss = ncc_loss(tensor_img1, tensor_img2)
         data_range = max(tensor_img1.max(), tensor_img2.max())
@@ -308,8 +308,8 @@ def CalNCC(spacing, movingFormat, movedFormat,
            FixedsaveRefineFormat, MovingsaveRefineFormat,
            save_loss_format,
            rate):
-    # 假设img1和img2是你�?D图像数组，形状为 [depth, height, width]
-    # 例如，使用随机数据来创建这些图像
+    # img1img2?D [depth, height, width]
+    # 
 
     saveFlag = True;
     # FixedsaveRefineFormat = r"Z:\users\yq\MorphDatasets\TestTemp\th2_refine\{}_{}up_temp_all.tif"
@@ -340,11 +340,11 @@ def readCSV(csv_path):
     # Path to the uploaded CSV file
     pointList = []
     if os.path.exists(csv_path):
-        # 打开文件并读取每一�?
+        # ?
         with open(csv_path, 'r') as file:
             next(file)
             for line in file:
-                # 使用 strip() 移除行末的换行符，然后用 split(',') 分割每行
+                #  strip()  split(',') 
                 data = line.strip().split(',')
                 pointList.append([int(data[5]), int(data[6]), int(data[8])])
                 print(data)
@@ -365,11 +365,11 @@ def read_loss(file_path):
             if not line:
                 continue
 
-            # 分割键值对
+            # 
             pairs = line.split(',')
             for pair in pairs:
                 key, value = pair.split(':')
-                key = key.strip().lower()  # 统一转为小写
+                key = key.strip().lower()  # 
                 if key in results:
                     results[key].append(float(value))
     # print(results)
@@ -377,36 +377,36 @@ def read_loss(file_path):
 
 
 def filter_arr(arr):
-    # 转为 NumPy 数组
+    #  NumPy 
     arr_np = np.array(arr)
 
-    # 计算均值和标准�?
+    # ?
     mean = np.mean(arr_np)
     std_dev = np.std(arr_np)
 
-    # 设置剔除的阈值，例如均�?±2 倍标准差
+    # ?2 
     lower_bound = mean - 1 * std_dev
     upper_bound = mean + 1 * std_dev
 
-    # 筛选数据，剔除超出阈值的�?
+    # ?
     filtered_arr = arr_np[(arr_np >= lower_bound) & (arr_np <= upper_bound)]
 
     dropped_arr = arr_np[(arr_np < lower_bound) | (arr_np > upper_bound)]
 
-    # 计算剔除后的均�?
+    # ?
     filtered_mean = np.mean(filtered_arr)
 
-    print(f"原数�? {arr}")
-    print(f"剔除阈值范�? {lower_bound:.2f} �?{upper_bound:.2f}")
-    print(f"筛选后的数�? {filtered_arr.tolist()}")
-    print(f"剔除异常值后的均�? {filtered_mean:.2f}")
+    print(f"? {arr}")
+    print(f"? {lower_bound:.2f} ?{upper_bound:.2f}")
+    print(f"? {filtered_arr.tolist()}")
+    print(f"? {filtered_mean:.2f}")
     return filtered_arr, dropped_arr
 
 
 def read_coordinates(file_path):
     """
-    读取包含 (x, y, z) 格式坐标的文本文�?
-    返回包含元组的列表，例如 [(-31.8817, -44.628, -49.7399), ...]
+     (x, y, z) ?
+     [(-31.8817, -44.628, -49.7399), ...]
     """
     coordinates = []
 
@@ -415,22 +415,22 @@ def read_coordinates(file_path):
             for line in file:
                 line = line.strip()
                 if line:
-                    # 去除首尾括号，分割数�?
+                    # ?
                     stripped = line.strip('()\n')
                     values = [float(x.strip()) for x in stripped.split(',')]
 
-                    # 检查是否为三维坐标
+                    # 
                     if len(values) == 3:
                         coordinates.append(values)
                     else:
-                        print(f"忽略无效�? {line}")
+                        print(f"? {line}")
             print(coordinates)
             return coordinates
 
     except FileNotFoundError:
-        print(f"错误: 文件 {file_path} 未找�?)
+        print(f":  {file_path} ?)
     except Exception as e:
-        print(f"读取文件时出�? {str(e)}")
+        print(f"? {str(e)}")
 
 
 def rest(used_list, Offsets, slice_index,
@@ -467,12 +467,12 @@ def rest(used_list, Offsets, slice_index,
     npy_array = np.load(os.path.join(root, "{}_np_array.npy".format(slice_index)))
 
     # print(f"{np.sum(npy_array1 - npy_array)}")
-    # 计算过滤后的均�?
+    # ?
     # mean_sum = np.mean(filit_list)
     # print(f"mean sum is {mean_sum}")
 
     z_array = npy_array[:, :, 2]
-    # �?填充为标准面 然后再减�?然后再插�?对z轴进行操�?
+    # ? ??z?
     non_zero_positions = np.where(z_array != 0)
     zero_positions = np.where(z_array == 0)
     z = linerArray2D(z_array, zero_positions, non_zero_positions)
@@ -483,7 +483,7 @@ def rest(used_list, Offsets, slice_index,
     x = linerArray2D(x_array, zero_positions, non_zero_positions)
 
     npy_size = npy_array.shape
-    # # 根据 z 的信息对 x y 轴都进行操作
+    # #  z  x y 
     result = np.zeros(npy_size)
     result[:, :, 0] = x;
     result[:, :, 1] = y;
@@ -504,7 +504,7 @@ def cal_loss():
 
     # max size is [10401  6032]
     block_size = 250
-    # ncc_loss = NCC_CPU()  # 确保NCC模块在CUDA上运�?
+    # ncc_loss = NCC_CPU()  # NCCCUDA?
 
     # todo
     # Calculate row_index, col_index for each position
@@ -575,7 +575,7 @@ def cal_loss():
                         ct += 1
                         value = Offsets[pos]
                         used_offsets[pos] = value
-                        used_list.append(value[2])  # 保存最后一个offset
+                        used_list.append(value[2])  # offset
                         print(f"key is {pos}; value is {value}; ncc: {ncc}; ssim: {ssim} ct is {ct}")
         if len(used_list):
             vector_points = np.zeros((row, col, 3))

@@ -1,19 +1,9 @@
-'''
-@ yangqi
-time is 2025.03.13
-本步骤实�?offset 的校�?以及计算粗配准面
+"""B85 refinement step 1.1 helpers.
 
-'''
-
-'''
-@ yangqi
-使用修复�?3D detect surface的方�?来检测数�?
-block size = 250 * 250;   cal size 125 * 125 * 40
-
-                down_temp = down_img[i * block_size: (i + 1) * block_size, j * block_size:(j + 1) * block_size,
-                          end2 - interval//2 :end2 + interval - interval//2]
-
-'''
+This module creates adjacent-slice image blocks used for coarse alignment.
+It is a local copy of the B85 utility code so the runner does not depend on
+YQReconstructionScripts at runtime.
+"""
 from .yq_elastix_files import *
 import numpy as np
 import os
@@ -31,7 +21,7 @@ def CalSurfaceTranslate(prev_surface_path, next_surface_path):
         return refineImg
     translateDict = {}
 
-    # 选取 index �?33 的数据进行测�?
+    #  index ?33 ?
     prev_surface = sitk.ReadImage(prev_surface_path)
     next_surface = sitk.ReadImage(next_surface_path)
     prev_surface = PreProcess(prev_surface)
@@ -43,7 +33,7 @@ def CalSurfaceTranslate(prev_surface_path, next_surface_path):
     # next_surface = ResizeImg(next_surface, next_size, ref_scale)
     prev_surface = fill_outside(prev_surface, outside_brightness)
     next_surface = fill_outside(next_surface, outside_brightness)
-    # 此处 按照 next �?fixed �?prev �?moving�?因为需要计�?next的上表面偏移�?
+    #   next ?fixed ?prev ?moving??next?
     tp_ = translate_get_align_transform(next_surface, prev_surface,
                                         [os.path.join(PARAMETER_DIR,
                                                       'yq_align_surface_2D.txt')])
@@ -103,7 +93,7 @@ def GetOffset(visorPath):
         rightList.append(right)
     return leftList , rightList
 
-# todo 根据origin 和整�?bounds 来重�?SliceImage
+# todo origin ?bounds ?SliceImage
 def SliceResample(imgPath,leftPoint, point, refSize,savePath,checklsPath, checkusPath):
 
     img = sitk.ReadImage(imgPath)
@@ -119,7 +109,7 @@ def SliceResample(imgPath,leftPoint, point, refSize,savePath,checklsPath, checku
     sitk.WriteImage(refineImg[:,:,75],checkusPath)
     # write_ome_tiff(refineImg, savePath)
     pass
-# todo �?75 上下的数据进行maxprojection
+# todo ?75 maxprojection
 def MaxProjSurface(imgPath, usSavePath, lsSavePath):
     img = sitk.ReadImage(imgPath)
     usIndex = 75
@@ -151,7 +141,7 @@ def step1_1_multiprocess(numsThread, taskParas):
     pool.join()
 
     # for res in result:
-    #     print('***:', res.get())  # get()函数得出每个返回结果的�?
+    #     print('***:', res.get())  # get()?
 
     print('All end--')
 
@@ -159,9 +149,9 @@ def step1_1_multiprocess(numsThread, taskParas):
 
 def taskFun(up_path, down_path, upOrigin, downOrigin, left_point, refSize, spacing, i,
             save_root):
-    # 解包数据
+    # 
 
-    # 模拟重建算法的任�?
+    # ?
     print(f"Reconstruction started for data chunk ")
     print(f"String input: {up_path, down_path}")
 
@@ -170,13 +160,13 @@ def taskFun(up_path, down_path, upOrigin, downOrigin, left_point, refSize, spaci
     up_img = sitk.ReadImage(up_path)
     down_img = sitk.ReadImage(down_path)
 
-    # 统一 数据的大小范�?
-    # todo 默认不做 扩充，但是可能造成数据的缺�?
+    #  ?
+    # todo  ?
     # left_point = [0,0,0]
     print("left_point is : ", left_point)
     # todo
 
-    # todo 不需要做全局�?填充，仅仅只用在意邻近片之间的问�?
+    # todo ??
     up_img.SetOrigin(upOrigin)
     up_img.SetSpacing(spacing)
     down_img.SetOrigin(downOrigin)
@@ -200,13 +190,13 @@ def taskFun(up_path, down_path, upOrigin, downOrigin, left_point, refSize, spaci
     os.makedirs(temp_img_path, exist_ok=True)
     # sitk.WriteImage(up_img[:,:,75],os.path.join(temp_img_path,"{}_75.tif".format(i)))
     # sitk.WriteImage(up_img[:,:,175],os.path.join(temp_img_path,"{}_175.tif".format(i)))
-    # todo 获得 xy 的粗校准
+    # todo  xy 
     start = time.time()
 
-    #  利用 最大值投影的2D data 计算位移（和旋转角度�?
+    #   2D data ?
     size1 = up_img.GetSize()
     size2 = down_img.GetSize()
-    # 计算高度 圈定大概的数据范�?
+    #  ?
     # bottom1 = GetBottom_4um(size1)
     # bottom2 = GetBottom_4um(size2)
     # end2 = int(bottom2 - 40 * 2.5)
@@ -215,11 +205,11 @@ def taskFun(up_path, down_path, upOrigin, downOrigin, left_point, refSize, spaci
     first = up_size[2] - gap
     second = down_size[2] - gap - 100 + 10
     roi = [[first - interval,first], [second - interval,second]]
-    # todo 使用 4 微米的图像进行测�?
+    # todo  4 ?
     # spacing = [4,4,4]
 
     next_result = None
-    print("粗校�?花费的时间为�?{}".format(time.time() - start))
+    print("Coarse alignment elapsed time: {}".format(time.time() - start))
 
     split_block(next_result, up_img, down_img, spacing,  roi=roi, slices_index=i
                   ,save_root = save_root
@@ -242,7 +232,7 @@ def split_block(img, up_img, down_img, spacing, roi, slices_index,
     col = int(np.floor(size[1] / block_size))
     vector_points = np.zeros((row, col, 3))
     forbid_points = np.zeros((row, col))
-    # todo 计算平均的评分指标结�?然后用阈值进行分�?ban掉无用区�?
+    # todo ??ban?
     back_brightness = 120
     for i in range(row):
         for j in range(col):
@@ -258,7 +248,7 @@ def split_block(img, up_img, down_img, spacing, roi, slices_index,
             # print("")
     # print("")
 
-    # todo 预处�?
+    # todo ?
     # up_img = Preprocess(up_img, 120)
     # down_img = Preprocess(down_img, 120)
 
@@ -277,19 +267,19 @@ def split_block(img, up_img, down_img, spacing, roi, slices_index,
                 sub_up = up_temp[block_size - sub_block:, block_size - sub_block:, :]
                 sub_down = down_temp[block_size - sub_block:, block_size - sub_block:, :]
 
-                # todo 判断是否有过多的数据缺失
+                # todo 
                 max_sub_down = sitk.MaximumProjection(sub_down[:, :, :(roi[0][1] - roi[0][0]) // 2],
                                                       projectionDimension=2)[:, :, 0]
                 hollow_scale = np.mean(np.mean(max_sub_down))
                 if hollow_scale < 0.4:
                     continue
 
-                # todo 找出非背景图像的表面 start 经过测试 还是算了，现在尝试拼接另一个表面数据做测试
+                # todo  start  
 
-                # todo 找出非背景图像的表面 end
+                # todo  end
 
                 origin = [0, 0, 0]
-                # todo 使用 200 * 200 �?右下角的块进行测�?
+                # todo  200 * 200 ??
                 sub_up.SetOrigin(origin)
                 sub_up.SetSpacing(spacing)
                 sub_down.SetOrigin(origin)
@@ -319,7 +309,7 @@ def main():
     # todo read reconstruction info and use the point bounds to resample the size of the image
     imgFormat = r"E:\20250426_SMY_TAC1_AI14_1_1\Reconstruction\SliceImage\4.0\TAC1_AI14_1_{:03d}_561nm_10X.tif"
 
-    # TODO 遍历数据 然后计算粗校准数�?拿前五个出来测试
+    # TODO  ?
     taskChunk = []
     # visorPath = r"E:\CRH_all.visor"
     visorPath = r"E:\tac1_ai14.visor"
@@ -355,7 +345,7 @@ def main():
         taskChunk.append(temp)
         # taskFun(up_path, down_path, upOrigin, downOrigin, lefttop, refSize, spacing, i,temp_root)
 
-    num_threads = 8  # 设置线程数量
+    num_threads = 8  # 
     run_multiprocess(num_threads, taskChunk)
 
 if __name__ == '__main__':

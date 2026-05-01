@@ -1,6 +1,6 @@
 '''
 @ yangqi
-修改�?separate 里面�?forbid location 增加了对 next image 的空缺判断；
+?separate ?forbid location  next image 
 
 '''
 
@@ -123,13 +123,13 @@ class Reconstruction_Point():
         info["slice_thickness"]=thickness
         #  slice list
         slice_list = get_files(slicePath,'.txt')
-        slice_index = 1 # TODO 需要添加名字读取出index
+        slice_index = 1 # TODO index
         slices = {}
         points = []
 
         channel = self.channel
         temp_list = []
-        #  目前只考虑488nm的图�?
+        #  488nm?
         for i in slice_list:
             if re.search(channel,i):
                 print(i)
@@ -170,10 +170,10 @@ class Reconstruction_Point():
         pDispTops = []
         uZ = []
         lZ = []
-        # create 形变�?
+        # create ?
         index = 0
         for i in slices:
-            # 仅仅尝试 index = 6
+            #  index = 6
             # if i != 6:
             #     continue
             slice = slices[i]
@@ -195,7 +195,7 @@ class Reconstruction_Point():
         SliceImagePath = os.path.join(basePath, 'SliceImage', '4.0')
         slice_images = get_files(SliceImagePath,'.tif')
         temp_list = []
-        #  目前只考虑488nm的图�?
+        #  488nm?
         for i in slice_images:
             if re.search(channel, i):
                 print(i)
@@ -227,7 +227,7 @@ class Reconstruction_Point():
         lZ = []
         index = 0
         for i in slices:
-            # 仅仅尝试 index = 6
+            #  index = 6
             # if i != 6:
             #     continue
             slice = slices[i]
@@ -322,7 +322,7 @@ def fill_outside_yq(img, value: int):
                   (img.shape[1] - 1, 0), value, value, value, cv2.FLOODFILL_FIXED_RANGE)
     # img = sitk.GetImageFromArray(img)
     return img
-# todo �?SeparateBlock 中调�?用来计算小块block的xyz位移
+# todo ?SeparateBlock ?blockxyz
 def CalBlock(prev_surface, next_surface,spacing, ref_img: sitk.Image = None, prev_points=None, next_points=None,
                    outside_brightness=2, nonrigid=True, ref_size=None, ref_scale=1, use_rigidity_mask=False, **kwargs):
     size = prev_surface.GetSize()
@@ -346,7 +346,7 @@ def CalBlock(prev_surface, next_surface,spacing, ref_img: sitk.Image = None, pre
     # prev_surface = fill_outside_yq(prev_surface, outside_brightness)
     # next_surface = fill_outside_yq(next_surface, outside_brightness)
     '''
-    只是�?affine 效果查看
+    ?affine 
     '''
     # justify the spcaing of imgs
     prev_surface.SetSpacing(spacing)
@@ -364,7 +364,7 @@ def CalBlock(prev_surface, next_surface,spacing, ref_img: sitk.Image = None, pre
     #                                             ref_img.GetSpacing(),
     #                                             ref_img.GetDirection())
     return prev_surface, next_result, transform2
-# todo 计算区域划分，forbid 一些评分低的点
+# todo forbid 
 def SeparateBlock(img,up_img,down_img,spacing,bottom1,end2,interval, slices_index,block_size = 250,sub_block = 125, tempName = 'th2_0511'):
     if img == None:
         img = sitk.MaximumProjection(down_img,projectionDimension=2)[:,:,0]
@@ -377,7 +377,7 @@ def SeparateBlock(img,up_img,down_img,spacing,bottom1,end2,interval, slices_inde
     col = int(np.floor(size[1]/block_size))
     vector_points = np.zeros((row,col,3))
     forbid_points = np.zeros((row,col))
-    # todo 计算平均的评分指标结�?然后用阈值进行分�?ban掉无用区�?
+    # todo ??ban?
     back_brightness = 120
     for i in range(row):
         for j in range(col):
@@ -393,10 +393,10 @@ def SeparateBlock(img,up_img,down_img,spacing,bottom1,end2,interval, slices_inde
             # print("")
     # print("")
 
-    # todo 计算数据
+    # todo 
     size1 = up_img.GetSize()
     size2 = down_img.GetSize()
-    # 计算高度 圈定大概的数据范�?
+    #  ?
     # bottom1 = GetBottom(size1)
     # bottom2 = GetBottom(size2)
     # end2 = bottom2 - 40
@@ -430,27 +430,27 @@ def SeparateBlock(img,up_img,down_img,spacing,bottom1,end2,interval, slices_inde
                 sub_up = up_temp[block_size-sub_block:,block_size-sub_block:,:]
                 sub_down = down_temp[block_size - sub_block:, block_size - sub_block:, :]
 
-                # todo 判断是否有过多的数据缺失
+                # todo 
                 max_sub_down = sitk.MaximumProjection(sub_down[:,:,:interval//2], projectionDimension=2)[:, :, 0]
                 hollow_scale = np.mean(np.mean(max_sub_down))
                 if hollow_scale < 0.2:
                     continue
 
-                # todo 找出非背景图像的表面 start 经过测试 还是算了，现在尝试拼接另一个表面数据做测试
+                # todo  start  
                 # drop, drop_hollow_scale = FindUsefulSurface(sub_down)
                 # down_temp = down_img[i * block_size: (i + 1) * block_size, j * block_size:(j + 1) * block_size,
                 #             end2 - interval + drop:end2 + drop]
                 # sub_down = down_temp[block_size - sub_block:, block_size - sub_block:, :]
 
 
-                # todo 找出非背景图像的表面 end
+                # todo  end
 
                 origin = [0, 0, 0]
                 # up_temp.SetOrigin(origin)
                 # up_temp.SetSpacing(spacing)
                 # down_temp.SetOrigin(origin)
                 # down_temp.SetSpacing(spacing)
-                # todo 使用 200 * 200 �?右下角的块进行测�?
+                # todo  200 * 200 ??
                 sub_up.SetOrigin(origin)
                 sub_up.SetSpacing(spacing)
                 sub_down.SetOrigin(origin)
@@ -485,9 +485,9 @@ def SeparateBlock(img,up_img,down_img,spacing,bottom1,end2,interval, slices_inde
                     vector_points[i, j, :] = np.array(param)
                     tf_pars.append(param)
                     pos.append([i,j])
-                    # todo 写入tf pars文件  这是 next img 下面那个图像的数据表面提取信�?
+                    # todo tf pars   next img ?
                     with open(os.path.join(r"D:\USERS\yq\code\cal_overlap\Refine", tempName,'tf_'+str(slices_index)+'_pars.txt'), 'w') as file:
-                        # 将列表的每个元素写入文件的一�?
+                        # ?
                         for k in range(len(tf_pars)):
                             file.write(str(pos[k])+": " + str(tf_pars[k]) + '\n')
                     # if tf_pars is not None:

@@ -76,7 +76,7 @@ def step3_multiprocess(numsThread, taskParas):
     pool.join()
 
     # for res in result:
-    #     print('***:', res.get())  # get()函数得出每个返回结果的�?
+    #     print('***:', res.get())  # get()?
 
     print('All end--')
 def main():
@@ -139,7 +139,7 @@ def main():
         tempChunk = (prev_path,next_path,rate,ref_size,prev_points,next_points,save_prev_df,
                save_next_df,save_prev,save_next,save_prev_2,save_next_2)
         taskChunks.append(tempChunk)
-    num_threads = 16  # 设置线程数量
+    num_threads = 16  # 
     start = time.time()
     run_multiprocess(num_threads, taskChunks)
     used_time = time.time() - start

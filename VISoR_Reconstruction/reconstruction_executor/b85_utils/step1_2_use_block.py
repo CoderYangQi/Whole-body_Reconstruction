@@ -1,19 +1,9 @@
-'''
-@ yangqi
-time is 2025.03.13
-本步骤实�?offset 的校�?以及计算粗配准面
+"""B85 refinement step 1.2 helpers.
 
-'''
-
-'''
-@ yangqi
-使用修复�?3D detect surface的方�?来检测数�?
-block size = 250 * 250;   cal size 125 * 125 * 40
-
-                down_temp = down_img[i * block_size: (i + 1) * block_size, j * block_size:(j + 1) * block_size,
-                          end2 - interval//2 :end2 + interval - interval//2]
-
-'''
+This module aligns adjacent image blocks and writes coarse position results.
+It is stored inside VISoR_Reconstruction to avoid runtime imports from
+YQReconstructionScripts.
+"""
 from .yq_elastix_files import *
 import numpy as np
 import os
@@ -91,7 +81,7 @@ def step1_2_multiprocess(numsThread, taskParas):
     pool.join()
 
     # for res in result:
-    #     print('***:', res.get())  # get()函数得出每个返回结果的�?
+    #     print('***:', res.get())  # get()?
 
     print('All end--')
 
@@ -134,9 +124,9 @@ try:
     vector_points[i, j, :] = np.array(param)
     tf_pars.append(param)
     pos.append([i,j])
-    # todo 写入tf pars文件  这是 next img 下面那个图像的数据表面提取信�?
+    # todo tf pars   next img ?
     with open(os.path.join(save_root, tempName,'tf_'+str(slices_index)+'_pars.txt'), 'w') as file:
-        # 将列表的每个元素写入文件的一�?
+        # ?
         for k in range(len(tf_pars)):
             file.write(str(pos[k])+": " + str(tf_pars[k]) + '\n')
     # if tf_pars is not None:
@@ -165,22 +155,22 @@ def deal_block(up_path, donw_path, i,j,save_res_folder):
     sub_up = sitk.ReadImage(up_path)[:,:,10:]
     sub_down = sitk.ReadImage(donw_path)[:,:,:-10]
     threshold = 120
-    # 获取图像的像素类�?
+    # ?
     pixel_type = sub_up.GetPixelID()
 
-    # 判断数据类型并做相应操作
+    # 
     if pixel_type == sitk.sitkUInt8:
-        print("图像类型�?sitk.UInt8，不进行操作�?)
+        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
     elif pixel_type == sitk.sitkUInt16:
-        print("图像类型�?sitk.UInt16，进行操作�?)
+        print("Image pixel type is sitkUInt16; preprocessing is applied.")
         sub_up = Preprocess(sub_up, threshold)
 
     pixel_type = sub_down.GetPixelID()
-    # 判断数据类型并做相应操作
+    # 
     if pixel_type == sitk.sitkUInt8:
-        print("图像类型�?sitk.UInt8，不进行操作�?)
+        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
     elif pixel_type == sitk.sitkUInt16:
-        print("图像类型�?sitk.UInt16，进行操作�?)
+        print("Image pixel type is sitkUInt16; preprocessing is applied.")
         sub_down = Preprocess(sub_down, threshold)
     spacing = [4,4,4]
     origin = [0,0,0]
@@ -199,7 +189,7 @@ def deal_block(up_path, donw_path, i,j,save_res_folder):
         print(transform2)
         param = transform2.GetParameters()
         print(f"param is {param}")
-        # 将参数内容写入txt文件
+        # txt
         with open(save_path, "w") as f:
             f.write(str(param))
         print("{} {} costs time :{}".format(i, j, time.time() - start))
@@ -229,7 +219,7 @@ def CalBlock(prev_surface, next_surface,spacing, ref_img: sitk.Image = None, pre
     next_surface = sitk.GetImageFromArray(temp)
 
     '''
-    只是�?affine 效果查看
+    ?affine 
     '''
     # justify the spcaing of imgs
     prev_surface.SetSpacing(spacing)
@@ -285,7 +275,7 @@ def extract_surface_failed(name_format):
         if os.path.exists(uz_path) and os.path.exists(lz_path):
             print(f"{uz_path} exists")
             continue
-        # todo 不需要做全局�?填充，仅仅只用在意邻近片之间的问�?
+        # todo ??
         imgOrigin = leftList[i - 1]
         imgOrigin = [imgOrigin[0], imgOrigin[1], 0]
         print(f"imgOrigin is {imgOrigin} lefttop is {lefttop}")

@@ -64,15 +64,15 @@ def CreateProcessInput(s,e,temp_root,name_format,uzlzRoot):
         # create udf ldf
         output.append(os.path.join(temp_root,name_format + "_udf.mha").format(index))
         output.append(os.path.join(temp_root,name_format + "_ldf.mha").format(index))
-    # 检查所有输入文件是否存�?
+    # ?
     all_exist = True
     for key, file_path in input.items():
         if not os.path.exists(file_path):
-            print(f"错误：文件不存在: {file_path} (key: {key})")
+            print(f": {file_path} (key: {key})")
             all_exist = False
 
     if not all_exist:
-        raise FileNotFoundError("部分输入文件不存在，请检查路径和文件名格式�?)
+        raise FileNotFoundError("?)
 
     return input,output
 def ROI_ProcessTranform(s,e,temp_root,name_format,uzlzRoot):
@@ -129,7 +129,7 @@ def refine_create_brain(s,e, temp_root, name_format,leftList, lefttop, recon_roo
         slice_offset_list.append([left[0],left[1],0])
     ct = 0
     ##
-    # todo �?6~16 测试
+    # todo ?6~16 
     ct = 0
     output = os.path.join(recon_root, 'BrainTransform', 'visor_brain.txt')
     param = {'internal_pixel_size': 4.0, 'slice_thickness': 400}
@@ -209,7 +209,7 @@ def refine_create_brain_(input_, internal_pixel_size, slice_thickness,slice_offs
             xy_offset = [[0,0,0],[0,0,0]]
         print(f"index {i} offset is {xy_offset}")
 
-        # �?sliceindex �?1
+        # ?sliceindex ?1
         slice_offset = slice_offset_list[i - start_ind]
         u = sitk.Compose(sitk.VectorIndexSelectionCast(u, 0) * internal_pixel_size - slice_offset[0] + xy_offset[0][0],
                          sitk.VectorIndexSelectionCast(u, 1) * internal_pixel_size - slice_offset[1] + xy_offset[0][1],
@@ -296,7 +296,7 @@ def generate_brain_image(brainPath, imgPath, slice_index, input_pixel_size, outp
     img = sitk.ReadImage(imgPath)
     if slice_origin is None:
         # slice_origin = brain.slices[slice_index].sphere[0]
-        # # todo 可能是数据有问题
+        # # todo 
         slice_origin = [0,0,0]
     img.SetOrigin(slice_origin)
     img.SetSpacing([input_pixel_size, input_pixel_size, input_pixel_size])
@@ -338,7 +338,7 @@ def _generate_brain_image(s,e,recon_root,imgFormat,leftList,start_ind):
         slice_index = sliceIndex;
         input_pixel_size = 4.0;
         output_pixel_size = 4.0
-        originIndex = sliceIndex - start_ind # 自动 -1
+        originIndex = sliceIndex - start_ind #  -1
         imgOrigin = leftList[originIndex]
         imgOrigin = [imgOrigin[0], imgOrigin[1], 0]
         temp = (brainPath, imgPath, slice_index, input_pixel_size, output_pixel_size, name_format, n_start)
@@ -346,7 +346,7 @@ def _generate_brain_image(s,e,recon_root,imgFormat,leftList,start_ind):
         # yq_generate_brain_image(brainPath, imgPath, slice_index, input_pixel_size, output_pixel_size
         #         , name_format, n_start,imgOrigin,refSize,lefttop)
 
-    num_threads = 1  # 设置线程数量
+    num_threads = 1  # 
     brainimage_multiprocess(num_threads, taskChunks)
     # print(imgPath,sliceIndex,n_start)
     # for sliceIndex in range(131,170):
@@ -376,7 +376,7 @@ def yq_generate_brain_image(brainPath, imgPath, slice_index, input_pixel_size, o
     brain.load(brainPath)
     if slice_origin is None:
         slice_origin = brain.slices[slice_index].sphere[0]
-        # # todo 可能是数据有问题
+        # # todo 
         # slice_origin[2] = 0
     img = sitk.ReadImage(imgPath)
 
@@ -384,7 +384,7 @@ def yq_generate_brain_image(brainPath, imgPath, slice_index, input_pixel_size, o
     nextSize = img.GetSize()
     spacing = [4, 4, 4]
     # img_size = [nextSize[0], nextSize[1]]
-    # todo 对图像进�?Resample 和之前的计算粗校准面的坐标一�?
+    # todo ?Resample ?
     img.SetOrigin(imgOrigin)
     img.SetSpacing(spacing)
     img = sitk.Resample(img, [refSize[0], refSize[1], nextSize[2]], sitk.Transform(), sitk.sitkLinear, lefttop,
@@ -444,11 +444,11 @@ def CheckInput(s,e,temp_root, name_format,uzlzRoot):
         # create udf ldf
         # output.append(os.path.join(temp_root,name_format + "_udf.mha").format(index))
         # output.append(os.path.join(temp_root,name_format + "_ldf.mha").format(index))
-    # 检查所有输入文件是否存�?
+    # ?
     all_exist = True
     for key, file_path in input.items():
         if not os.path.exists(file_path):
-            print(f"错误：文件不存在: {file_path} (key: {key})")
+            print(f": {file_path} (key: {key})")
             all_exist = False
     return all_exist
 
@@ -465,18 +465,18 @@ if __name__ == '__main__':
 
     # extract_surface()
 
-    # 获取了uxy lxy �?-�?get udf ldf
-    # CreateProcessInput() # 修改 路径
+    # uxy lxy ?-?get udf ldf
+    # CreateProcessInput() #  
 
-    # check_interval = 1 * 6  # 检查间隔：10分钟�?00秒）
+    # check_interval = 1 * 6  # 10?00
     #
     # # while True:
-    # #     print("开始检查文件是否就绪…�?)
+    # #     print("?)
     # #     if CheckInput():
-    # #         print("检查完毕：所有文件均已就绪�?)
+    # #         print("?)
     # #         break
     # #     else:
-    # #         print(f"检查结果：部分文件未就绪。{check_interval / 60} 分钟后再次检查�?)
+    # #         print(f"{check_interval / 60} ?)
     # #         time.sleep(check_interval)
     #
     # s, e = 36,42
