@@ -428,7 +428,7 @@ def read_coordinates(file_path):
             return coordinates
 
     except FileNotFoundError:
-        print(f":  {file_path} ?)
+        print(f":  {file_path} ")
     except Exception as e:
         print(f"? {str(e)}")
 

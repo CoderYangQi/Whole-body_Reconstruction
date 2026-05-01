@@ -72,7 +72,7 @@ def CreateProcessInput(s,e,temp_root,name_format,uzlzRoot):
             all_exist = False
 
     if not all_exist:
-        raise FileNotFoundError("?)
+        raise FileNotFoundError("no exist error")
 
     return input,output
 def ROI_ProcessTranform(s,e,temp_root,name_format,uzlzRoot):
