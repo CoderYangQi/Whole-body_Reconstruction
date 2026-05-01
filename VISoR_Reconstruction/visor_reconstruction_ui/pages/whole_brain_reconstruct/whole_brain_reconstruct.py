@@ -25,7 +25,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         self.pb_settings.clicked.connect(self.settings)
         self.pb_stop.clicked.connect(self.stop_reconstruct)
         self.worker_thread = WorkerThread()
-        self.worker_thread.text_stream.textWritten.connect(self.textBrowser.append)
+        self.worker_thread.text_stream.textWritten.connect(self._append_log)
         self.worker_thread.finished.connect(self.reconstruct_finished)
         self.param = default_param.copy()
 
@@ -44,6 +44,25 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         self._setup_page_chrome()
         self._setup_b85_controls()
         self._set_b85_controls_enabled(False)
+
+    def _append_log(self, text):
+        if text is None:
+            return
+        text = str(text)
+        if len(text) == 0:
+            return
+        text = text.replace('\r\n', '\n').replace('\r', '\n')
+        lines = text.split('\n')
+        cursor = self.textBrowser.textCursor()
+        cursor.movePosition(QtGui.QTextCursor.End)
+        for line in lines:
+            if len(line) == 0:
+                continue
+            if not self.textBrowser.document().isEmpty():
+                cursor.insertBlock()
+            cursor.insertText(line)
+        self.textBrowser.setTextCursor(cursor)
+        self.textBrowser.ensureCursorVisible()
 
     def _setup_page_chrome(self):
         self.setObjectName('wholeBrainReconstructPage')
@@ -435,7 +454,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         try:
             config = self._build_b85_config(validate=True)
         except Exception as e:
-            self.textBrowser.append(str(e))
+            self._append_log(str(e))
             self.label_status.setText('Refinement config error')
             return
         self.latest_b85_result = None
@@ -480,7 +499,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         if not isinstance(s, dict):
             return
         if 'message' in s:
-            self.textBrowser.append(str(s['message']))
+            self._append_log(s['message'])
         if 'progress' in s:
             try:
                 value = int(float(s['progress']) * self.progressBar.maximum())
@@ -499,7 +518,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         try:
             self.pipe.send({'stop': None})
         except (BrokenPipeError, EOFError, OSError) as e:
-            self.textBrowser.append('Stop signal failed: {}'.format(e))
+            self._append_log('Stop signal failed: {}'.format(e))
 
     def _close_process_handles(self):
         if self.pipe is not None:
@@ -524,7 +543,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         self._set_running_state(False)
         if self.process_exit_code not in (None, 0):
             self.label_status.setText('Failed')
-            self.textBrowser.append('Reconstruction process exited with code {}'.format(self.process_exit_code))
+            self._append_log('Reconstruction process exited with code {}'.format(self.process_exit_code))
         self._close_process_handles()
         if self.latest_b85_result is not None and self.pipeline.dataset is not None:
             brain_transform = self.latest_b85_result.get('brain_transform')
@@ -532,15 +551,15 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
                 self.pipeline.dataset.brain_transform = brain_transform
                 self.pipeline.dataset.reconstruction_info.setdefault('BrainTransform', {})
                 self.pipeline.dataset.reconstruction_info.setdefault('BrainImage', {})
-                self.textBrowser.append('Refinement brain transform: {}'.format(brain_transform))
+                self._append_log('Refinement brain transform: {}'.format(brain_transform))
 
     def settings(self):
         if self.cb_mode.currentData() == 'b85':
             try:
                 config = self._build_b85_config(validate=False)
-                self.textBrowser.append(config.to_json())
+                self._append_log(config.to_json())
             except Exception as e:
-                self.textBrowser.append(str(e))
+                self._append_log(str(e))
             return
         dialog = QtWidgets.QDialog()
         dialog.setWindowTitle('Settings')
@@ -607,7 +626,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         try:
             config = infer_b85_config(dataset, validate=False)
         except Exception as e:
-            self.textBrowser.append('Refinement defaults failed: {}'.format(e))
+            self._append_log('Refinement defaults failed: {}'.format(e))
             return
 
         self.b85_output_root.setText(config.output_root)
