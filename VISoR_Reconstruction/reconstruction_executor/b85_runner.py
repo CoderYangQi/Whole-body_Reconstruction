@@ -3,8 +3,6 @@ import os
 import re
 import sys
 import time
-import types
-from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -86,10 +84,6 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
-def _b85_root() -> Path:
-    return _repo_root() / "YQReconstructionScripts" / "B85_Test"
-
-
 def _pixel_dir_name(pixel_size: float) -> str:
     if float(pixel_size).is_integer():
         return f"{float(pixel_size):.1f}"
@@ -102,70 +96,24 @@ def _channel_wavelength(channel: dict) -> float:
     return float(match.group(0)) if match else 0.0
 
 
-def _install_common0313_shim():
-    def preprocess(surface, threshold):
-        surface = sitk.Threshold(surface, threshold, 65535, threshold)
-        back_log_value = np.log(threshold)
-        return sitk.Clamp(
-            (sitk.Log(sitk.Cast(surface + 1, sitk.sitkFloat32)) - back_log_value) * 39.4,
-            sitk.sitkUInt8,
-            0,
-            255,
-        )
-
-    def fill_outside_yq(img, value: int):
-        img[0, 0] = 0
-        mask = np.zeros((img.shape[0] + 2, img.shape[1] + 2), np.uint8)
-        cv2.floodFill(img, mask, (0, 0), value, value, value, cv2.FLOODFILL_FIXED_RANGE)
-        img[img.shape[0] - 1, 0] = 0
-        cv2.floodFill(img, mask, (0, img.shape[0] - 1), value, value, value, cv2.FLOODFILL_FIXED_RANGE)
-        img[img.shape[0] - 1, img.shape[1] - 1] = 0
-        cv2.floodFill(
-            img,
-            mask,
-            (img.shape[1] - 1, img.shape[0] - 1),
-            value,
-            value,
-            value,
-            cv2.FLOODFILL_FIXED_RANGE,
-        )
-        img[0, img.shape[1] - 1] = 0
-        cv2.floodFill(img, mask, (img.shape[1] - 1, 0), value, value, value, cv2.FLOODFILL_FIXED_RANGE)
-        return img
-
-    package_name = "YQReconstructionScripts.CRH"
-    module_name = f"{package_name}.common0313"
-    if package_name not in sys.modules:
-        package = types.ModuleType(package_name)
-        package.__path__ = []
-        sys.modules[package_name] = package
-    if module_name not in sys.modules:
-        module = types.ModuleType(module_name)
-        module.Preprocess = preprocess
-        module.fill_outside_yq = fill_outside_yq
-        sys.modules[module_name] = module
-
-
 def _prepare_b85_imports():
     repo_root = str(_repo_root())
-    b85_root = str(_b85_root())
-    for path in [repo_root, b85_root]:
-        if path not in sys.path:
-            sys.path.insert(0, path)
-    _install_common0313_shim()
+    if repo_root not in sys.path:
+        sys.path.insert(0, repo_root)
 
 
 def _import_b85_modules():
     _prepare_b85_imports()
     import importlib
 
+    package = "VISoR_Reconstruction.reconstruction_executor.b85_utils"
     return {
-        "step1_1": importlib.import_module("utils.step1_1_methods"),
-        "step1_2": importlib.import_module("utils.step1_2_use_block"),
-        "step1_3": importlib.import_module("utils.step1_3_CalLoss"),
-        "step2": importlib.import_module("utils.step2_extract"),
-        "step3": importlib.import_module("utils.step3_align"),
-        "step4": importlib.import_module("utils.step4_ContiuneProcessTransform"),
+        "step1_1": importlib.import_module(f"{package}.step1_1_methods"),
+        "step1_2": importlib.import_module(f"{package}.step1_2_use_block"),
+        "step1_3": importlib.import_module(f"{package}.step1_3_CalLoss"),
+        "step2": importlib.import_module(f"{package}.step2_extract"),
+        "step3": importlib.import_module(f"{package}.step3_align"),
+        "step4": importlib.import_module(f"{package}.step4_ContiuneProcessTransform"),
     }
 
 
@@ -426,16 +374,6 @@ def _check_stop(pipe):
         payload = pipe.recv()
         return "stop" in payload
     return False
-
-
-@contextmanager
-def _pushd(path: Path):
-    old = os.getcwd()
-    os.chdir(str(path))
-    try:
-        yield
-    finally:
-        os.chdir(old)
 
 
 def _brain_output_root(config: B85Config) -> str:
@@ -991,24 +929,18 @@ class B85Runner:
         total = max(1, len([s for s in B85_STEP_NAMES if s in self.config.selected_steps]))
         current = 0
 
-        def in_b85_root(func):
-            def wrapped():
-                with _pushd(_b85_root()):
-                    func()
-            return wrapped
-
         for name, func in [
             ("reconstruct_sample", lambda: _run_reconstruct_sample(self.config, self.pipe)),
             ("reconstruct_image", lambda: _run_reconstruct_image(self.config, self.pipe)),
-            ("step1_1", in_b85_root(lambda: _run_step1_1(self.modules, self.config, ref, left_list, lefttop, ref_size, spacing))),
-            ("step1_2", in_b85_root(lambda: _run_step1_2(self.modules, self.config, ref_size))),
-            ("step1_3", in_b85_root(lambda: _run_step1_3(self.modules, self.config, ref_size))),
-            ("step2", in_b85_root(lambda: _run_step2(self.modules, self.config, ref, left_list, lefttop, ref_size, spacing))),
-            ("extract_surface_failed", in_b85_root(lambda: _run_extract_surface_failed(self.modules, self.config, ref, left_list, lefttop, ref_size, spacing))),
-            ("step3", in_b85_root(lambda: _run_step3(self.modules, self.config, ref, ref_size))),
-            ("check_xy", in_b85_root(lambda: _run_check_xy(self.config, ref))),
-            ("step4", in_b85_root(lambda: self._run_step4(ref, left_list, lefttop))),
-            ("step4_channel", in_b85_root(self._run_step4_channel)),
+            ("step1_1", lambda: _run_step1_1(self.modules, self.config, ref, left_list, lefttop, ref_size, spacing)),
+            ("step1_2", lambda: _run_step1_2(self.modules, self.config, ref_size)),
+            ("step1_3", lambda: _run_step1_3(self.modules, self.config, ref_size)),
+            ("step2", lambda: _run_step2(self.modules, self.config, ref, left_list, lefttop, ref_size, spacing)),
+            ("extract_surface_failed", lambda: _run_extract_surface_failed(self.modules, self.config, ref, left_list, lefttop, ref_size, spacing)),
+            ("step3", lambda: _run_step3(self.modules, self.config, ref, ref_size)),
+            ("check_xy", lambda: _run_check_xy(self.config, ref)),
+            ("step4", lambda: self._run_step4(ref, left_list, lefttop)),
+            ("step4_channel", self._run_step4_channel),
         ]:
             if name in self.config.selected_steps:
                 current += 1
