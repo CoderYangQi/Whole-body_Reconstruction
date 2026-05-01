@@ -9,11 +9,11 @@ __pycache__/
 temp/
 # VISoR_Analysis/
 YQReconstructionScripts/
-common_script/
-misc/
-VISoR_Reconstruction/doc/
-VISoR_Reconstruction/preset/
-VISoR_Reconstruction/reconstruction/parameters/
+# common_script/
+# misc/
+# VISoR_Reconstruction/doc/
+# VISoR_Reconstruction/preset/
+# VISoR_Reconstruction/reconstruction/parameters/
 # VISoR_Reconstruction/scripts/
 # VISoR_Reconstruction/tools/
 !VISoR_Brain/lib/flsmio/flsmio.cp311-win_amd64.pyd

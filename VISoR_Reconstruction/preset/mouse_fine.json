@@ -1,0 +1,27 @@
+{
+  "annotation_path": null,
+  "generate_projection": true,
+  "global_optimization_downsample": 32,
+  "ignore_channel": null,
+  "ignore_slice": null,
+  "internal_pixel_size": 4.0,
+  "nonrigid": true,
+  "output_path": "",
+  "output_pixel_size": 2.0,
+  "outside_brightness": 112,
+  "reconstruct_brain": true,
+  "reference_channel": null,
+  "roi_height": 10000,
+  "roi_width": 14000,
+  "slice_source": "raw",
+  "slice_stitch_method": "elastix",
+  "slice_template": "mouse_brain",
+  "slice_thickness": 300,
+  "surface_detect_downsample": [
+    2,
+    2,
+    1
+  ],
+  "use_annotation": true,
+  "use_rigidity_mask": false
+}

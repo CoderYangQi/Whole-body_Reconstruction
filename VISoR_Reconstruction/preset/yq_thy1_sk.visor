@@ -1,0 +1,40 @@
+{
+  "annotation_path": null,
+  "brain_projection_thickness": 30,
+  "channel_align_method": "channel_elastix_align",
+  "column_align_method": "elastix_align2",
+  "flip_slices": null,
+  "generate_brain_projection": false,
+  "generate_projection": true,
+  "global_optimization_downsample": 32,
+  "ignore_channel": null,
+  "ignore_slice": null,
+  "internal_pixel_size": 10.0,
+  "nonrigid": true,
+  "output_path": "F:/THY1-SK-F",
+  "output_pixel_size": 10.0,
+  "outside_brightness": 112,
+  "overwrite_pixel_size": null,
+  "reconstruct_brain": true,
+  "reference_channel": null,
+  "roi_height": 20120,
+  "roi_width": 40880,
+  "separate_brain_image": false,
+  "slice_source": "thumbnail",
+  "slice_stitch_channels": "all",
+  "slice_stitch_method": "elastix",
+  "slice_template": "mouse_brain",
+  "slice_thickness": 400,
+  "surface_detect_downsample": [
+    2,
+    2,
+    1
+  ],
+  "surface_detect_metric_weight": [
+    1.0,
+    19200.0,
+    360.0
+  ],
+  "use_annotation": true,
+  "use_rigidity_mask": false
+}
