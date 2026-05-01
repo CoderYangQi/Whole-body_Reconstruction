@@ -18,8 +18,8 @@ VISoR_Reconstruction/reconstruction/parameters/
 # VISoR_Reconstruction/tools/
 !VISoR_Brain/lib/flsmio/flsmio.cp311-win_amd64.pyd
 !VISoR_Brain/lib/flsmio/flsmio.cp37-win_amd64.pyd
-
-# # 你指定的文件
+!VISoR_Brain/lib/gpu_resample
+# # 你指定的文件!
 # VISoR_Data.py
 # ome_tiff.py
 # Torch_Losses.py
