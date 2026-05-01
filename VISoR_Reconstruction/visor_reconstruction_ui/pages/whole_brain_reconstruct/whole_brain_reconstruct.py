@@ -15,6 +15,8 @@ from multiprocessing import Pipe, Process
 
 
 class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
+    pipe_message_received = QtCore.pyqtSignal(dict)
+
     def __init__(self, pipeline, parent=None):
         super(WholeBrainReconstructPage, self).__init__(parent)
         self.setupUi(self)
@@ -34,7 +36,9 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
 
         self.pipe = None
         self.process = None
+        self.process_exit_code = None
         self.latest_b85_result = None
+        self.pipe_message_received.connect(self._handle_pipe_message)
 
         self.pipeline = pipeline
         self._setup_page_chrome()
@@ -416,6 +420,8 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         if not self.checkBox.isChecked():
             dst = self.pipeline.dataset.path
         self.param['output_path'] = dst
+        self.latest_b85_result = None
+        self.process_exit_code = None
         self.pipe, pipe = Pipe()
         s = gen_brain_reconstruction_pipeline(self.pipeline.dataset, **self.param)
         p = Process(target=main, args=(s, pipe))
@@ -433,6 +439,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
             self.label_status.setText('Refinement config error')
             return
         self.latest_b85_result = None
+        self.process_exit_code = None
         self.pipe, pipe = Pipe()
         p = Process(target=b85_main, args=(config.to_json(), pipe))
         self.process = p
@@ -442,35 +449,83 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         self._set_running_state(True)
 
     def listen(self, p):
-        ct = 0
+        pipe = self.pipe
         while 1:
-            if self.pipe.poll(1):
-                try:
-                    s = self.pipe.recv()
-                except EOFError:
-                    break
-                ct += 1
-                if ct == 16:
-                    ct = 0
-                if 'message' in s:
-                    print(s['message'])
-                if 'progress' in s:
-                    self.progressBar.setValue(int(s['progress'] * self.progressBar.maximum()))
-                if 'status' in s:
-                    self.label_status.setText(s['status'])
-                if 'result' in s:
-                    self.latest_b85_result = s['result']
+            try:
+                if pipe is not None:
+                    if pipe.poll(0.2):
+                        self.pipe_message_received.emit(pipe.recv())
+                else:
+                    p.join(0.2)
+            except (EOFError, BrokenPipeError, OSError) as e:
+                self.pipe_message_received.emit({
+                    'status': 'Pipe closed',
+                    'message': 'Process pipe closed: {}'.format(e),
+                })
+                pipe = None
+
             p.join(0.01)
             if p.exitcode is not None:
+                self.process_exit_code = p.exitcode
+                while pipe is not None:
+                    try:
+                        if not pipe.poll():
+                            break
+                        self.pipe_message_received.emit(pipe.recv())
+                    except (EOFError, BrokenPipeError, OSError):
+                        break
                 break
+
+    def _handle_pipe_message(self, s):
+        if not isinstance(s, dict):
+            return
+        if 'message' in s:
+            self.textBrowser.append(str(s['message']))
+        if 'progress' in s:
+            try:
+                value = int(float(s['progress']) * self.progressBar.maximum())
+                value = max(0, min(self.progressBar.maximum(), value))
+                self.progressBar.setValue(value)
+            except (TypeError, ValueError):
+                pass
+        if 'status' in s:
+            self.label_status.setText(str(s['status']))
+        if 'result' in s:
+            self.latest_b85_result = s['result']
+
+    def _safe_send_stop(self):
+        if self.pipe is None:
+            return
+        try:
+            self.pipe.send({'stop': None})
+        except (BrokenPipeError, EOFError, OSError) as e:
+            self.textBrowser.append('Stop signal failed: {}'.format(e))
+
+    def _close_process_handles(self):
+        if self.pipe is not None:
+            try:
+                self.pipe.close()
+            except (BrokenPipeError, EOFError, OSError):
+                pass
+            self.pipe = None
+        if self.process is not None and self.process.exitcode is not None:
+            try:
+                self.process.close()
+            except (AttributeError, ValueError, OSError):
+                pass
+            self.process = None
 
     def stop_reconstruct(self):
         if self.pipe is not None:
             self.label_status.setText('Stopping')
-            self.pipe.send({'stop': None})
+            self._safe_send_stop()
 
     def reconstruct_finished(self):
         self._set_running_state(False)
+        if self.process_exit_code not in (None, 0):
+            self.label_status.setText('Failed')
+            self.textBrowser.append('Reconstruction process exited with code {}'.format(self.process_exit_code))
+        self._close_process_handles()
         if self.latest_b85_result is not None and self.pipeline.dataset is not None:
             brain_transform = self.latest_b85_result.get('brain_transform')
             if brain_transform is not None:

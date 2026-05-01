@@ -6,7 +6,11 @@ class EmittingStream(QtCore.QObject):
     textWritten = QtCore.pyqtSignal(str)
 
     def write(self, text):
-        self.textWritten.emit(text)
+        if text:
+            self.textWritten.emit(text)
+
+    def flush(self):
+        pass
 
 
 class WorkerThread(QtCore.QThread):
@@ -34,15 +38,16 @@ class WorkerThread(QtCore.QThread):
         self.progress.emit(value)
 
     def run(self):
+        old_stdout = sys.stdout
         sys.stdout = self.text_stream
         self.status.emit('Running')
-        #error = None
         try:
-            self.func(*self.args, **self.kwargs)
+            if self.func is not None:
+                self.func(*self.args, **self.kwargs)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             traceback.print_exception(exc_type, exc_value, exc_traceback)
             self.status.emit('Failed')
-        self.status.emit('Finished')
-        sys.stdout = sys.__stdout__
-        #print(error)
+        finally:
+            sys.stdout = old_stdout
+            self.status.emit('Finished')

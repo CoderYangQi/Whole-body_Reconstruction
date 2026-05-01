@@ -372,6 +372,41 @@ def _send_message(pipe, message: str):
     _send(pipe, {"message": message})
 
 
+class _StandardExecutorPipe:
+    def __init__(self, parent_pipe):
+        self.parent_pipe = parent_pipe
+        self.pending = None
+        self.closed = False
+
+    def send(self, payload):
+        if self.closed:
+            return
+        if not _send(self.parent_pipe, payload):
+            self.closed = True
+
+    def poll(self, timeout=0):
+        if self.parent_pipe is None or self.closed:
+            if timeout:
+                time.sleep(timeout)
+            return False
+        if self.pending is not None:
+            return True
+        try:
+            if self.parent_pipe.poll(timeout):
+                self.pending = self.parent_pipe.recv()
+                return True
+        except (BrokenPipeError, EOFError, OSError):
+            self.closed = True
+        return False
+
+    def recv(self):
+        if self.pending is None:
+            return {}
+        payload = self.pending
+        self.pending = None
+        return payload
+
+
 def _check_stop(pipe):
     if pipe is None:
         return False
@@ -475,7 +510,7 @@ def _run_standard_pre_step(config: B85Config, task_type: str, pipe=None):
     _send(pipe, {
         "message": "Running {} {} task(s) for Refinement.".format(len(filtered_tasks), task_type)
     })
-    executor_main(json.dumps(pipeline), pipe)
+    executor_main(json.dumps(pipeline), _StandardExecutorPipe(pipe))
 
 
 def _run_reconstruct_sample(config: B85Config, pipe=None):
