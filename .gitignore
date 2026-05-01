@@ -7,7 +7,7 @@ __pycache__/
 .idea/
 .vscode/
 temp/
-VISoR_Analysis/
+# VISoR_Analysis/
 YQReconstructionScripts/
 common_script/
 misc/
