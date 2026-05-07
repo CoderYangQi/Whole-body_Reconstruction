@@ -5,6 +5,7 @@ It is stored inside VISoR_Reconstruction to avoid runtime imports from
 YQReconstructionScripts.
 """
 from .yq_elastix_files import *
+import ast
 import numpy as np
 import os
 
@@ -70,8 +71,225 @@ def GetOffset(visorPath):
 import multiprocessing
 import time, gc
 
+STEP1_2_BLOCK_STATUS_NAME = "step1_2_block_status.txt"
+_STEP1_2_BLOCK_STATUS_HEADER = "row\tcol\tstatus\tpos_name\treason\tmessage\tupdated_at\n"
+
+
+def _safe_status_field(value):
+    return str(value).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
+def _file_ready(path):
+    try:
+        return os.path.isfile(path) and os.path.getsize(path) > 0
+    except OSError:
+        return False
+
+
+def _pos_file_path(save_res_folder, row_index, col_index):
+    return os.path.join(save_res_folder, f"pos_{row_index}_{col_index}.txt")
+
+
+def _status_file_path(save_res_folder):
+    return os.path.join(save_res_folder, STEP1_2_BLOCK_STATUS_NAME)
+
+
+def _pos_file_ready(path):
+    if not _file_ready(path):
+        return False
+    try:
+        with open(path, "r", encoding="utf-8-sig", errors="replace") as file:
+            value = ast.literal_eval(file.read().strip())
+        return isinstance(value, (list, tuple)) and len(value) == 3
+    except (OSError, SyntaxError, ValueError):
+        return False
+
+
+def _read_block_statuses(status_path):
+    records = {}
+    if not os.path.isfile(status_path):
+        return records
+    with open(status_path, "r", encoding="utf-8-sig", errors="replace") as file:
+        for line in file:
+            line = line.rstrip("\r\n")
+            if not line or line.startswith("row\tcol\tstatus"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 3:
+                continue
+            try:
+                row_index = int(parts[0])
+                col_index = int(parts[1])
+            except ValueError:
+                continue
+            records[(row_index, col_index)] = {
+                "status": parts[2],
+                "pos_name": parts[3] if len(parts) > 3 else "",
+                "reason": parts[4] if len(parts) > 4 else "",
+                "message": parts[5] if len(parts) > 5 else "",
+                "updated_at": parts[6] if len(parts) > 6 else "",
+            }
+    return records
+
+
+def _append_block_status(status_path, row_index, col_index, status, pos_name="", reason="", message=""):
+    os.makedirs(os.path.dirname(status_path), exist_ok=True)
+    need_header = not os.path.exists(status_path) or os.path.getsize(status_path) == 0
+    updated_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    line = "{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(
+        row_index,
+        col_index,
+        _safe_status_field(status),
+        _safe_status_field(pos_name),
+        _safe_status_field(reason),
+        _safe_status_field(message),
+        updated_at,
+    )
+    with open(status_path, "a", encoding="utf-8") as file:
+        if need_header:
+            file.write(_STEP1_2_BLOCK_STATUS_HEADER)
+        file.write(line)
+        file.flush()
+
+
+def _append_task_result(result):
+    if result is None:
+        return
+    save_res_folder, row_index, col_index, status, pos_name, reason, message = result
+    _append_block_status(
+        _status_file_path(save_res_folder),
+        row_index,
+        col_index,
+        status,
+        pos_name,
+        reason,
+        message,
+    )
+
+
+def _block_record_complete(save_res_folder, row_index, col_index, record):
+    if not record:
+        return False
+    status = record.get("status")
+    if status == "aligned":
+        return _pos_file_ready(_pos_file_path(save_res_folder, row_index, col_index))
+    if status in ("failed", "skipped_no_step1_1_block"):
+        return True
+    return False
+
+
+def step1_2_block_complete(save_res_folder, row_index, col_index):
+    records = _read_block_statuses(_status_file_path(save_res_folder))
+    return _block_record_complete(save_res_folder, row_index, col_index, records.get((row_index, col_index)))
+
+
+def bootstrap_step1_2_status(save_res_folder, expected_blocks=None, all_blocks=None):
+    os.makedirs(save_res_folder, exist_ok=True)
+    expected_blocks = set(expected_blocks or [])
+    all_blocks = set(all_blocks or expected_blocks)
+    status_path = _status_file_path(save_res_folder)
+    records = _read_block_statuses(status_path)
+    changed = False
+
+    for row_index, col_index in sorted(all_blocks):
+        pos_path = _pos_file_path(save_res_folder, row_index, col_index)
+        record = records.get((row_index, col_index))
+        if (row_index, col_index) in expected_blocks:
+            if _pos_file_ready(pos_path):
+                if not record or record.get("status") != "aligned":
+                    _append_block_status(
+                        status_path,
+                        row_index,
+                        col_index,
+                        "aligned",
+                        os.path.basename(pos_path),
+                        "legacy_existing_pos",
+                    )
+                    changed = True
+            continue
+
+        if not record or record.get("status") != "skipped_no_step1_1_block":
+            _append_block_status(
+                status_path,
+                row_index,
+                col_index,
+                "skipped_no_step1_1_block",
+                "",
+                "step1_1_filtered_or_missing",
+            )
+            changed = True
+    return changed
+
+
+def step1_2_pair_complete(save_res_folder, expected_blocks):
+    records = _read_block_statuses(_status_file_path(save_res_folder))
+    for row_index, col_index in expected_blocks:
+        if not _block_record_complete(save_res_folder, row_index, col_index, records.get((row_index, col_index))):
+            return False
+    return True
+
+
+def step1_2_incomplete_blocks(save_res_folder, expected_blocks):
+    records = _read_block_statuses(_status_file_path(save_res_folder))
+    incomplete = []
+    for row_index, col_index in sorted(expected_blocks):
+        record = records.get((row_index, col_index))
+        if _block_record_complete(save_res_folder, row_index, col_index, record):
+            continue
+        pos_path = _pos_file_path(save_res_folder, row_index, col_index)
+        incomplete.append(
+            {
+                "row": row_index,
+                "col": col_index,
+                "status": record.get("status", "missing") if record else "missing",
+                "pos_ready": _pos_file_ready(pos_path),
+            }
+        )
+    return incomplete
+
+
+def finalize_step1_2_status(save_res_folder, expected_blocks, all_blocks=None, mark_missing_failed=False):
+    bootstrap_step1_2_status(save_res_folder, expected_blocks, all_blocks)
+    incomplete = step1_2_incomplete_blocks(save_res_folder, expected_blocks)
+    if mark_missing_failed:
+        status_path = _status_file_path(save_res_folder)
+        for block in incomplete:
+            if block["pos_ready"]:
+                _append_block_status(
+                    status_path,
+                    block["row"],
+                    block["col"],
+                    "aligned",
+                    os.path.basename(_pos_file_path(save_res_folder, block["row"], block["col"])),
+                    "recovered_existing_pos",
+                    "status file was repaired after multiprocessing",
+                )
+            else:
+                _append_block_status(
+                    status_path,
+                    block["row"],
+                    block["col"],
+                    "failed",
+                    "",
+                    "missing_pos_after_step1_2",
+                    "pos file was not generated by the worker",
+                )
+        bootstrap_step1_2_status(save_res_folder, expected_blocks, all_blocks)
+        incomplete = step1_2_incomplete_blocks(save_res_folder, expected_blocks)
+    return incomplete
+
+
 def step1_2_multiprocess(numsThread, taskParas):
     # todo use multiprocess
+    if not taskParas:
+        print('No step1_2 block tasks to run--')
+        return
+    if numsThread <= 1:
+        for task in taskParas:
+            _append_task_result(deal_block(*task))
+        print('All end--')
+        return
+
     pool = multiprocessing.Pool(numsThread)
     result = []
     for i in range(len(taskParas)):
@@ -80,8 +298,8 @@ def step1_2_multiprocess(numsThread, taskParas):
     pool.close()
     pool.join()
 
-    # for res in result:
-    #     print('***:', res.get())  # get()?
+    for res in result:
+        _append_task_result(res.get())
 
     print('All end--')
 
@@ -146,45 +364,47 @@ def ReadNPY():
     a_2 = a[:,:,2]
     print()
 def deal_block(up_path, donw_path, i,j,save_res_folder):
-    save_path = os.path.join(save_res_folder, f"pos_{i}_{j}.txt")
+    save_path = _pos_file_path(save_res_folder, i, j)
+    status_path = _status_file_path(save_res_folder)
     print(save_path)
-    if os.path.exists(save_path):
-        print(f"exist {save_path}")
-        return
+    if step1_2_block_complete(save_res_folder, i, j):
+        print(f"Step1_2 block {i}_{j} already complete from status file: {status_path}")
+        return None
+
     start = time.time()
-    sub_up = sitk.ReadImage(up_path)[:,:,10:]
-    sub_down = sitk.ReadImage(donw_path)[:,:,:-10]
-    threshold = 120
-    # ?
-    pixel_type = sub_up.GetPixelID()
-
-    # 
-    if pixel_type == sitk.sitkUInt8:
-        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
-    elif pixel_type == sitk.sitkUInt16:
-        print("Image pixel type is sitkUInt16; preprocessing is applied.")
-        sub_up = Preprocess(sub_up, threshold)
-
-    pixel_type = sub_down.GetPixelID()
-    # 
-    if pixel_type == sitk.sitkUInt8:
-        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
-    elif pixel_type == sitk.sitkUInt16:
-        print("Image pixel type is sitkUInt16; preprocessing is applied.")
-        sub_down = Preprocess(sub_down, threshold)
-    spacing = [4,4,4]
-    origin = [0,0,0]
-    sub_up.SetOrigin(origin)
-    sub_up.SetSpacing(spacing)
-    sub_down.SetOrigin(origin)
-    sub_down.SetSpacing(spacing)
-
-
-    # write_ome_tiff(sub_up, save_name1)
-    # write_ome_tiff(sub_down, save_name2)
-
-    # prev_surface, next_result, transform2 = CalBlock(sub_up, sub_down, spacing)
     try:
+        sub_up = sitk.ReadImage(up_path)[:,:,10:]
+        sub_down = sitk.ReadImage(donw_path)[:,:,:-10]
+        threshold = 120
+        # ?
+        pixel_type = sub_up.GetPixelID()
+
+        #
+        if pixel_type == sitk.sitkUInt8:
+            print("Image pixel type is sitkUInt8; preprocessing is skipped.")
+        elif pixel_type == sitk.sitkUInt16:
+            print("Image pixel type is sitkUInt16; preprocessing is applied.")
+            sub_up = Preprocess(sub_up, threshold)
+
+        pixel_type = sub_down.GetPixelID()
+        #
+        if pixel_type == sitk.sitkUInt8:
+            print("Image pixel type is sitkUInt8; preprocessing is skipped.")
+        elif pixel_type == sitk.sitkUInt16:
+            print("Image pixel type is sitkUInt16; preprocessing is applied.")
+            sub_down = Preprocess(sub_down, threshold)
+        spacing = [4,4,4]
+        origin = [0,0,0]
+        sub_up.SetOrigin(origin)
+        sub_up.SetSpacing(spacing)
+        sub_down.SetOrigin(origin)
+        sub_down.SetSpacing(spacing)
+
+
+        # write_ome_tiff(sub_up, save_name1)
+        # write_ome_tiff(sub_down, save_name2)
+
+        # prev_surface, next_result, transform2 = CalBlock(sub_up, sub_down, spacing)
         prev_surface, next_result, transform2 = CalBlock(sub_up, sub_down, spacing)
         print(transform2)
         param = transform2.GetParameters()
@@ -192,12 +412,31 @@ def deal_block(up_path, donw_path, i,j,save_res_folder):
         # txt
         with open(save_path, "w") as f:
             f.write(str(param))
+        result = (
+            save_res_folder,
+            i,
+            j,
+            "aligned",
+            os.path.basename(save_path),
+            "written",
+            "",
+        )
         print("{} {} costs time :{}".format(i, j, time.time() - start))
         # sitk.WriteImage(prev_surface, r"D:\USERS\yq\CRH\save_temp_0413\temp_block\prev_surface.tif")
         # sitk.WriteImage(next_result, r"D:\USERS\yq\CRH\save_temp_0413\temp_block\next_result.tif")
         print()
-    except:
-        print("row: {}; col: {} gets wrong!!!".format(i, j))
+        return result
+    except Exception as exc:
+        print("row: {}; col: {} gets wrong!!! {}".format(i, j, exc))
+        return (
+            save_res_folder,
+            i,
+            j,
+            "failed",
+            "",
+            exc.__class__.__name__,
+            str(exc),
+        )
 def CalBlock(prev_surface, next_surface,spacing, ref_img: sitk.Image = None, prev_points=None, next_points=None,
                    outside_brightness=2, nonrigid=True, ref_size=None, ref_scale=1, use_rigidity_mask=False, **kwargs):
     size = prev_surface.GetSize()

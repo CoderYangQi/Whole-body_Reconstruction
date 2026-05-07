@@ -38,7 +38,10 @@ def gen_roi_reconstruction_pipeline(dataset: VISoRData, **param):
         tasks[t['name']] = t
         return t
 
-    brain_transform = VISoRBrain(os.path.join(dataset.path, 'Reconstruction/BrainTransform/visor_brain.txt'))
+    brain_transform_path = dataset.brain_transform
+    if brain_transform_path is None:
+        brain_transform_path = os.path.join(dataset.path, 'Reconstruction/BrainTransform/visor_brain.txt')
+    brain_transform = VISoRBrain(brain_transform_path)
     roi = param['roi']
     pixel_size = param['pixel_size']
     if roi is None:
@@ -125,7 +128,7 @@ def gen_roi_reconstruction_pipeline(dataset: VISoRData, **param):
                           'roi': slice_image_roi[(i, x, y)]},
                          {'sample_data': t_slice, 'rawdata': t_rawdata}, [t_slice_image])
 
-    t_brain = _create_target('brain_transfrom', 'reconstructed_brain', dataset.brain_transform)
+    t_brain = _create_target('brain_transfrom', 'reconstructed_brain', brain_transform_path)
 
     for c in channels:
         channel_name = dataset.channels[c]['ChannelName']
@@ -181,7 +184,7 @@ def gen_roi_reconstruction_pipeline(dataset: VISoRData, **param):
             "Parameter": "../Parameters.json",
             "Version": VERSION,
             "Time": time.asctime(),
-            "Transform": os.path.join(dataset.path, 'Reconstruction/BrainTransform')
+            "Transform": os.path.dirname(brain_transform_path)
         }}
     }
     doc = {'tasks': tasks, 'name': param['name'],

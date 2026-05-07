@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import shutil
 import sys
 import time
 from dataclasses import asdict, dataclass, field
@@ -63,6 +64,7 @@ class B85Config:
     pixel_size: float = 4.0
     block_size: int = 250
     gap: int = 500
+    overwrite_existing: bool = False
     selected_steps: List[str] = field(default_factory=lambda: list(B85_STEP_NAMES))
     channels: Dict[str, B85ChannelConfig] = field(default_factory=dict)
 
@@ -72,6 +74,7 @@ class B85Config:
     @classmethod
     def from_json(cls, text: str) -> "B85Config":
         data = json.loads(text.lstrip("\ufeff"))
+        data.setdefault("overwrite_existing", False)
         data["reference_channel_id"] = str(data["reference_channel_id"])
         data["output_channel_ids"] = [str(c) for c in data.get("output_channel_ids", [])]
         data["channels"] = {
@@ -170,6 +173,7 @@ def infer_b85_config(
     pixel_size: float = 4.0,
     block_size: int = 250,
     gap: int = 500,
+    overwrite_existing: bool = False,
     selected_steps: Optional[List[str]] = None,
     validate: bool = True,
 ) -> B85Config:
@@ -267,6 +271,7 @@ def infer_b85_config(
         pixel_size=float(pixel_size),
         block_size=int(block_size),
         gap=int(gap),
+        overwrite_existing=bool(overwrite_existing),
         selected_steps=steps,
         channels={c: channels[c] for c in output_channel_ids},
     )
@@ -521,13 +526,225 @@ def _run_reconstruct_image(config: B85Config, pipe=None):
     _run_standard_pre_step(config, "reconstruct_image", pipe)
 
 
-def _run_step1_1(modules, config, ref, left_list, lefttop, ref_size, spacing):
-    tasks = []
-    npy_format = os.path.join(config.temp_root, "refine_{}_pars.npy")
-    for i in range(config.start_slice, config.end_slice_exclusive):
-        if os.path.exists(npy_format.format(i)):
-            print(f"exist {npy_format.format(i)}")
+def _slice_pair_indices(config: B85Config):
+    return range(config.start_slice, config.end_slice_exclusive)
+
+
+def _pair_folder(root: str, slice_index: int) -> str:
+    return os.path.join(root, f"{slice_index}_{slice_index + 1}")
+
+
+def _is_fresh(path: str, min_mtime: Optional[float] = None) -> bool:
+    if min_mtime is None:
+        return True
+    try:
+        return os.path.getmtime(path) >= min_mtime
+    except OSError:
+        return False
+
+
+def _matching_step1_1_blocks(folder: str, min_mtime: Optional[float] = None) -> List[str]:
+    if not os.path.isdir(folder):
+        return []
+    result = []
+    for name in os.listdir(folder):
+        if not name.endswith("up_temp_all.tif"):
             continue
+        down_name = name.replace("up_temp_all.tif", "down_temp_all.tif")
+        up_path = os.path.join(folder, name)
+        down_path = os.path.join(folder, down_name)
+        if (
+            os.path.isfile(down_path)
+            and _is_fresh(up_path, min_mtime)
+            and _is_fresh(down_path, min_mtime)
+        ):
+            result.append(up_path)
+    return result
+
+
+def _validate_step1_1_outputs(config: B85Config, min_mtime: Optional[float] = None):
+    missing = []
+    for slice_index in _slice_pair_indices(config):
+        folder = _pair_folder(config.temp_root, slice_index)
+        if not _matching_step1_1_blocks(folder, min_mtime):
+            missing.append(folder)
+    if missing:
+        raise RuntimeError("Refinement step1_1 did not generate block pairs: " + missing[0])
+
+
+def _validate_step1_2_outputs(config: B85Config, min_mtime: Optional[float] = None):
+    missing = []
+    for slice_index in _slice_pair_indices(config):
+        folder = _pair_folder(config.save_res_root, slice_index)
+        if not os.path.isdir(folder) or not any(
+            name.startswith("pos_")
+            and name.endswith(".txt")
+            and _is_fresh(os.path.join(folder, name), min_mtime)
+            for name in os.listdir(folder)
+        ):
+            missing.append(folder)
+    if missing:
+        raise RuntimeError("Refinement step1_2 did not generate position results: " + missing[0])
+
+
+def _validate_step1_3_outputs(config: B85Config, min_mtime: Optional[float] = None):
+    missing = []
+    for slice_index in _slice_pair_indices(config):
+        path = os.path.join(config.temp_root, f"refine_{slice_index}_pars.npy")
+        if not os.path.isfile(path) or not _is_fresh(path, min_mtime):
+            missing.append(path)
+    if missing:
+        raise RuntimeError("Refinement step1_3 did not generate refine parameters: " + missing[0])
+
+
+def _clear_path(path: str):
+    try:
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        elif os.path.isfile(path):
+            os.remove(path)
+    except OSError as exc:
+        print(f"Cannot delete existing Refinement output, will overwrite if possible: {path} ({exc})")
+
+
+def _clear_step1_1_outputs(config: B85Config):
+    for slice_index in _slice_pair_indices(config):
+        _clear_path(_pair_folder(config.temp_root, slice_index))
+
+
+def _clear_step1_2_outputs(config: B85Config):
+    for slice_index in _slice_pair_indices(config):
+        _clear_path(_pair_folder(config.save_res_root, slice_index))
+
+
+def _clear_step1_3_outputs(config: B85Config):
+    for slice_index in _slice_pair_indices(config):
+        _clear_path(os.path.join(config.temp_root, f"refine_{slice_index}_pars.npy"))
+        _clear_path(os.path.join(config.temp_root, f"{slice_index}_np_array.npy"))
+        refine_folder = _pair_folder(config.temp_root, slice_index)
+        if os.path.isdir(refine_folder):
+            for name in os.listdir(refine_folder):
+                if name.endswith("moved.tif") or name.startswith("save_"):
+                    _clear_path(os.path.join(refine_folder, name))
+        txt_block_folder = _pair_folder(config.save_res_root, slice_index)
+        if os.path.isdir(txt_block_folder):
+            for name in os.listdir(txt_block_folder):
+                if (
+                    name.startswith("loss_") and name.endswith(".txt")
+                ) or name == "step1_3_block_status.txt":
+                    _clear_path(os.path.join(txt_block_folder, name))
+
+
+def _read_image_with_tifffile_fallback(path: str) -> sitk.Image:
+    try:
+        return sitk.ReadImage(path)
+    except RuntimeError:
+        if not str(path).lower().endswith((".tif", ".tiff")):
+            raise
+        array = _read_tiff_stack_with_page_fallback(path)
+        if array.ndim == 2:
+            array = array[np.newaxis, :, :]
+        return sitk.GetImageFromArray(array)
+
+
+def _read_tiff_stack_with_page_fallback(path: str):
+    arrays = []
+    last_valid = None
+    expected_shape = None
+    with tifffile.TiffFile(path) as tif:
+        for page_index, page in enumerate(tif.pages):
+            try:
+                array = page.asarray()
+            except Exception as exc:
+                if last_valid is None:
+                    raise
+                print(
+                    "TIFF page {} could not be read from {}; using previous page. {}".format(
+                        page_index,
+                        path,
+                        exc,
+                    )
+                )
+                array = last_valid.copy()
+            if expected_shape is None:
+                expected_shape = array.shape
+            elif array.shape != expected_shape:
+                if last_valid is None:
+                    raise RuntimeError(
+                        "TIFF page {} has unexpected shape {} in {}; expected {}".format(
+                            page_index,
+                            array.shape,
+                            path,
+                            expected_shape,
+                        )
+                    )
+                print(
+                    "TIFF page {} has unexpected shape {} in {}; using previous page.".format(
+                        page_index,
+                        array.shape,
+                        path,
+                    )
+                )
+                array = last_valid.copy()
+            last_valid = array
+            arrays.append(array)
+    if not arrays:
+        raise RuntimeError(f"No readable TIFF pages: {path}")
+    return np.stack(arrays, axis=0)
+
+
+def _read_tiff_page_with_fallback(path: str, page_index: int):
+    with tifffile.TiffFile(path) as tif:
+        depth = len(tif.pages)
+        if depth <= 0:
+            raise RuntimeError(f"No TIFF pages: {path}")
+        page_index = max(0, min(page_index, depth - 1))
+        first_error = None
+        candidates = [page_index]
+        for distance in range(1, min(depth, 16)):
+            candidates.extend([page_index - distance, page_index + distance])
+        for candidate in candidates:
+            if candidate < 0 or candidate >= depth:
+                continue
+            try:
+                array = tif.pages[candidate].asarray()
+                if array.ndim == 2:
+                    return array, depth, candidate
+                first_error = RuntimeError(
+                    f"TIFF page {candidate} has unsupported shape {array.shape}: {path}"
+                )
+            except Exception as exc:
+                if first_error is None:
+                    first_error = exc
+        if first_error is not None:
+            raise first_error
+        raise RuntimeError(f"No readable 2D TIFF page near {page_index}: {path}")
+
+
+def _resample_tiff_page_2d(path: str, page_index: int, img_origin, lefttop, spacing, ref_size):
+    array, depth, used_index = _read_tiff_page_with_fallback(path, page_index)
+    if used_index != page_index:
+        print(f"TIFF page {page_index} could not be used from {path}; using page {used_index}.")
+    img = sitk.GetImageFromArray(array)
+    img.SetOrigin([float(img_origin[0]), float(img_origin[1])])
+    img.SetSpacing([float(spacing[0]), float(spacing[1])])
+    return sitk.Resample(
+        img,
+        [int(ref_size[0]), int(ref_size[1])],
+        sitk.Transform(),
+        sitk.sitkLinear,
+        [float(lefttop[0]), float(lefttop[1])],
+        [float(spacing[0]), float(spacing[1])],
+    ), depth
+
+
+def _run_step1_1(modules, config, ref, left_list, lefttop, ref_size, spacing):
+    if config.overwrite_existing:
+        _clear_step1_1_outputs(config)
+    tasks = []
+    temp_parent = os.path.dirname(os.path.normpath(config.temp_root))
+    temp_name = os.path.basename(os.path.normpath(config.temp_root))
+    for i in range(config.start_slice, config.end_slice_exclusive):
         prev_index = i
         next_index = i + 1
         up_origin = left_list[prev_index - config.start_slice].copy()
@@ -543,57 +760,99 @@ def _run_step1_1(modules, config, ref, left_list, lefttop, ref_size, spacing):
             ref_size,
             spacing,
             i,
-            config.output_root,
+            temp_parent,
+            temp_name,
+            config.block_size,
         ))
-    modules["step1_1"].step1_1_multiprocess(3, tasks)
+    modules["step1_1"].step1_1_multiprocess(1, tasks)
+    for i in range(config.start_slice, config.end_slice_exclusive):
+        if not modules["step1_1"].step1_1_task_complete(temp_parent, temp_name, i, ref_size, config.block_size):
+            raise RuntimeError(
+                "Refinement step1_1 block status file is incomplete: "
+                + os.path.join(config.temp_root, f"{i}_{i + 1}", "step1_1_block_status.txt")
+            )
+    _validate_step1_1_outputs(config)
 
 
 def _run_step1_2(modules, config, ref_size):
+    if config.overwrite_existing:
+        _clear_step1_2_outputs(config)
     step1_2 = modules["step1_2"]
     tasks = []
-    names = {}
-    npy_format = os.path.join(config.temp_root, "refine_{}_pars.npy")
+    expected_by_folder = {}
+    temp_parent = os.path.dirname(os.path.normpath(config.temp_root))
+    temp_name = os.path.basename(os.path.normpath(config.temp_root))
+    row_count = int(np.floor(ref_size[0] / config.block_size))
+    col_count = int(np.floor(ref_size[1] / config.block_size))
+    all_blocks = [(row, col) for row in range(row_count) for col in range(col_count)]
     for i in range(config.start_slice, config.end_slice_exclusive):
-        if os.path.exists(npy_format.format(i)):
-            print(f"exist {npy_format.format(i)}")
-            continue
         temp_block_path = os.path.join(config.temp_root, f"{i}_{i + 1}")
         if not os.path.exists(temp_block_path):
-            print(f"path is wrong {temp_block_path}")
-            continue
-        names[f"{i}_{i + 1}"] = step1_2.get_block_name(
+            raise FileNotFoundError(f"Refinement step1_2 requires step1_1 block output: {temp_block_path}")
+        block_pairs = step1_2.get_block_name(
             ref_size,
             slices_index=i,
             block_size=config.block_size,
-            save_root=config.output_root,
-            tempName="temp_block",
+            save_root=temp_parent,
+            tempName=temp_name,
         )
-
-    for _, value in names.items():
-        for pair in value:
+        folder_name = f"{i}_{i + 1}"
+        save_res_folder = os.path.join(config.save_res_root, folder_name)
+        os.makedirs(save_res_folder, exist_ok=True)
+        expected_blocks = set()
+        parsed_pairs = []
+        for pair in block_pairs:
             folder_name = os.path.basename(os.path.dirname(pair[0]))
             filename = os.path.basename(pair[0])
             match = re.match(r"^(\d+)_([0-9]+)", filename)
             if match is None:
                 continue
             row, col = int(match.group(1)), int(match.group(2))
-            save_res_folder = os.path.join(config.save_res_root, folder_name)
-            os.makedirs(save_res_folder, exist_ok=True)
+            expected_blocks.add((row, col))
+            parsed_pairs.append((pair, row, col))
+
+        step1_2.bootstrap_step1_2_status(save_res_folder, expected_blocks, all_blocks)
+        expected_by_folder[save_res_folder] = expected_blocks
+        for pair, row, col in parsed_pairs:
+            if step1_2.step1_2_block_complete(save_res_folder, row, col):
+                continue
             tasks.append((pair[0], pair[1], row, col, save_res_folder))
+
     step1_2.step1_2_multiprocess(40, tasks)
+    for save_res_folder, expected_blocks in expected_by_folder.items():
+        incomplete = step1_2.finalize_step1_2_status(
+            save_res_folder,
+            expected_blocks,
+            all_blocks,
+            mark_missing_failed=True,
+        )
+        if incomplete:
+            preview = ", ".join(
+                "{}_{}:{} pos_ready={}".format(
+                    block["row"],
+                    block["col"],
+                    block["status"],
+                    block["pos_ready"],
+                )
+                for block in incomplete[:20]
+            )
+            raise RuntimeError(
+                "Refinement step1_2 block status file is incomplete: "
+                + os.path.join(save_res_folder, "step1_2_block_status.txt")
+                + (f" ({preview})" if preview else "")
+            )
+    _validate_step1_2_outputs(config)
 
 
 def _run_step1_3(modules, config, ref_size):
+    if config.overwrite_existing:
+        _clear_step1_3_outputs(config)
     step1_3 = modules["step1_3"]
     transformed_data = []
     root = config.temp_root
     txt_root = config.save_res_root
     for slice_index in range(config.start_slice, config.end_slice_exclusive):
         print(f"start {slice_index}")
-        res_path = os.path.join(root, f"refine_{slice_index}_pars.npy")
-        if os.path.exists(res_path):
-            print(f"exists {res_path}")
-            continue
         offsets = {}
         txt_block_folder = os.path.join(txt_root, f"{slice_index}_{slice_index + 1}")
         row = int(np.floor(ref_size[0] / config.block_size))
@@ -605,8 +864,7 @@ def _run_step1_3(modules, config, ref_size):
                     res = step1_3.read_coordinates(pos_path)
                     offsets[(int(i), int(j))] = res[0]
         if not offsets:
-            print(f"index {slice_index} is empty")
-            continue
+            raise RuntimeError(f"Refinement step1_3 has no step1_2 positions for slice {slice_index}.")
 
         refine_path = os.path.join(root, f"{slice_index}_{slice_index + 1}")
         os.makedirs(refine_path, exist_ok=True)
@@ -616,6 +874,31 @@ def _run_step1_3(modules, config, ref_size):
         fixed_save_format = os.path.join(refine_path, "save_{}_{}up_temp_all.tif")
         moving_save_format = os.path.join(refine_path, "save_{}_{}moved.tif")
         save_loss_format = os.path.join(txt_block_folder, "loss_{}_{}.txt")
+        step1_3.bootstrap_step1_3_status(
+            txt_block_folder,
+            offsets,
+            moved_format,
+            fixed_save_format,
+            moving_save_format,
+            save_loss_format,
+        )
+        refine_pars_path = os.path.join(root, f"refine_{slice_index}_pars.npy")
+        np_array_path = os.path.join(root, f"{slice_index}_np_array.npy")
+        if (
+            not config.overwrite_existing
+            and os.path.isfile(refine_pars_path)
+            and os.path.isfile(np_array_path)
+            and step1_3.step1_3_pair_complete(
+                txt_block_folder,
+                offsets,
+                moved_format,
+                fixed_save_format,
+                moving_save_format,
+                save_loss_format,
+            )
+        ):
+            print(f"Refinement step1_3 slice {slice_index} already complete from status file.")
+            continue
         step1_3.CalNCC(
             [4.0, 4.0, 4.0],
             moving_format,
@@ -627,7 +910,29 @@ def _run_step1_3(modules, config, ref_size):
             moving_save_format,
             save_loss_format,
             rate=4,
+            status_folder=txt_block_folder,
+            force=config.overwrite_existing,
         )
+        step1_3.bootstrap_step1_3_status(
+            txt_block_folder,
+            offsets,
+            moved_format,
+            fixed_save_format,
+            moving_save_format,
+            save_loss_format,
+        )
+        if not step1_3.step1_3_pair_complete(
+            txt_block_folder,
+            offsets,
+            moved_format,
+            fixed_save_format,
+            moving_save_format,
+            save_loss_format,
+        ):
+            raise RuntimeError(
+                "Refinement step1_3 block status file is incomplete: "
+                + os.path.join(txt_block_folder, "step1_3_block_status.txt")
+            )
 
         used_list = []
         count = 0
@@ -641,19 +946,57 @@ def _run_step1_3(modules, config, ref_size):
                         count += 1
                         value = offsets[pos]
                         used_list.append(value[2])
-                        print(f"key is {pos}; value is {value}; ncc: {ncc}; ssim: {ssim} ct is {count}")
+        print(
+            "Refinement step1_3 slice {} usable blocks: {} / {}".format(
+                slice_index,
+                count,
+                len(offsets),
+            )
+        )
         if used_list:
             npy_array = np.zeros((row, col, 3))
             step1_3.rest(used_list, offsets, slice_index, count, npy_array, 1, transformed_data, root)
+        else:
+            raise RuntimeError(f"Refinement step1_3 did not find usable blocks for slice {slice_index}.")
+    _validate_step1_3_outputs(config)
 
 
 def _run_step2(modules, config, ref, left_list, lefttop, ref_size, spacing):
     tasks = []
+    expected_outputs = []
     npy_format = os.path.join(config.temp_root, "refine_{}_pars.npy")
+    failed_marker = os.path.join(config.temp_root, "step2_failed_slices.txt")
+    if config.overwrite_existing:
+        _clear_path(failed_marker)
+    failed_slices = set()
+    if os.path.isfile(failed_marker):
+        with open(failed_marker, "r", encoding="utf-8-sig", errors="replace") as file:
+            for line in file:
+                parts = line.strip().split("\t")
+                if parts and parts[0].isdigit():
+                    failed_slices.add(int(parts[0]))
     for slice_index in range(config.start_slice, config.end_slice_exclusive):
         img_index = slice_index + 1
         img_origin = left_list[img_index - config.start_slice]
         img_origin = [img_origin[0], img_origin[1], 0]
+        output_stem = os.path.join(config.temp_root, ref.name_format.format(img_index))
+        outputs = [
+            output_stem + "_uz.mha",
+            output_stem + "_lz.mha",
+            output_stem + "_us.mha",
+            output_stem + "_ls.mha",
+        ]
+        expected_outputs.extend(outputs)
+        if not config.overwrite_existing and all(os.path.exists(path) for path in outputs):
+            print(f"Refinement step2 slice {img_index} already complete.")
+            continue
+        if (
+            not config.overwrite_existing
+            and img_index in failed_slices
+            and "extract_surface_failed" in config.selected_steps
+        ):
+            print(f"Refinement step2 slice {img_index} previously failed; extract_surface_failed will rebuild it.")
+            continue
         tasks.append((
             npy_format.format(slice_index),
             ref.image_format.format(img_index),
@@ -667,7 +1010,20 @@ def _run_step2(modules, config, ref, left_list, lefttop, ref_size, spacing):
             int(round(_channel_wavelength({"LaserWavelength": ref.laser_wavelength}))),
             ref.name_format,
         ))
-    modules["step2"].step2_multiprocess(4, tasks)
+    failures = modules["step2"].step2_multiprocess(4, tasks)
+    if failures:
+        with open(failed_marker, "a", encoding="utf-8") as file:
+            for slice_index, reason in failures:
+                file.write(f"{slice_index}\t{reason}\t{time.asctime()}\n")
+    missing_outputs = [path for path in expected_outputs if not os.path.exists(path)]
+    if missing_outputs:
+        if "extract_surface_failed" in config.selected_steps:
+            print(
+                "Refinement step2 has missing outputs; extract_surface_failed will handle: "
+                + ", ".join(missing_outputs)
+            )
+        else:
+            raise RuntimeError("Refinement step2 did not generate expected files: " + ", ".join(missing_outputs))
 
 
 def _run_extract_surface_failed(modules, config, ref, left_list, lefttop, ref_size, spacing):
@@ -676,23 +1032,74 @@ def _run_extract_surface_failed(modules, config, ref, left_list, lefttop, ref_si
     lz_format = os.path.join(config.temp_root, ref.name_format + "_lz.mha")
     us_format = os.path.join(config.temp_root, ref.name_format + "_us.mha")
     ls_format = os.path.join(config.temp_root, ref.name_format + "_ls.mha")
-    for i in range(config.start_slice, config.end_slice_exclusive):
+    expected_outputs = []
+    for i in range(config.start_slice, config.end_slice_exclusive + 1):
         uz_path = uz_format.format(i)
         lz_path = lz_format.format(i)
-        if os.path.exists(uz_path) and os.path.exists(lz_path):
+        us_path = us_format.format(i)
+        ls_path = ls_format.format(i)
+        expected_outputs.extend([uz_path, lz_path, us_path, ls_path])
+        if (
+            not config.overwrite_existing
+            and os.path.exists(uz_path)
+            and os.path.exists(lz_path)
+            and os.path.exists(us_path)
+            and os.path.exists(ls_path)
+        ):
             print(f"{uz_path} exists")
             continue
         img_origin = left_list[i - config.start_slice]
         img_origin = [img_origin[0], img_origin[1], 0]
-        img = sitk.ReadImage(ref.image_format.format(i))
-        img.SetOrigin(img_origin)
-        img.SetSpacing(spacing)
-        img_size = img.GetSize()
-        img = sitk.Resample(img, [ref_size[0], ref_size[1], img_size[2]], sitk.Transform(), sitk.sitkLinear, lefttop, spacing)
+        img_path = ref.image_format.format(i)
         gap = 30
-        height_range = [img_size[2] - 100 - gap, img_size[2] - gap]
-        img.SetOrigin([0, 0, 0])
-        img.SetSpacing([1, 1, 1])
+        if str(img_path).lower().endswith((".tif", ".tiff")):
+            _, depth, _ = _read_tiff_page_with_fallback(img_path, 0)
+            height_range = [depth - 100 - gap, depth - gap]
+            upper_index = int(np.clip(round(height_range[0]), 0, depth - 1))
+            lower_index = int(np.clip(round(height_range[1]), 0, depth - 1))
+            us = _resample_tiff_page_2d(
+                img_path,
+                upper_index,
+                img_origin,
+                lefttop,
+                spacing,
+                ref_size,
+            )[0]
+            ls = _resample_tiff_page_2d(
+                img_path,
+                lower_index,
+                img_origin,
+                lefttop,
+                spacing,
+                ref_size,
+            )[0]
+        else:
+            img = _read_image_with_tifffile_fallback(img_path)
+            img.SetOrigin(img_origin)
+            img.SetSpacing(spacing)
+            img_size = img.GetSize()
+            img = sitk.Resample(
+                img,
+                [ref_size[0], ref_size[1], img_size[2]],
+                sitk.Transform(),
+                sitk.sitkLinear,
+                lefttop,
+                spacing,
+            )
+            height_range = [img_size[2] - 100 - gap, img_size[2] - gap]
+            img.SetOrigin([0, 0, 0])
+            img.SetSpacing([1, 1, 1])
+            umap_x = sitk.Image(ref_size, sitk.sitkFloat32)
+            umap_y = sitk.Image(ref_size, sitk.sitkFloat32)
+            uz = sitk.Compose(umap_x, umap_y, sitk.Image(ref_size, sitk.sitkFloat32) + height_range[0])
+            lz = sitk.Compose(
+                sitk.Image(ref_size, sitk.sitkFloat32),
+                sitk.Image(ref_size, sitk.sitkFloat32),
+                sitk.Image(ref_size, sitk.sitkFloat32) + height_range[1],
+            )
+            surfaces = copy_extract_surface(img, uz, lz)
+            us = surfaces[:, :, 0]
+            ls = surfaces[:, :, 1]
         umap_x = sitk.Image(ref_size, sitk.sitkFloat32)
         umap_y = sitk.Image(ref_size, sitk.sitkFloat32)
         uz = sitk.Compose(umap_x, umap_y, sitk.Image(ref_size, sitk.sitkFloat32) + height_range[0])
@@ -701,11 +1108,13 @@ def _run_extract_surface_failed(modules, config, ref, left_list, lefttop, ref_si
             sitk.Image(ref_size, sitk.sitkFloat32),
             sitk.Image(ref_size, sitk.sitkFloat32) + height_range[1],
         )
-        surfaces = copy_extract_surface(img, uz, lz)
         sitk.WriteImage(uz, uz_path)
         sitk.WriteImage(lz, lz_path)
-        sitk.WriteImage(surfaces[:, :, 0], us_format.format(i))
-        sitk.WriteImage(surfaces[:, :, 1], ls_format.format(i))
+        sitk.WriteImage(us, us_path)
+        sitk.WriteImage(ls, ls_path)
+    missing_outputs = [path for path in expected_outputs if not os.path.exists(path)]
+    if missing_outputs:
+        raise RuntimeError("Refinement extract_surface_failed did not generate expected files: " + ", ".join(missing_outputs))
 
 
 def _run_step3(modules, config, ref, ref_size):
@@ -836,7 +1245,7 @@ def _generate_brain_image_task(args):
     brain_path, img_path, slice_index, pixel_size, name_format, n_start = args
     brain = VISoRBrain()
     brain.load(brain_path)
-    img = sitk.ReadImage(img_path)
+    img = _read_image_with_tifffile_fallback(img_path)
     img.SetOrigin(brain.slices[slice_index].sphere[0])
     img.SetSpacing([pixel_size, pixel_size, pixel_size])
     roi = brain.slice_spheres[slice_index]
@@ -851,6 +1260,44 @@ def _generate_brain_image_task(args):
         image = np.left_shift(np.right_shift((image + 8), 4), 4)
         tifffile.imwrite(paths[i], image, compress=1)
     return "\n".join(paths)
+
+
+def _write_freesia_input(config, channel, save_dir, channel_id, image_paths):
+    if not image_paths:
+        return None
+
+    def image_index(path):
+        match = re.search(r"Z(\d+)_C", os.path.basename(path))
+        if match is None:
+            return 0
+        return int(match.group(1))
+
+    image_paths = sorted(image_paths, key=image_index)
+    first_image = tifffile.imread(image_paths[0])
+    height, width = first_image.shape[-2], first_image.shape[-1]
+    doc = {
+        "group_size": max(1, int(round(400 / config.pixel_size))),
+        "image_path": os.path.basename(save_dir),
+        "images": [],
+        "pixel_size": config.pixel_size,
+        "slide_thickness": config.pixel_size,
+        "version": "1.1.2",
+    }
+    for path in image_paths:
+        doc["images"].append({
+            "index": image_index(path),
+            "height": int(height),
+            "width": int(width),
+            "file_name": os.path.basename(path),
+        })
+
+    freesia_path = os.path.join(
+        os.path.dirname(save_dir),
+        f"freesia_{_pixel_dir_name(config.pixel_size)}_C{channel_id}_{channel.channel_name}.json",
+    )
+    with open(freesia_path, "w") as file:
+        json.dump(doc, file, indent=2)
+    return freesia_path
 
 
 def _generate_brain_images(config, channel, output_root, channel_id):
@@ -869,9 +1316,11 @@ def _generate_brain_images(config, channel, output_root, channel_id):
             int(400 / config.pixel_size) * (slice_index - 1),
         ))
     file_lists = [_generate_brain_image_task(task) for task in tasks]
+    image_paths = [p for group in file_lists for p in group.splitlines()]
     list_file = os.path.join(save_dir, f"{config.dataset_name}_C{channel_id}_files.txt")
     with open(list_file, "w") as file:
-        file.write("\n".join([p for group in file_lists for p in group.splitlines()]))
+        file.write("\n".join(image_paths))
+    _write_freesia_input(config, channel, save_dir, channel_id, image_paths)
     return list_file
 
 
@@ -901,6 +1350,7 @@ def _write_metadata(config: B85Config, output_root: str, generated_lists: Dict[s
         }, file, indent=2)
 
     brain_image_entries = {}
+    freesia_entries = {}
     for channel_id, list_file in generated_lists.items():
         channel = config.channels[channel_id]
         brain_image_entries[os.path.relpath(list_file, brain_image_dir)] = {
@@ -909,9 +1359,18 @@ def _write_metadata(config: B85Config, output_root: str, generated_lists: Dict[s
             "SliceStart": config.start_slice,
             "SliceEndExclusive": config.end_slice_exclusive,
         }
+        freesia_file = os.path.join(
+            brain_image_dir,
+            f"freesia_{_pixel_dir_name(config.pixel_size)}_C{channel_id}_{channel.channel_name}.json",
+        )
+        if os.path.isfile(freesia_file):
+            freesia_entries[os.path.relpath(freesia_file, brain_image_dir)] = {
+                "ChannelName": channel.channel_name,
+                "PixelSize": config.pixel_size,
+            }
     brain_image_path = os.path.join(brain_image_dir, "BrainImage.json")
     with open(brain_image_path, "w") as file:
-        json.dump({
+        payload = {
             "BrainImageInfo": {
                 "Type": "BrainImage",
                 "Software": "VISOR_Reconstruction",
@@ -921,7 +1380,10 @@ def _write_metadata(config: B85Config, output_root: str, generated_lists: Dict[s
                 "Transform": "../BrainTransform/BrainTransform.json",
             },
             "BrainImage": brain_image_entries,
-        }, file, indent=2)
+        }
+        if freesia_entries:
+            payload["FreesiaFile"] = freesia_entries
+        json.dump(payload, file, indent=2)
 
     summary = {
         "name": "Refinement",

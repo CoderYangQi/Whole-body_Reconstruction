@@ -116,7 +116,6 @@ def write_ome_tiff(image, file_name: str, bit_downsample=True):
         dtype = image.dtype
     xml_description = generate_ome_xml_description('tczyx', size, dtype, file_name)
     total_size = size[0] * size[1] * size[2] * size[3] * size[4]
-    print(total_size)
     if total_size > 4000000000:
         bigtiff = True
     else:

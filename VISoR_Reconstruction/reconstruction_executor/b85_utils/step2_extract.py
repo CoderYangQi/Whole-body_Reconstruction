@@ -6,6 +6,9 @@ This module extracts upper/lower z and surface images from refine parameters.
 import json
 import os.path
 import unittest
+import numpy as np
+import SimpleITK as sitk
+import tifffile
 from VISoR_Reconstruction.reconstruction.yq_reconstruct import *
 from VISoR_Brain.utils.elastix_files import *
 from VISoR_Reconstruction.reconstruction.brain_reconstruct_methods.common import fill_outside
@@ -170,7 +173,69 @@ def ReadNpy(txtPath,tempName):
 import multiprocessing
 import time, gc
 
+
+def _read_image_with_tifffile_fallback(path):
+    try:
+        return sitk.ReadImage(path)
+    except RuntimeError:
+        if not str(path).lower().endswith((".tif", ".tiff")):
+            raise
+        array = _read_tiff_stack_with_page_fallback(path)
+        if array.ndim == 2:
+            array = array[np.newaxis, :, :]
+        return sitk.GetImageFromArray(array)
+
+
+def _read_tiff_stack_with_page_fallback(path):
+    arrays = []
+    last_valid = None
+    expected_shape = None
+    with tifffile.TiffFile(path) as tif:
+        for page_index, page in enumerate(tif.pages):
+            try:
+                array = page.asarray()
+            except Exception as exc:
+                if last_valid is None:
+                    raise
+                print(
+                    "TIFF page {} could not be read from {}; using previous page. {}".format(
+                        page_index,
+                        path,
+                        exc,
+                    )
+                )
+                array = last_valid.copy()
+            if expected_shape is None:
+                expected_shape = array.shape
+            elif array.shape != expected_shape:
+                if last_valid is None:
+                    raise RuntimeError(
+                        "TIFF page {} has unexpected shape {} in {}; expected {}".format(
+                            page_index,
+                            array.shape,
+                            path,
+                            expected_shape,
+                        )
+                    )
+                print(
+                    "TIFF page {} has unexpected shape {} in {}; using previous page.".format(
+                        page_index,
+                        array.shape,
+                        path,
+                    )
+                )
+                array = last_valid.copy()
+            last_valid = array
+            arrays.append(array)
+    if not arrays:
+        raise RuntimeError(f"No readable TIFF pages: {path}")
+    return np.stack(arrays, axis=0)
+
+
 def step2_multiprocess(numsThread, taskParas):
+    if not taskParas:
+        print('No step2 tasks to run--')
+        return []
     # todo use multiprocess
     pool = multiprocessing.Pool(numsThread)
     result = []
@@ -181,10 +246,17 @@ def step2_multiprocess(numsThread, taskParas):
     pool.close()
     pool.join()
 
-    # for res in result:
-    #     print('***:', res.get())  # get()?
+    failures = []
+    for task, res in zip(taskParas, result):
+        try:
+            res.get()
+        except Exception as exc:
+            slice_index = task[3] + 1
+            print(f"Step2 task failed for slice {slice_index}: {exc}")
+            failures.append((slice_index, repr(exc)))
 
     print('All end--')
+    return failures
 
 
 
@@ -216,7 +288,7 @@ def MainTask(npy_path,imgPath,saveRoot,slice_index,left_point,
     print(f"npy shape is {data.shape}")
 
 
-    img = sitk.ReadImage(imgPath)
+    img = _read_image_with_tifffile_fallback(imgPath)
 
     img.SetOrigin(imgOrigin)
     #  spacing ?.0 ?sliceimage consistency

@@ -359,6 +359,8 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         self.b85_gap = QtWidgets.QSpinBox(self.b85_group)
         self.b85_gap.setRange(0, 20000)
         self.b85_gap.setValue(500)
+        self.b85_overwrite_existing = QtWidgets.QCheckBox('Overwrite existing outputs', self.b85_group)
+        self.b85_overwrite_existing.setChecked(False)
 
         self.b85_steps = QtWidgets.QListWidget(self.b85_group)
         self.b85_steps.setMinimumHeight(210)
@@ -380,6 +382,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
 
         b85_layout.addWidget(self._section_label('Parameters'))
         b85_layout.addWidget(self._numeric_parameters_widget())
+        b85_layout.addWidget(self.b85_overwrite_existing)
 
         b85_layout.addWidget(self._section_label('Steps'))
         b85_layout.addWidget(self.b85_steps)
@@ -534,6 +537,44 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
                 pass
             self.process = None
 
+    def _apply_b85_result_to_dataset(self):
+        if self.latest_b85_result is None or self.pipeline.dataset is None:
+            return
+        brain_transform = self.latest_b85_result.get('brain_transform')
+        if brain_transform is None:
+            return
+
+        dataset = self.pipeline.dataset
+        dataset.brain_transform = brain_transform
+        dataset.reconstruction_info.setdefault('Refinement', {})
+        dataset.reconstruction_info['Refinement']['RunSummary'] = self.latest_b85_result
+        dataset.misc.setdefault('Reconstruction', {})
+        for key, summary_key in [
+            ('BrainTransform', 'brain_transform_metadata'),
+            ('BrainImage', 'brain_image_metadata'),
+        ]:
+            metadata_path = self.latest_b85_result.get(summary_key)
+            if metadata_path is None:
+                continue
+            try:
+                with open(metadata_path) as fp:
+                    dataset.reconstruction_info[key] = json.load(fp)
+                try:
+                    metadata_ref = os.path.relpath(metadata_path, dataset.path)
+                except ValueError:
+                    metadata_ref = metadata_path
+                dataset.misc['Reconstruction'][key] = metadata_ref
+            except Exception as e:
+                self._append_log('Load Refinement {} metadata failed: {}'.format(key, e))
+        self._append_log('Refinement brain transform: {}'.format(brain_transform))
+
+        try:
+            self.pipeline.pages[3]['main_page'].update_dataset()
+            self.pipeline.pages[4]['main_page'].update_dataset()
+            self.pipeline.toggle_page.emit(4)
+        except Exception as e:
+            self._append_log('Refresh downstream pages failed: {}'.format(e))
+
     def stop_reconstruct(self):
         if self.pipe is not None:
             self.label_status.setText('Stopping')
@@ -545,13 +586,8 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
             self.label_status.setText('Failed')
             self._append_log('Reconstruction process exited with code {}'.format(self.process_exit_code))
         self._close_process_handles()
-        if self.latest_b85_result is not None and self.pipeline.dataset is not None:
-            brain_transform = self.latest_b85_result.get('brain_transform')
-            if brain_transform is not None:
-                self.pipeline.dataset.brain_transform = brain_transform
-                self.pipeline.dataset.reconstruction_info.setdefault('BrainTransform', {})
-                self.pipeline.dataset.reconstruction_info.setdefault('BrainImage', {})
-                self._append_log('Refinement brain transform: {}'.format(brain_transform))
+        if self.process_exit_code in (None, 0):
+            self._apply_b85_result_to_dataset()
 
     def settings(self):
         if self.cb_mode.currentData() == 'b85':
@@ -636,6 +672,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
         self.b85_pixel_size.setValue(config.pixel_size)
         self.b85_block_size.setValue(config.block_size)
         self.b85_gap.setValue(config.gap)
+        self.b85_overwrite_existing.setChecked(config.overwrite_existing)
 
         self.b85_reference_channel.clear()
         self.b85_output_channels.clear()
@@ -681,6 +718,7 @@ class WholeBrainReconstructPage(QtWidgets.QWidget, Ui_Form):
             pixel_size=self.b85_pixel_size.value(),
             block_size=self.b85_block_size.value(),
             gap=self.b85_gap.value(),
+            overwrite_existing=self.b85_overwrite_existing.isChecked(),
             selected_steps=self._selected_b85_steps(),
             validate=validate,
         )

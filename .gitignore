@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *.so
 
+# Runtime logs
+*.log
+*.err.log
+!docs/**/*.log
+
 # 你指定的目录（统一使用正斜杠，末尾加 /）
 .idea/
 .vscode/

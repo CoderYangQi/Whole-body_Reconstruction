@@ -7,12 +7,14 @@ YQReconstructionScripts at runtime.
 from .yq_elastix_files import *
 import numpy as np
 import os
+import tifffile
 
 import unittest
 from VISoR_Reconstruction.reconstruction.yq_reconstruct import *
 from VISoR_Brain.utils.elastix_files import *
 from VISoR_Reconstruction.reconstruction.brain_reconstruct_methods.common import fill_outside
 from .common0313 import *
+from .ome_tiff import write_ome_tiff
 
 def CalSurfaceTranslate(prev_surface_path, next_surface_path):
     def PreProcess(img):
@@ -130,7 +132,12 @@ import multiprocessing
 import time, gc
 
 def step1_1_multiprocess(numsThread, taskParas):
-    # todo use multiprocess
+    if numsThread <= 1:
+        for task in taskParas:
+            taskFun(*task)
+        print('All end--')
+        return
+
     pool = multiprocessing.Pool(numsThread)
     result = []
     for i in range(len(taskParas)):
@@ -140,15 +147,215 @@ def step1_1_multiprocess(numsThread, taskParas):
     pool.close()
     pool.join()
 
-    # for res in result:
-    #     print('***:', res.get())  # get()?
+    for res in result:
+        res.get()
 
     print('All end--')
 
 
 
+def _tiff_size(path):
+    with tifffile.TiffFile(path) as tif:
+        page_count = len(tif.pages)
+        if page_count == 0:
+            raise RuntimeError("TIFF has no readable pages: {}".format(path))
+        y_size, x_size = tif.pages[0].shape
+    return [int(x_size), int(y_size), int(page_count)]
+
+
+def _read_resampled_tiff_range(path, origin, left_point, ref_size, spacing, z_range):
+    z_start, z_end = z_range
+    with tifffile.TiffFile(path) as tif:
+        page_count = len(tif.pages)
+        z_start = max(0, min(int(z_start), page_count))
+        z_end = max(z_start + 1, min(int(z_end), page_count))
+        data = tif.asarray(key=range(z_start, z_end))
+    if data.ndim == 2:
+        data = data[np.newaxis, :, :]
+    image = sitk.GetImageFromArray(data)
+    image.SetOrigin([origin[0], origin[1], 0])
+    image.SetSpacing(spacing)
+    return sitk.Resample(
+        image,
+        [ref_size[0], ref_size[1], image.GetSize()[2]],
+        sitk.Transform(),
+        sitk.sitkLinear,
+        [left_point[0], left_point[1], 0],
+        spacing,
+    )
+
+
+STEP1_1_BLOCK_STATUS_NAME = "step1_1_block_status.txt"
+_STEP1_1_BLOCK_STATUS_HEADER = "row\tcol\tstatus\tscore\tup_name\tdown_name\treason\tupdated_at\n"
+
+
+def _block_save_path(save_root, temp_name, slices_index):
+    return os.path.join(save_root, temp_name, "{}_{}".format(slices_index, slices_index + 1))
+
+
+def _block_file_paths(block_save_path, row_index, col_index):
+    prefix = "{}_{}".format(row_index, col_index)
+    return (
+        os.path.join(block_save_path, prefix + "up_temp_all.tif"),
+        os.path.join(block_save_path, prefix + "down_temp_all.tif"),
+    )
+
+
+def _status_file_path(block_save_path):
+    return os.path.join(block_save_path, STEP1_1_BLOCK_STATUS_NAME)
+
+
+def _safe_status_field(value):
+    return str(value).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
+def _file_ready(path):
+    try:
+        return os.path.isfile(path) and os.path.getsize(path) > 0
+    except OSError:
+        return False
+
+
+def _read_block_statuses(status_path):
+    records = {}
+    if not os.path.isfile(status_path):
+        return records
+    with open(status_path, "r", encoding="utf-8-sig", errors="replace") as file:
+        for line in file:
+            line = line.rstrip("\r\n")
+            if not line or line.startswith("row\tcol\tstatus"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 3:
+                continue
+            try:
+                row_index = int(parts[0])
+                col_index = int(parts[1])
+            except ValueError:
+                continue
+            records[(row_index, col_index)] = {
+                "status": parts[2],
+                "score": parts[3] if len(parts) > 3 else "",
+                "up_name": parts[4] if len(parts) > 4 else "",
+                "down_name": parts[5] if len(parts) > 5 else "",
+                "reason": parts[6] if len(parts) > 6 else "",
+                "updated_at": parts[7] if len(parts) > 7 else "",
+            }
+    return records
+
+
+def _append_block_status(status_path, row_index, col_index, status, score="", up_name="", down_name="", reason=""):
+    os.makedirs(os.path.dirname(status_path), exist_ok=True)
+    need_header = not os.path.exists(status_path) or os.path.getsize(status_path) == 0
+    if score != "":
+        score = "{:.6f}".format(float(score))
+    updated_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    line = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(
+        row_index,
+        col_index,
+        _safe_status_field(status),
+        _safe_status_field(score),
+        _safe_status_field(up_name),
+        _safe_status_field(down_name),
+        _safe_status_field(reason),
+        updated_at,
+    )
+    with open(status_path, "a", encoding="utf-8") as file:
+        if need_header:
+            file.write(_STEP1_1_BLOCK_STATUS_HEADER)
+        file.write(line)
+        file.flush()
+
+
+def _block_record_complete(block_save_path, row_index, col_index, record):
+    if not record:
+        return False
+    status = record.get("status")
+    if status == "filtered":
+        return True
+    if status == "saved":
+        up_path, down_path = _block_file_paths(block_save_path, row_index, col_index)
+        return _file_ready(up_path) and _file_ready(down_path)
+    return False
+
+
+def _step1_1_task_complete(save_root, temp_name, slices_index, ref_size, block_size):
+    block_save_path = _block_save_path(save_root, temp_name, slices_index)
+    status_path = _status_file_path(block_save_path)
+    row = int(np.floor(ref_size[0] / block_size))
+    col = int(np.floor(ref_size[1] / block_size))
+    if row <= 0 or col <= 0:
+        return False
+    records = _read_block_statuses(status_path)
+    if len(records) < row * col:
+        return False
+    for row_index in range(row):
+        for col_index in range(col):
+            if not _block_record_complete(block_save_path, row_index, col_index, records.get((row_index, col_index))):
+                return False
+    return True
+
+
+def _bootstrap_step1_1_status_from_existing_outputs(save_root, temp_name, slices_index, ref_size, block_size):
+    block_save_path = _block_save_path(save_root, temp_name, slices_index)
+    status_path = _status_file_path(block_save_path)
+    if os.path.exists(status_path) or not os.path.isdir(block_save_path):
+        return False
+    row = int(np.floor(ref_size[0] / block_size))
+    col = int(np.floor(ref_size[1] / block_size))
+    if row <= 0 or col <= 0:
+        return False
+
+    existing_count = 0
+    for row_index in range(row):
+        for col_index in range(col):
+            save_name1, save_name2 = _block_file_paths(block_save_path, row_index, col_index)
+            if _file_ready(save_name1) and _file_ready(save_name2):
+                existing_count += 1
+    if existing_count == 0:
+        return False
+
+    for row_index in range(row):
+        for col_index in range(col):
+            save_name1, save_name2 = _block_file_paths(block_save_path, row_index, col_index)
+            if _file_ready(save_name1) and _file_ready(save_name2):
+                _append_block_status(
+                    status_path,
+                    row_index,
+                    col_index,
+                    "saved",
+                    "",
+                    os.path.basename(save_name1),
+                    os.path.basename(save_name2),
+                    "legacy_existing_output",
+                )
+            else:
+                _append_block_status(
+                    status_path,
+                    row_index,
+                    col_index,
+                    "filtered",
+                    "",
+                    "",
+                    "",
+                    "legacy_assumed_filtered_no_tiff",
+                )
+    print(
+        "Step1_1 bootstrapped status from existing outputs: {} saved={} filtered={}".format(
+            status_path,
+            existing_count,
+            row * col - existing_count,
+        )
+    )
+    return True
+
+
+def step1_1_task_complete(save_root, temp_name, slices_index, ref_size, block_size):
+    return _step1_1_task_complete(save_root, temp_name, slices_index, ref_size, block_size)
+
+
 def taskFun(up_path, down_path, upOrigin, downOrigin, left_point, refSize, spacing, i,
-            save_root):
+            save_root, temp_name='temp_block', block_size=250):
     # 
 
     # ?
@@ -157,30 +364,24 @@ def taskFun(up_path, down_path, upOrigin, downOrigin, left_point, refSize, spaci
 
 
     # print(f"Reconstruction completed for data chunk {data_id}")
-    up_img = sitk.ReadImage(up_path)
-    down_img = sitk.ReadImage(down_path)
-
-    #  ?
-    # todo  ?
-    # left_point = [0,0,0]
     print("left_point is : ", left_point)
-    # todo
 
-    # todo ??
-    up_img.SetOrigin(upOrigin)
-    up_img.SetSpacing(spacing)
-    down_img.SetOrigin(downOrigin)
-    down_img.SetSpacing(spacing)
-    # init transform
-    dimension = 3
-    up_size = up_img.GetSize()
-    up_img = sitk.Resample(up_img, [refSize[0], refSize[1], up_size[2]],
-                             sitk.Transform(), sitk.sitkLinear, left_point, spacing)
+    block_save_path = _block_save_path(save_root, temp_name, i)
+    _bootstrap_step1_1_status_from_existing_outputs(save_root, temp_name, i, refSize, block_size)
+    if _step1_1_task_complete(save_root, temp_name, i, refSize, block_size):
+        print("Step1_1 slice {} already complete from status file: {}".format(i, block_save_path))
+        return
 
-    down_size = down_img.GetSize()
-    down_img = sitk.Resample(down_img, [refSize[0], refSize[1], down_size[2]],
-                             sitk.Transform(), sitk.sitkLinear, left_point, spacing)
-    # sitk.WriteImage()
+    up_size = _tiff_size(up_path)
+    down_size = _tiff_size(down_path)
+    interval = 60
+    gap = 10
+    first = up_size[2] - gap
+    second = down_size[2] - gap - 100 + 10
+    up_roi = [first - interval, first]
+    down_roi = [second - interval, second]
+    up_img = _read_resampled_tiff_range(up_path, upOrigin, left_point, refSize, spacing, up_roi)
+    down_img = _read_resampled_tiff_range(down_path, downOrigin, left_point, refSize, spacing, down_roi)
 
     print("down_img.GetSpacing() : {}\n Origin: {} \n Size: {}".format(down_img.GetSpacing(), down_img.GetOrigin(),
                                                                        down_img.GetSize()))
@@ -193,27 +394,17 @@ def taskFun(up_path, down_path, upOrigin, downOrigin, left_point, refSize, spaci
     # todo  xy 
     start = time.time()
 
-    #   2D data ?
-    size1 = up_img.GetSize()
-    size2 = down_img.GetSize()
-    #  ?
-    # bottom1 = GetBottom_4um(size1)
-    # bottom2 = GetBottom_4um(size2)
-    # end2 = int(bottom2 - 40 * 2.5)
-    interval = 60
-    gap = 10
-    first = up_size[2] - gap
-    second = down_size[2] - gap - 100 + 10
-    roi = [[first - interval,first], [second - interval,second]]
-    # todo  4 ?
-    # spacing = [4,4,4]
+    overlap_depth = min(up_img.GetSize()[2], down_img.GetSize()[2])
+    roi = [[0, overlap_depth], [0, overlap_depth]]
 
     next_result = None
     print("Coarse alignment elapsed time: {}".format(time.time() - start))
 
     split_block(next_result, up_img, down_img, spacing,  roi=roi, slices_index=i
                   ,save_root = save_root
-                  ,tempName = 'temp_block')
+                  ,tempName = temp_name,
+                  block_size=block_size,
+                  sub_block=block_size)
 
     print("the space of {} cost : {} ".format(i, time.time() - start))
     gc.collect()
@@ -255,49 +446,124 @@ def split_block(img, up_img, down_img, spacing, roi, slices_index,
     tf_pars = []
     pos = []
     # i,j = 5,2
-    for i in range(row):
-        for j in range(col):
+    all_blocks = [
+        (i, j)
+        for i in range(row)
+        for j in range(col)
+    ]
+    selected_blocks = [
+        (i, j)
+        for i, j in all_blocks
+        if forbid_points[i, j] > 0.4
+    ]
+    used_fallback = False
+    if not selected_blocks:
+        flat_scores = [
+            (forbid_points[i, j], i, j)
+            for i, j in all_blocks
+        ]
+        flat_scores.sort(reverse=True)
+        fallback_count = min(64, len(flat_scores))
+        selected_blocks = [(i, j) for score, i, j in flat_scores[:fallback_count]]
+        used_fallback = True
+        print("No blocks passed foreground threshold for slice {}. Using {} strongest blocks.".format(
+            slices_index,
+            len(selected_blocks),
+        ))
 
-            if forbid_points[i, j] > 0.4:
-                start = time.time()
-                up_temp = up_img[i * block_size: (i + 1) * block_size, j * block_size:(j + 1) * block_size,
-                          roi[0][0]:roi[0][1]]
-                down_temp = down_img[i * block_size: (i + 1) * block_size, j * block_size:(j + 1) * block_size,
-                            roi[1][0]:roi[1][1]]
-                sub_up = up_temp[block_size - sub_block:, block_size - sub_block:, :]
-                sub_down = down_temp[block_size - sub_block:, block_size - sub_block:, :]
+    os.makedirs(os.path.join(save_root, tempName), exist_ok=True)
+    block_save_path = _block_save_path(save_root, tempName, slices_index)
+    if not os.path.exists(block_save_path):
+        os.mkdir(block_save_path)
+    print("Step1_1 block output folder: {}".format(block_save_path))
 
-                # todo 
-                max_sub_down = sitk.MaximumProjection(sub_down[:, :, :(roi[0][1] - roi[0][0]) // 2],
-                                                      projectionDimension=2)[:, :, 0]
-                hollow_scale = np.mean(np.mean(max_sub_down))
-                if hollow_scale < 0.4:
-                    continue
+    status_path = _status_file_path(block_save_path)
+    records = _read_block_statuses(status_path)
+    selected_set = set(selected_blocks)
+    filtered_reason = "fallback_not_selected" if used_fallback else "foreground_below_threshold"
 
-                # todo  start  
+    for row_index, col_index in all_blocks:
+        if (row_index, col_index) in selected_set:
+            continue
+        save_name1, save_name2 = _block_file_paths(block_save_path, row_index, col_index)
+        if _file_ready(save_name1) and _file_ready(save_name2):
+            if records.get((row_index, col_index), {}).get("status") != "saved":
+                _append_block_status(
+                    status_path,
+                    row_index,
+                    col_index,
+                    "saved",
+                    forbid_points[row_index, col_index],
+                    os.path.basename(save_name1),
+                    os.path.basename(save_name2),
+                    "existing_output",
+                )
+            continue
+        if records.get((row_index, col_index), {}).get("status") != "filtered":
+            _append_block_status(
+                status_path,
+                row_index,
+                col_index,
+                "filtered",
+                forbid_points[row_index, col_index],
+                "",
+                "",
+                filtered_reason,
+            )
 
-                # todo  end
+    for i, j in selected_blocks:
+        start = time.time()
+        save_name1, save_name2 = _block_file_paths(block_save_path, i, j)
+        if _file_ready(save_name1) and _file_ready(save_name2):
+            if records.get((i, j), {}).get("status") != "saved":
+                _append_block_status(
+                    status_path,
+                    i,
+                    j,
+                    "saved",
+                    forbid_points[i, j],
+                    os.path.basename(save_name1),
+                    os.path.basename(save_name2),
+                    "existing_output",
+                )
+            continue
+        up_temp = up_img[i * block_size: (i + 1) * block_size, j * block_size:(j + 1) * block_size,
+                  roi[0][0]:roi[0][1]]
+        down_temp = down_img[i * block_size: (i + 1) * block_size, j * block_size:(j + 1) * block_size,
+                    roi[1][0]:roi[1][1]]
+        sub_up = up_temp[block_size - sub_block:, block_size - sub_block:, :]
+        sub_down = down_temp[block_size - sub_block:, block_size - sub_block:, :]
 
-                origin = [0, 0, 0]
-                # todo  200 * 200 ??
-                sub_up.SetOrigin(origin)
-                sub_up.SetSpacing(spacing)
-                sub_down.SetOrigin(origin)
-                sub_down.SetSpacing(spacing)
-                # create file folder
-                os.makedirs(os.path.join(save_root, tempName), exist_ok=True)
+        origin = [0, 0, 0]
+        sub_up.SetOrigin(origin)
+        sub_up.SetSpacing(spacing)
+        sub_down.SetOrigin(origin)
+        sub_down.SetSpacing(spacing)
 
-                block_save_path = os.path.join(save_root, tempName, str(slices_index) + '_' + str(slices_index + 1))
-                if not os.path.exists(block_save_path):
-                    os.mkdir(block_save_path)
-                save_name1 = os.path.join(block_save_path, str(i) + "_" + str(j) + "up_temp_all.tif")
-                save_name2 = os.path.join(block_save_path, str(i) + "_" + str(j) + "down_temp_all.tif")
-                # sitk.WriteImage(sub_up, save_name1)
-                # sitk.WriteImage(sub_down, save_name2)
-                if os.path.exists(save_name1) and os.path.exists(save_name2):
-                    continue
-                write_ome_tiff(sub_up, save_name1)
-                write_ome_tiff(sub_down, save_name2)
+        write_ome_tiff(sub_up, save_name1)
+        write_ome_tiff(sub_down, save_name2)
+        _append_block_status(
+            status_path,
+            i,
+            j,
+            "saved",
+            forbid_points[i, j],
+            os.path.basename(save_name1),
+            os.path.basename(save_name2),
+            "written",
+        )
+
+    final_records = _read_block_statuses(status_path)
+    saved_count = sum(1 for record in final_records.values() if record.get("status") == "saved")
+    filtered_count = sum(1 for record in final_records.values() if record.get("status") == "filtered")
+    print(
+        "Step1_1 block status file: {} saved={} filtered={} total={}".format(
+            status_path,
+            saved_count,
+            filtered_count,
+            row * col,
+        )
+    )
 
 def ReadNPY():
     a = np.load("Refine/tf_155_pars.npy")

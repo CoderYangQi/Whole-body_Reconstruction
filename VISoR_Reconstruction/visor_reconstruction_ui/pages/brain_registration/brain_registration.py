@@ -29,6 +29,8 @@ class BrainRegistrationPage(QtWidgets.QWidget, Ui_Form):
                 self.cb_template.addItem(d['name'])
 
     def update_dataset(self):
+        self.cb_channel.clear()
+        self.channels = {}
         for c in self.pipeline.dataset.channels:
             self.cb_channel.addItem(self.pipeline.dataset.channels[c]['ChannelName'])
             self.channels[self.pipeline.dataset.channels[c]['ChannelName']] = c
@@ -39,10 +41,12 @@ class BrainRegistrationPage(QtWidgets.QWidget, Ui_Form):
                     self.pb_start.setEnabled(True)
 
     def run_brain_registration(self):
-        transform_path = os.path.join(os.path.dirname(os.path.join(self.pipeline.dataset.path,
-                                                      self.pipeline.dataset.misc['Reconstruction']['BrainTransform'])),
-                                      'visor_brain.txt')
-        output_path = os.path.join(self.pipeline.dataset.path, 'Reconstruction/BrainRegistration')
+        transform_path = self.pipeline.dataset.brain_transform
+        if transform_path is None:
+            transform_path = os.path.join(os.path.dirname(os.path.join(self.pipeline.dataset.path,
+                                                          self.pipeline.dataset.misc['Reconstruction']['BrainTransform'])),
+                                          'visor_brain.txt')
+        output_path = os.path.join(os.path.dirname(os.path.dirname(transform_path)), 'BrainRegistration')
         if not os.path.exists(output_path):
             os.mkdir(output_path)
         current_template = self.templates[self.cb_template.currentText()]

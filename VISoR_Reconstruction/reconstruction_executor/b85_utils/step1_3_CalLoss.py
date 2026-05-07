@@ -11,9 +11,240 @@ import warnings
 import numpy as np
 
 from .torch_losses import NCC, NCC_CPU, GlobalNCC, SSIMLoss
+from .ome_tiff import write_ome_tiff
 import torch, os, time
 import SimpleITK as sitk
 import multiprocessing
+
+STEP1_3_BLOCK_STATUS_NAME = "step1_3_block_status.txt"
+_STEP1_3_BLOCK_STATUS_HEADER = (
+    "row\tcol\tstatus\tloss_name\tmoved_name\tfixed_save_name\tmoving_save_name\t"
+    "ncc\tssim\treason\tmessage\tupdated_at\n"
+)
+
+
+def _safe_status_field(value):
+    return str(value).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
+def _file_ready(path):
+    try:
+        return os.path.isfile(path) and os.path.getsize(path) > 0
+    except OSError:
+        return False
+
+
+def _status_file_path(status_folder):
+    return os.path.join(status_folder, STEP1_3_BLOCK_STATUS_NAME)
+
+
+def _path_from_format(path_format, row_index, col_index):
+    return path_format.format(row_index, col_index)
+
+
+def _loss_value(value):
+    if isinstance(value, torch.Tensor):
+        return float(value.detach().cpu().item())
+    return float(value)
+
+
+def _read_block_statuses(status_path):
+    records = {}
+    if not os.path.isfile(status_path):
+        return records
+    with open(status_path, "r", encoding="utf-8-sig", errors="replace") as file:
+        for line in file:
+            line = line.rstrip("\r\n")
+            if not line or line.startswith("row\tcol\tstatus"):
+                continue
+            parts = line.split("\t")
+            if len(parts) < 3:
+                continue
+            try:
+                row_index = int(parts[0])
+                col_index = int(parts[1])
+            except ValueError:
+                continue
+            records[(row_index, col_index)] = {
+                "status": parts[2],
+                "loss_name": parts[3] if len(parts) > 3 else "",
+                "moved_name": parts[4] if len(parts) > 4 else "",
+                "fixed_save_name": parts[5] if len(parts) > 5 else "",
+                "moving_save_name": parts[6] if len(parts) > 6 else "",
+                "ncc": parts[7] if len(parts) > 7 else "",
+                "ssim": parts[8] if len(parts) > 8 else "",
+                "reason": parts[9] if len(parts) > 9 else "",
+                "message": parts[10] if len(parts) > 10 else "",
+                "updated_at": parts[11] if len(parts) > 11 else "",
+            }
+    return records
+
+
+def _append_block_status(
+        status_path, row_index, col_index, status, loss_name="", moved_name="",
+        fixed_save_name="", moving_save_name="", ncc="", ssim="", reason="", message=""):
+    os.makedirs(os.path.dirname(status_path), exist_ok=True)
+    need_header = not os.path.exists(status_path) or os.path.getsize(status_path) == 0
+    updated_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    line = "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(
+        row_index,
+        col_index,
+        _safe_status_field(status),
+        _safe_status_field(loss_name),
+        _safe_status_field(moved_name),
+        _safe_status_field(fixed_save_name),
+        _safe_status_field(moving_save_name),
+        _safe_status_field(ncc),
+        _safe_status_field(ssim),
+        _safe_status_field(reason),
+        _safe_status_field(message),
+        updated_at,
+    )
+    with open(status_path, "a", encoding="utf-8") as file:
+        if need_header:
+            file.write(_STEP1_3_BLOCK_STATUS_HEADER)
+        file.write(line)
+        file.flush()
+
+
+def _loss_file_ready(path):
+    if not _file_ready(path):
+        return False
+    try:
+        read_loss(path)
+        return True
+    except Exception:
+        return False
+
+
+def _step1_3_outputs_ready(row_index, col_index, moved_format, fixed_save_format,
+                           moving_save_format, save_loss_format, save_flag=True):
+    loss_path = _path_from_format(save_loss_format, row_index, col_index)
+    if not _loss_file_ready(loss_path):
+        return False
+    moved_path = _path_from_format(moved_format, row_index, col_index)
+    if not _file_ready(moved_path):
+        return False
+    if save_flag:
+        if not _file_ready(_path_from_format(fixed_save_format, row_index, col_index)):
+            return False
+        if not _file_ready(_path_from_format(moving_save_format, row_index, col_index)):
+            return False
+    return True
+
+
+def _block_record_complete(status_folder, row_index, col_index, moved_format, fixed_save_format,
+                           moving_save_format, save_loss_format, save_flag=True):
+    records = _read_block_statuses(_status_file_path(status_folder))
+    record = records.get((row_index, col_index))
+    if not record:
+        return False
+    status = record.get("status")
+    if status == "evaluated":
+        return _step1_3_outputs_ready(
+            row_index,
+            col_index,
+            moved_format,
+            fixed_save_format,
+            moving_save_format,
+            save_loss_format,
+            save_flag,
+        )
+    if status == "failed":
+        return True
+    return False
+
+
+def step1_3_block_complete(status_folder, row_index, col_index, moved_format, fixed_save_format,
+                           moving_save_format, save_loss_format, save_flag=True):
+    return _block_record_complete(
+        status_folder,
+        row_index,
+        col_index,
+        moved_format,
+        fixed_save_format,
+        moving_save_format,
+        save_loss_format,
+        save_flag,
+    )
+
+
+def bootstrap_step1_3_status(status_folder, offsets, moved_format, fixed_save_format,
+                             moving_save_format, save_loss_format, save_flag=True):
+    os.makedirs(status_folder, exist_ok=True)
+    status_path = _status_file_path(status_folder)
+    records = _read_block_statuses(status_path)
+    changed = False
+    for row_index, col_index in sorted(offsets):
+        record = records.get((row_index, col_index))
+        if record and _block_record_complete(
+                status_folder, row_index, col_index, moved_format, fixed_save_format,
+                moving_save_format, save_loss_format, save_flag):
+            continue
+        if _step1_3_outputs_ready(
+                row_index, col_index, moved_format, fixed_save_format,
+                moving_save_format, save_loss_format, save_flag):
+            loss_path = _path_from_format(save_loss_format, row_index, col_index)
+            ncc, ssim = read_loss(loss_path)
+            _append_block_status(
+                status_path,
+                row_index,
+                col_index,
+                "evaluated",
+                os.path.basename(loss_path),
+                os.path.basename(_path_from_format(moved_format, row_index, col_index)),
+                os.path.basename(_path_from_format(fixed_save_format, row_index, col_index)),
+                os.path.basename(_path_from_format(moving_save_format, row_index, col_index)),
+                ncc,
+                ssim,
+                "legacy_existing_outputs",
+            )
+            changed = True
+    return changed
+
+
+def step1_3_pair_complete(status_folder, offsets, moved_format, fixed_save_format,
+                          moving_save_format, save_loss_format, save_flag=True):
+    for row_index, col_index in offsets:
+        if not _block_record_complete(
+                status_folder, row_index, col_index, moved_format, fixed_save_format,
+                moving_save_format, save_loss_format, save_flag):
+            return False
+    return True
+
+
+def _crop_to_common_size(img1, img2):
+    size1 = img1.GetSize()
+    size2 = img2.GetSize()
+    common_size = [min(size1[axis], size2[axis]) for axis in range(3)]
+    if any(size <= 0 for size in common_size):
+        raise RuntimeError("No overlapping voxels after size normalization: {} vs {}".format(size1, size2))
+    if list(size1) != common_size:
+        img1 = img1[:common_size[0], :common_size[1], :common_size[2]]
+    if list(size2) != common_size:
+        img2 = img2[:common_size[0], :common_size[1], :common_size[2]]
+    return img1, img2
+
+
+def _crop_by_offset(img1, img2, offset, rate):
+    off_x = int(offset[0] // rate)
+    off_y = int(offset[1] // rate)
+    off_z = int(offset[2] // rate)
+    max_x, max_y, max_z = img2.GetSize()
+    start_x = max(0, -off_x)
+    end_x = max_x - max(0, off_x)
+    start_y = max(0, -off_y)
+    end_y = max_y - max(0, off_y)
+    start_z = max(0, -off_z)
+    end_z = max_z - max(0, off_z)
+    if start_x >= end_x or start_y >= end_y or start_z >= end_z:
+        raise RuntimeError(
+            "No valid crop after offset. offset={} rate={} size={}".format(offset, rate, img2.GetSize())
+        )
+    return (
+        img1[start_x:end_x, start_y:end_y, start_z:end_z],
+        img2[start_x:end_x, start_y:end_y, start_z:end_z],
+    )
 
 
 def ReadOffsetTxt(txtPath=r"Z:\users\yq\MorphDatasets\TestTemp\th2_33\tf_33_pars.txt"):
@@ -94,6 +325,8 @@ def linerArray2D(array, zero_positions, non_zero_positions):
     new_array = array.copy()
     for pos in zip(non_zero_positions[0], non_zero_positions[1]):
         list_.append(array[pos[0], pos[1]])
+    if not list_:
+        return new_array
     mean = np.mean(list_)
 
     # ??
@@ -119,7 +352,6 @@ def linerArray2D(array, zero_positions, non_zero_positions):
         # else:
         #     new_array[pos] = mean
     # 
-    print(new_array)
     return new_array
 
 
@@ -149,7 +381,6 @@ def linerArray(array):
                 array[pos] = np.mean(array)
 
     # 
-    print(array)
     return array
 
 
@@ -159,6 +390,15 @@ import time, gc
 
 def run_multiprocess(numsThread, taskParas):
     # todo use multiprocess
+    if not taskParas:
+        print('No step1_3 block tasks to run--')
+        return
+    if numsThread <= 1:
+        for task in taskParas:
+            cal_single(*task)
+        print('All end--')
+        return
+
     pool = multiprocessing.Pool(numsThread)
     result = []
     for i in range(len(taskParas)):
@@ -168,8 +408,8 @@ def run_multiprocess(numsThread, taskParas):
     pool.close()
     pool.join()
 
-    # for res in result:
-    #     print('***:', res.get())  # get()?
+    for res in result:
+        res.get()
 
     print('All end--')
 
@@ -177,137 +417,128 @@ def run_multiprocess(numsThread, taskParas):
 def cal_single(key, value, rate, spacing
                , movingFormat, movedFormat, FixedPathFormat,
                MovedPathFormat, FixedsaveRefineFormat,
-               MovingsaveRefineFormat, save_loss_format, saveFlag):
-    ncc_loss = GlobalNCC().cuda()  # NCCCUDA?
-    ssim_loss = SSIMLoss(spatial_dims=3).cuda()  # NCCCUDA?
+               MovingsaveRefineFormat, save_loss_format, saveFlag,
+               status_folder=None, force=False):
     i = key[0];
     j = key[1];
-    moving = sitk.ReadImage(movingFormat.format(i, j))[:, :, :-10]
-    movedPath = (movedFormat.format(i, j))
-    moving.SetOrigin([0, 0, 0])
-    moving.SetSpacing(spacing)
+    if status_folder is None:
+        status_folder = os.path.dirname(save_loss_format.format(i, j))
+    status_path = _status_file_path(status_folder)
+    if (
+            not force
+            and step1_3_block_complete(
+                status_folder,
+                i,
+                j,
+                movedFormat,
+                FixedsaveRefineFormat,
+                MovingsaveRefineFormat,
+                save_loss_format,
+                saveFlag,
+            )
+    ):
+        print(f"Step1_3 block {i}_{j} already complete from status file: {status_path}")
+        return
 
-    # todo translate
-    # 
-    translate = value
+    try:
+        ncc_loss = GlobalNCC().cuda()  # NCCCUDA?
+        ssim_loss = SSIMLoss(spatial_dims=3).cuda()  # NCCCUDA?
+        moving = sitk.ReadImage(movingFormat.format(i, j))[:, :, :-10]
+        movedPath = (movedFormat.format(i, j))
+        moving.SetOrigin([0, 0, 0])
+        moving.SetSpacing(spacing)
 
-    # 
-    translation = sitk.TranslationTransform(3, translate)
-    # 
-    resampler = sitk.ResampleImageFilter()
-    resampler.SetReferenceImage(moving)  # ?
-    resampler.SetInterpolator(sitk.sitkLinear)  # ?
-    resampler.SetTransform(translation)  # ?
+        translate = value
+        translation = sitk.TranslationTransform(3, translate)
+        resampler = sitk.ResampleImageFilter()
+        resampler.SetReferenceImage(moving)
+        resampler.SetInterpolator(sitk.sitkLinear)
+        resampler.SetTransform(translation)
+        resampled_image = resampler.Execute(moving)
+        write_ome_tiff(resampled_image, movedPath)
 
-    # 
-    resampled_image = resampler.Execute(moving)
+        img1 = (sitk.ReadImage(FixedPathFormat.format(i, j)))[:, :, 10:]
+        img2 = (sitk.ReadImage(MovedPathFormat.format(i, j)))
+        img1.SetOrigin([0, 0, 0])
+        img2.SetOrigin([0, 0, 0])
+        img1, img2 = _crop_to_common_size(img1, img2)
+        img1, img2 = _crop_by_offset(img1, img2, value, rate)
 
-    # ?
-    # print(movedPath)
-    write_ome_tiff(resampled_image, movedPath)
+        threshold = 120
+        pixel_type = img1.GetPixelID()
+        if pixel_type == sitk.sitkUInt8:
+            print("Image pixel type is sitkUInt8; preprocessing is skipped.")
+        elif pixel_type == sitk.sitkUInt16:
+            print("Image pixel type is sitkUInt16; preprocessing is applied.")
+            img1 = Preprocess(img1, threshold)
+        if saveFlag:
+            write_ome_tiff(img1, FixedsaveRefineFormat.format(i, j))
+            write_ome_tiff(img2, MovingsaveRefineFormat.format(i, j))
+        pixel_type = img2.GetPixelID()
+        if pixel_type == sitk.sitkUInt8:
+            print("Image pixel type is sitkUInt8; preprocessing is skipped.")
+        elif pixel_type == sitk.sitkUInt16:
+            print("Image pixel type is sitkUInt16; preprocessing is applied.")
+            img2 = Preprocess(img2, threshold)
+        img1 = sitk.GetArrayFromImage(img1)
+        img2 = sitk.GetArrayFromImage(img2)
 
-    # test i = 7; j = 3; todo 
-    # i = 7; j = 3;
-    i = key[0];
-    j = key[1]
-    temp = value
-    # off_ = (i,j)
-    # temp = Offsets[off_]
-    off_z = temp[2] // rate;
-    off_y = temp[1] // rate;
-    off_x = temp[0] // rate
-    # img1 = (sitk.ReadImage(r"Z:\users\yq\MorphDatasets\TestTemp\th2_33\{}_{}up_temp_all.tif".format(i, j)))
-    # img2 = (sitk.ReadImage(r"Z:\users\yq\MorphDatasets\TestTemp\th2_33\{}_{}moved.tif".format(i, j)))
-    img1 = (sitk.ReadImage(FixedPathFormat.format(i, j)))[:, :, 10:]
-    img2 = (sitk.ReadImage(MovedPathFormat.format(i, j)))
-    img1.SetOrigin([0, 0, 0])
-    img2.SetOrigin([0, 0, 0])
-    max_z = img2.GetSize()[2]
-    max_y = img2.GetSize()[1]
-    max_x = img2.GetSize()[0]
-    if img1.GetSize()[2] != max_z:
-        raise "error img1.GetSize()[2] != img2.GetSize()[2]"
-    if off_z < 0:
-        start = int(- off_z);
-        end = max_z
-    else:
-        start = 0;
-        end = int(max_z - off_z)
+        tensor_img1 = torch.tensor(img1, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
+        tensor_img2 = torch.tensor(img2, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
 
-    # y axis
-    if off_y < 0:
-        start_y = int(-off_y);
-        end_y = max_y
-    else:
-        start_y = 0;
-        end_y = int(max_x - off_y)
-
-    # x axis
-    if off_x < 0:
-        start_x = int(-off_x);
-        end_x = max_y
-    else:
-        start_x = 0;
-        end_x = int(max_x - off_x)
-
-    img1 = img1[start_x:end_x, start_y:end_y, start:end]
-    img2 = img2[start_x:end_x, start_y:end_y, start:end]
-
-    if start > end:
-        warnings.warn(
-            "The 'start' value should not exceed 'end'. Unexpected results may occur.",
-            category=UserWarning,  # [1,4](@ref)
-            stacklevel=2  # [5,7](@ref)
+        shape = img1.shape
+        if shape[0] > 7:
+            loss = ncc_loss(tensor_img1, tensor_img2)
+            data_range = max(tensor_img1.max(), tensor_img2.max())
+            ssim_res = ssim_loss(tensor_img1, tensor_img2, data_range)
+        else:
+            loss = 0
+            ssim_res = 0
+        loss_value = _loss_value(loss)
+        ssim_value = _loss_value(ssim_res)
+        save_loss_path = save_loss_format.format(i, j)
+        with open(save_loss_path, "w") as f:
+            f.write(f"ncc:{loss_value},ssim:{ssim_value}")
+        _append_block_status(
+            status_path,
+            i,
+            j,
+            "evaluated",
+            os.path.basename(save_loss_path),
+            os.path.basename(movedPath),
+            os.path.basename(FixedsaveRefineFormat.format(i, j)),
+            os.path.basename(MovingsaveRefineFormat.format(i, j)),
+            loss_value,
+            ssim_value,
+            "written",
         )
-
-    # 
-    threshold = 120
-    pixel_type = img1.GetPixelID()
-    if pixel_type == sitk.sitkUInt8:
-        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
-    elif pixel_type == sitk.sitkUInt16:
-        print("Image pixel type is sitkUInt16; preprocessing is applied.")
-        img1 = Preprocess(img1, threshold)
-    if saveFlag:
-        write_ome_tiff(img1, FixedsaveRefineFormat.format(i, j))
-        write_ome_tiff(img2, MovingsaveRefineFormat.format(i, j))
-    pixel_type = img2.GetPixelID()
-    if pixel_type == sitk.sitkUInt8:
-        print("Image pixel type is sitkUInt8; preprocessing is skipped.")
-    elif pixel_type == sitk.sitkUInt16:
-        print("Image pixel type is sitkUInt16; preprocessing is applied.")
-        img2 = Preprocess(img2, threshold)
-    img1 = sitk.GetArrayFromImage(img1)
-    img2 = sitk.GetArrayFromImage(img2)
-    # todo  loss
-
-    tensor_img1 = torch.tensor(img1, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
-    tensor_img2 = torch.tensor(img2, dtype=torch.float32).unsqueeze(0).unsqueeze(0)
-
-    shape = img1.shape
-    if shape[0] > 7:
-        # NCC
-
-        loss = ncc_loss(tensor_img1, tensor_img2)
-        data_range = max(tensor_img1.max(), tensor_img2.max())
-        ssim_res = ssim_loss(tensor_img1, tensor_img2, data_range)
-        # selfloss = ncc_loss(tensor_img1, tensor_img1)
-    else:
-        loss = 0
-        ssim_res = 0
-    # lossList[key] = loss
-    # ssimList[key] = ssim_res
-    save_loss_path = save_loss_format.format(i, j)
-    with open(save_loss_path, "w") as f:
-        f.write(f"ncc:{loss},ssim:{ssim_res}")
-    print(f"key {key} is NCC loss:{loss}; SSIM loss:{ssim_res}; value is {value}")
+        print(f"key {key} is NCC loss:{loss_value}; SSIM loss:{ssim_value}; value is {value}")
+    except Exception as exc:
+        _append_block_status(
+            status_path,
+            i,
+            j,
+            "failed",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            exc.__class__.__name__,
+            str(exc),
+        )
+        print("Step1_3 block {}_{} failed: {}".format(i, j, exc))
 
 
 def CalNCC(spacing, movingFormat, movedFormat,
            Offsets, FixedPathFormat, MovedPathFormat,
            FixedsaveRefineFormat, MovingsaveRefineFormat,
            save_loss_format,
-           rate):
+           rate,
+           status_folder=None,
+           force=False,
+           num_threads=20):
     # img1img2?D [depth, height, width]
     # 
 
@@ -317,21 +548,43 @@ def CalNCC(spacing, movingFormat, movedFormat,
     lossList = {}
     ssimList = {}
     task_chunks = []
+    if status_folder is None:
+        status_folder = os.path.dirname(save_loss_format.format(0, 0))
+    bootstrap_step1_3_status(
+        status_folder,
+        Offsets,
+        movedFormat,
+        FixedsaveRefineFormat,
+        MovingsaveRefineFormat,
+        save_loss_format,
+        saveFlag,
+    )
     for key, value in Offsets.items():
-        if os.path.exists(save_loss_format.format(key[0], key[1])):
-            print(f"exists {save_loss_format.format(key[0], key[1])}")
+        if (
+                not force
+                and step1_3_block_complete(
+                    status_folder,
+                    key[0],
+                    key[1],
+                    movedFormat,
+                    FixedsaveRefineFormat,
+                    MovingsaveRefineFormat,
+                    save_loss_format,
+                    saveFlag,
+                )
+        ):
             continue
         temp = (key, value, rate, spacing
                 , movingFormat, movedFormat, FixedPathFormat,
                 MovedPathFormat, FixedsaveRefineFormat,
-                MovingsaveRefineFormat, save_loss_format, saveFlag)
+                MovingsaveRefineFormat, save_loss_format, saveFlag,
+                status_folder, force)
         task_chunks.append(temp)
         # cal_single(key,value,rate,spacing
         #        ,movingFormat,movedFormat, FixedPathFormat,
         #        MovedPathFormat,FixedsaveRefineFormat,
         #        MovingsaveRefineFormat,save_loss_format,saveFlag)
 
-    num_threads = 20
     run_multiprocess(num_threads, task_chunks)
     return lossList, ssimList
 
@@ -394,12 +647,21 @@ def filter_arr(arr):
     dropped_arr = arr_np[(arr_np < lower_bound) | (arr_np > upper_bound)]
 
     # ?
-    filtered_mean = np.mean(filtered_arr)
-
-    print(f"? {arr}")
-    print(f"? {lower_bound:.2f} ?{upper_bound:.2f}")
-    print(f"? {filtered_arr.tolist()}")
-    print(f"? {filtered_mean:.2f}")
+    if len(filtered_arr) == 0:
+        filtered_arr = arr_np
+        dropped_arr = np.array([])
+    if len(filtered_arr) > 0:
+        filtered_mean = np.mean(filtered_arr)
+    else:
+        filtered_mean = 0
+    print(
+        "Step1_3 offset filter: total={} kept={} dropped={} mean={:.2f}".format(
+            len(arr),
+            len(filtered_arr),
+            len(dropped_arr),
+            filtered_mean,
+        )
+    )
     return filtered_arr, dropped_arr
 
 
@@ -424,7 +686,6 @@ def read_coordinates(file_path):
                         coordinates.append(values)
                     else:
                         print(f"? {line}")
-            print(coordinates)
             return coordinates
 
     except FileNotFoundError:
