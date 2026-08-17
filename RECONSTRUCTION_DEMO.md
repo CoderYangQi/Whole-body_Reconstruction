@@ -6,7 +6,9 @@ An end-to-end method for transforming overlapping Blockface-VISoR image sections
 
 ## 1. From Image Sections to a Continuous 3D Volume
 
-![End-to-end whole-mouse 3D reconstruction pipeline](docs/reconstruction-pipeline.jpg)
+![End-to-end whole-mouse 3D reconstruction pipeline](docs/reconstruction-pipeline-preview.jpg)
+
+[View the full-resolution pipeline figure](docs/reconstruction-pipeline.jpg?raw=1)
 
 The reconstruction pipeline resolves both intra-section displacement and nonlinear deformation between adjacent physical sections.
 
