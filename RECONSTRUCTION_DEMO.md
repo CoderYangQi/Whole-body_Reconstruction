@@ -6,7 +6,7 @@ An end-to-end method for transforming overlapping Blockface-VISoR image sections
 
 ## 1. From Image Sections to a Continuous 3D Volume
 
-![End-to-end whole-mouse 3D reconstruction pipeline](reconstruction-pipeline.jpg)
+![End-to-end whole-mouse 3D reconstruction pipeline](docs/reconstruction-pipeline.jpg)
 
 The reconstruction pipeline resolves both intra-section displacement and nonlinear deformation between adjacent physical sections.
 
@@ -25,8 +25,8 @@ Red and green represent structures from two adjacent sections. Yellow indicates 
 
 <table>
   <tr>
-    <td width="50%"><img src="stitching-comparison-1.png" alt="Adjacent sections before surface-aware registration"></td>
-    <td width="50%"><img src="stitching-comparison-2.png" alt="Adjacent sections after surface-aware registration"></td>
+    <td width="50%"><img src="docs/stitching-comparison-1.png" alt="Adjacent sections before surface-aware registration"></td>
+    <td width="50%"><img src="docs/stitching-comparison-2.png" alt="Adjacent sections after surface-aware registration"></td>
   </tr>
   <tr>
     <td align="center"><strong>Before</strong><br>Fixed-plane registration leaves visible red-green displacement.</td>
@@ -41,10 +41,10 @@ Red and green represent structures from two adjacent sections. Yellow indicates 
 The final Thy1-EGFP reconstruction demonstrates continuous nervous-system structures across the reconstructed whole-mouse volume.
 
 <video controls preload="metadata" width="100%">
-  <source src="whole-body-thy1-reconstruction.mp4" type="video/mp4">
+  <source src="docs/whole-body-thy1-reconstruction.mp4" type="video/mp4">
   Your browser does not support embedded MP4 playback.
 </video>
 
-### [Play the whole-body reconstruction video](whole-body-thy1-reconstruction.mp4?raw=1)
+### [Play the whole-body reconstruction video](docs/whole-body-thy1-reconstruction.mp4?raw=1)
 
 <sub>The direct video link is provided for GitHub views that do not display the embedded player.</sub>
