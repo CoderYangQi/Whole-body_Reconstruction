@@ -1,43 +1,50 @@
-# 🌐 Whole-body_Reconstruction
+# Whole-Mouse 3D Reconstruction at Micron Resolution
 
-This repository is part of the work based on the [Volume-reconstruction](https://github.com/SMART-pipeline/Volume-reconstruction) project, focusing on advanced imaging and reconstruction techniques.
+An end-to-end method for transforming overlapping Blockface-VISoR image sections into a spatially continuous whole-body volume.
 
-## 🖥️ System Requirements
+---
 
-- **Graphics Card:** Nvidia graphic card with over 8 GB of memory
-- **Operating System:** Windows
+## 1. From Image Sections to a Continuous 3D Volume
 
-## 🛠 Installation
+![End-to-end whole-mouse 3D reconstruction pipeline](docs/reconstruction-pipeline.jpg)
 
-### 🌟 Strongly Recommended (Avoid installing dependencies individually)
+The reconstruction pipeline resolves both intra-section displacement and nonlinear deformation between adjacent physical sections.
 
-1. **Download Environment and Anaconda-5.3.1:** Get the necessary files via this [Link](https://rec.ustc.edu.cn/share/609a7520-2d6c-11ef-b3a9-8556057b7c72).
-2. **Install Anaconda-5.3.1:** Follow the instructions to install and unzip the venv.7z.
-3. **Verify the Environment:**
-   ```
-   click Whole-body_Reconstruction\VISoR_Reconstruction\run_visor_reconstruction.bat
-   ```
-   
-If a GUI interface appears, the environment is correctly set up and functional.
+| Stage | Operation | Purpose |
+| --- | --- | --- |
+| **1. Intra-section stitching** | Align overlapping image stacks within each section | Recover a complete section volume |
+| **2. Overlap registration** | Sample corresponding regions and estimate local displacement | Establish reliable cross-section correspondences |
+| **3. Surface extraction** | Fit the displacement field and recover the deformed surface | Model non-planar section geometry |
+| **4. Inter-section reconstruction** | Register adjacent surfaces and propagate the deformation through the volume | Produce a continuous whole-body reconstruction |
 
-### 🛠️ Manual Installation by Requirements
+---
 
-For custom setups, you might prefer to install each requirement individually. Below is the list of packages that need to be installed:
+## 2. Stitching Quality Across Adjacent Sections
 
-```
-opencv-python~=4.1.2.30
-numpy~=1.18.1
-tifffile~=2019.7.26.2
-Pillow~=5.3.0
-PyQt5~=5.14.1
-SimpleITK~=1.2.0rc2.dev1166+ga27d6
-torch~=1.4.0
-PyYAML~=3.13
-torchvision~=0.5.0
-```
+Red and green represent structures from two adjacent sections. Yellow indicates spatial agreement between them. After surface-aware registration, corresponding fibers overlap more closely and the discontinuity at the section boundary is substantially reduced.
 
+<table>
+  <tr>
+    <td width="50%"><img src="docs/stitching-comparison-1.png" alt="Adjacent sections before surface-aware registration"></td>
+    <td width="50%"><img src="docs/stitching-comparison-2.png" alt="Adjacent sections after surface-aware registration"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Before</strong><br>Fixed-plane registration leaves visible red-green displacement.</td>
+    <td align="center"><strong>After</strong><br>Surface-aware registration restores fiber continuity and overlap.</td>
+  </tr>
+</table>
 
-**Note**: ['SimpleElastix'](https://github.com/SuperElastix/SimpleElastix) must be installed separately. Instructions can be found [here](https://simpleelastix.readthedocs.io/GettingStarted.html#Windows). I initially used an earlier version of SimpleElastix; however, experimenting with the latest version may yield better results.
+---
 
-# 🔍 Usage
-Detailed usage instructions will be updated soon. Stay tuned for comprehensive guidance on how to leverage this project effectively.
+## 3. Whole-Body Reconstruction Result
+
+The final Thy1-EGFP reconstruction demonstrates continuous nervous-system structures across the reconstructed whole-mouse volume.
+
+<video controls preload="metadata" width="100%">
+  <source src="docs/whole-body-thy1-reconstruction.mp4" type="video/mp4">
+  Your browser does not support embedded MP4 playback.
+</video>
+
+### [Play the whole-body reconstruction video](docs/whole-body-thy1-reconstruction.mp4?raw=1)
+
+<sub>The direct video link is provided for GitHub views that do not display the embedded player.</sub>
