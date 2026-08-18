@@ -1,0 +1,52 @@
+# Python caches and environments
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# IDE and OS metadata
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Datasets and medical/image data
+datasets/
+dataset/
+*.nii
+*.nii.gz
+*.npy
+*.npz
+*.tif
+*.tiff
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+
+# Model weights and checkpoints
+weights/
+weight/
+checkpoints/
+checkpoint/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+
+# Training logs and generated results
+logs/
+log/
+runs/
+outputs/
+results/*
+!results/*.csv
+*.log
+events.out.tfevents.*
+IterationInfo.*.txt
+TransformParameters.*.txt
