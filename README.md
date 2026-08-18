@@ -2,6 +2,16 @@
 
 This repository is part of the work based on the [Volume-reconstruction](https://github.com/SMART-pipeline/Volume-reconstruction) project, focusing on advanced imaging and reconstruction techniques.
 
+## Demo
+
+[![Whole-body Thy1-EGFP reconstruction preview](docs/whole-body-thy1-reconstruction-preview.gif)](RECONSTRUCTION_DEMO.md)
+
+See the [reconstruction demo and method overview](RECONSTRUCTION_DEMO.md) for the complete pipeline, stitching comparison, and whole-body visualization. A [high-resolution MP4](docs/whole-body-thy1-reconstruction.mp4?raw=1) is also available.
+
+## DUST Registration
+
+The [`dust` branch](https://github.com/CoderYangQi/Whole-body_Reconstruction/tree/dust) contains DUST (Dual U-Net with Swin-Transformer), a dual-cascade method for non-rigid registration of high-resolution 3D fluorescence microscopy images. It includes the architecture overview, synthetic dataset examples, qualitative and quantitative comparisons, and dynamic registration demonstrations.
+
 ## 🖥️ System Requirements
 
 - **Graphics Card:** Nvidia graphic card with over 8 GB of memory

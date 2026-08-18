@@ -40,13 +40,12 @@ Red and green represent structures from two adjacent sections. Yellow indicates 
 
 ## 3. Whole-Body Reconstruction Result
 
-The final Thy1-EGFP reconstruction demonstrates continuous nervous-system structures across the reconstructed whole-mouse volume.
+The final Thy1-EGFP reconstruction demonstrates continuous nervous-system structures across the reconstructed whole-mouse volume. The preview below plays the complete visualization at its original speed; select it to open the high-resolution video.
 
-<video controls preload="metadata" width="100%">
-  <source src="docs/whole-body-thy1-reconstruction.mp4" type="video/mp4">
-  Your browser does not support embedded MP4 playback.
-</video>
+<a href="docs/whole-body-thy1-reconstruction.mp4?raw=1">
+  <img src="docs/whole-body-thy1-reconstruction-preview.gif" alt="Animated preview of the whole-body Thy1-EGFP reconstruction" width="100%">
+</a>
 
-### [Play the whole-body reconstruction video](docs/whole-body-thy1-reconstruction.mp4?raw=1)
+### [Play or download the high-resolution MP4](docs/whole-body-thy1-reconstruction.mp4?raw=1)
 
-<sub>The direct video link is provided for GitHub views that do not display the embedded player.</sub>
+<sub>Select the preview or the link above for the original 1440p video.</sub>
